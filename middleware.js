@@ -1,38 +1,28 @@
-import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
-export const middleware = (request) => {
-  const authToken = cookies().get("authToken")?.value || "";
-  let path = request.nextUrl.pathname;
-  if (
-    path === "/api/login" ||
-    path === "/api/signup" ||
-    path === "/api/login-user" ||
-    path === "/api/product" ||
-    /^\/api\/product\/\w+$/.test(path) ||
-    path === "/api/cart" ||
-    path === "/api/category" ||
-    /^\/api\/category\/\w+$/.test(path) ||
-    path === "/api/relatedProducts" ||
-    /^\/api\/relatedProducts\/\w+$/.test(path)
-  ) {
-    return null;
-  }
-  const loggedInUserNotAccessPath =
-    path === "/loginpage" || path === "/signupPage";
+export const middleware = (req, res, next) => {
+	let token;
 
-  if (loggedInUserNotAccessPath) {
-    if (authToken) {
-      return NextResponse.redirect(new URL("/", request.nextUrl));
-    }
-  } else {
-    if (!authToken) {
-      if (path.startsWith("/api") || path === "/dashboard") {
-        return NextResponse.redirect(new URL("/", request.nextUrl));
-      }
-    }
-  }
+	if (
+		req.headers.authorization &&
+		req.headers.authorization.startsWith("Bearer")
+	) {
+		token = req.headers.authorization.split(" ")[1];
+	}
+
+	if (!token) {
+		return res.status(401).json({ message: "Not authorized, no token" });
+	}
+
+	try {
+		const decoded = jwt.verify(token, process.env.JWT_SECRET);
+		req.user = decoded; // Attach the user info to the request
+		next();
+	} catch (error) {
+		return res.status(401).json({ message: "Not authorized, token failed" });
+	}
 };
+
 export const config = {
-  matcher: ["/", "/loginpage", "/signupPage", "/dashboard", "/api/:path*"],
+	matcher: "/api/user/me",
 };
