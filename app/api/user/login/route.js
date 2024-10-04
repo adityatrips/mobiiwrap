@@ -1,6 +1,5 @@
 import connectDB from "@/db/Database";
 import User from "@/models/User";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const POST = async (req, res) => {
@@ -9,27 +8,32 @@ export const POST = async (req, res) => {
 	const { email, password } = await req.json();
 	try {
 		const user = await User.findOne({ email });
-		if (!user || !(await bcrypt.compare(password, user.password))) {
-			return Response.json({ message: "Invalid credentials" });
+		if (!user) {
+			return Response.json({ message: "No user found" }, { status: 404 });
+		}
+		if (!user.comparePassword(password)) {
+			return Response.json({ message: "Invalid credentials" }, { status: 401 });
 		}
 
 		const token = jwt.sign(
 			{ userId: user._id, role: user.role },
 			process.env.JWT_SECRET,
-			{ expiresIn: "1h" }
+			{ expiresIn: "-1" }
 		);
 
-		return Response.json({
-			status: 200,
-			token,
-			user: {
-				id: user._id,
-				name: user.name,
-				email: user.email,
-				role: user.role,
+		return Response.json(
+			{
+				token,
+				user: {
+					id: user._id,
+					name: user.name,
+					email: user.email,
+					role: user.role,
+				},
 			},
-		});
+			{ status: 200 }
+		);
 	} catch (error) {
-		return Response.json({ status: 500, error: error.message });
+		return Response.json({ error: error.message }, { status: 500 });
 	}
 };

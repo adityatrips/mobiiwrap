@@ -11,10 +11,6 @@ const adminSchema = new Schema(
 			type: [String], // e.g., ['manage_products', 'manage_orders', etc.]
 			default: [],
 		},
-		createdAt: {
-			type: Date,
-			default: Date.now,
-		},
 	},
 	{ timestamps: true }
 );

@@ -1,12 +1,13 @@
-import User from "@/models/User";
+import connectDB from "@/db/Database";
+import Category from "@/models/Category";
 
-export const GET = async (req, { params: { id } }) => {
+export const POST = async (req, { params: { id } }) => {
+	connectDB();
 	try {
-		const user = await User.findById(id).select("-password");
-
-		if (!user) {
+		const category = await Category.findById(id);
+		if (!category) {
 			return Response.json(
-				{ message: "User not found" },
+				{ message: "Category not found" },
 				{
 					status: 404,
 				}
@@ -15,7 +16,7 @@ export const GET = async (req, { params: { id } }) => {
 
 		return Response.json(
 			{
-				user,
+				category,
 			},
 			{ status: 200 }
 		);
@@ -25,17 +26,18 @@ export const GET = async (req, { params: { id } }) => {
 };
 
 export const PUT = async (req, { params: { id } }) => {
+	connectDB();
 	const body = await req.json();
 
 	try {
-		const user = await User.findByIdAndUpdate(id, body, {
+		const category = await Category.findByIdAndUpdate(id, body, {
 			new: false,
 		});
-		if (!user)
+		if (!category)
 			return Response.json(
 				{
 					success: false,
-					message: "User not found",
+					message: "Category not found",
 				},
 				{
 					status: 404,
@@ -44,7 +46,7 @@ export const PUT = async (req, { params: { id } }) => {
 		return Response.json(
 			{
 				success: true,
-				message: "User updated successfully",
+				message: "Category updated successfully",
 			},
 			{ status: 200 }
 		);
@@ -54,17 +56,18 @@ export const PUT = async (req, { params: { id } }) => {
 };
 
 export const DELETE = async (req, { params: { id } }) => {
+	connectDB();
 	try {
-		const user = await User.findByIdAndDelete(id);
-		if (!user)
+		const category = await Category.findByIdAndDelete(id);
+		if (!category)
 			return Response.json(
-				{ message: "User not found" },
+				{ message: "Category not found" },
 				{
 					status: 404,
 				}
 			);
 		return Response.json(
-			{ message: "User deleted successfully" },
+			{ message: "Category deleted successfully" },
 			{ status: 200 }
 		);
 	} catch (error) {

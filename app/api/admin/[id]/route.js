@@ -1,42 +1,58 @@
+import connectDB from "@/db/Database";
 import Admin from "@/models/Admin";
-import { NextResponse } from "next/server";
 
-export const PUT = async (req, { params }) => {
-	const { id } = params;
+export const PUT = async (req, { params: { id } }) => {
+	connectDB();
 	const body = await req.json();
 	try {
 		const admin = await Admin.findByIdAndUpdate(id, body, { new: false });
 
 		if (!admin) {
-			return NextResponse({
-				status: 404,
-				message: "Admin not found",
-			});
+			return Response.json(
+				{
+					message: "Admin not found",
+				},
+				{ status: 404 }
+			);
 		}
+
+		return Response.json(
+			{
+				message: "Admin updated successfully",
+			},
+			{ status: 200 }
+		);
 	} catch (error) {
-		return NextResponse({
-			status: 500,
-			message: error.message,
-		});
+		return Response.json(
+			{
+				message: error.message,
+			},
+			{
+				status: 500,
+			}
+		);
 	}
 };
 
-export const DELETE = async (req, { params }) => {
-	const { id } = params;
-	const body = await req.json();
+export const DELETE = async (req, { params: { id } }) => {
+	connectDB();
 	try {
 		const admin = await Admin.findByIdAndDelete(id);
 
 		if (!admin) {
-			return NextResponse({
-				status: 404,
-				message: "Admin deleted successfully",
-			});
+			return Response.json(
+				{
+					message: "Admin deleted successfully",
+				},
+				{ status: 404 }
+			);
 		}
 	} catch (error) {
-		return NextResponse({
-			status: 500,
-			message: error.message,
-		});
+		return Response.json(
+			{
+				message: error.message,
+			},
+			{ status: 500 }
+		);
 	}
 };

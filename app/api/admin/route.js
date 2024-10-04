@@ -1,40 +1,55 @@
+import connectDB from "@/db/Database";
 import Admin from "@/models/Admin";
-import { NextResponse } from "next/server";
 
 export const GET = async (req, res) => {
+	connectDB();
 	try {
 		const admins = await Admin.find();
-		return NextResponse({
-			status: 200,
-			admins,
-		});
+		return Response.json(
+			{
+				admins,
+			},
+			{ status: 200 }
+		);
 	} catch (error) {
-		return NextResponse({
-			status: 500,
-			error: error.message,
-		});
+		return Response.json(
+			{
+				error: error.message,
+			},
+			{
+				status: 500,
+			}
+		);
 	}
 };
 
 export const POST = async (req, res) => {
-	const { name, email, password } = await req.json();
+	connectDB();
+	const { user, permissions } = await req.json();
 
 	try {
 		const newAdmin = new Admin({
-			name,
-			email,
-			password,
+			user,
+			permissions,
 		});
 		await newAdmin.save();
 
-		return NextResponse({
-			status: 201,
-			message: "Admin created successfully",
-		});
+		return Response.json(
+			{
+				message: "Admin created successfully",
+			},
+			{
+				status: 201,
+			}
+		);
 	} catch (error) {
-		return NextResponse({
-			status: 500,
-			error: error.message,
-		});
+		return Response.json(
+			{
+				error: error.message,
+			},
+			{
+				status: 500,
+			}
+		);
 	}
 };
