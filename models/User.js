@@ -16,12 +16,11 @@ const userSchema = new Schema(
 			type: String,
 			required: true,
 		},
-
 		role: {
 			type: String,
 			enum: ["Admin", "Customer", "Guest"],
 			default: "Customer",
-		}, // Added role field
+		},
 		address: {
 			street: String,
 			city: String,

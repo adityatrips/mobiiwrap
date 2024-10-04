@@ -16,20 +16,16 @@ export const POST = async (req, res) => {
 		}
 
 		const token = jwt.sign(
-			{ userId: user._id, role: user.role },
-			process.env.JWT_SECRET,
-			{ expiresIn: "-1" }
+			{
+				...user._doc,
+			},
+			process.env.JWT_SECRET
 		);
 
 		return Response.json(
 			{
 				token,
-				user: {
-					id: user._id,
-					name: user.name,
-					email: user.email,
-					role: user.role,
-				},
+				...user._doc,
 			},
 			{ status: 200 }
 		);
