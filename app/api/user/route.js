@@ -11,5 +11,12 @@ export const GET = async (req) => {
 				status: 200,
 			}
 		);
-	} catch (error) {}
+	} catch (error) {
+		return Response.json(
+			{ message: "Server error" },
+			{
+				status: 500,
+			}
+		);
+	}
 };
