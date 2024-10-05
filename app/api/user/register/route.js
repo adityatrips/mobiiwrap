@@ -1,4 +1,5 @@
 import connectDB from "@/db/Database";
+import Cart from "@/models/Cart";
 import User from "@/models/User";
 
 export const POST = async (req, res) => {
@@ -9,6 +10,11 @@ export const POST = async (req, res) => {
 
 	try {
 		await newUser.save();
+		const newCart = new Cart({
+			user: newUser._id,
+			products: [],
+		});
+		await newCart.save();
 		return Response.json(
 			{
 				...newUser._doc,

@@ -3,6 +3,7 @@
 import Skeleton from "@/components/Skeleton";
 import { AuthContext } from "@/context/AuthContext";
 import axios from "axios";
+import { model } from "mongoose";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -16,13 +17,23 @@ const Product = () => {
 	const [loading, setLoading] = useState(false);
 	const [quantity, setQuantity] = useState(1);
 
+	const [phoneModel, setPhoneModel] = useState(null);
+
+	const [brand, setBrand] = useState("");
+	const [model, setModel] = useState("");
+
 	useEffect(() => {
-		setLoading(true);
-		const fetchProduct = async () => {
-			const res = await axios.get(`/api/product/${_id}`);
-			setProduct(res.data);
+		const fetchPhoneBrands = async () => {
+			const brand = await axios.get("/api/brands");
+			brand.data.map(async (item) => {
+				let res = await axios.get(`/api/model/${item}`);
+				setPhoneModel((phoneModel) => {
+					return { ...phoneModel, [item]: res.data };
+				});
+			});
 		};
-		fetchProduct();
+		setLoading(true);
+		fetchPhoneBrands();
 		setLoading(false);
 	}, [_id]);
 
@@ -149,29 +160,61 @@ const Product = () => {
 								</div>
 
 								<div className="flex items-center mb-8">
-									<h2 className="w-16 text-xl font-bold ">Size:</h2>
+									<h2 className="w-16 text-xl font-bold ">Brand:</h2>
 									<div className="flex flex-wrap mx-2 -mb-2">
 										<fieldset className="flex flex-wrap gap-3">
 											<legend className="sr-only">size</legend>
 											<select
-												// value={cartdetails?.size}
-												// onChange={(e) =>
-												// 	setCartDetails({
-												// 		...cartdetails,
-												// 		size: e.target.value,
-												// 	})
-												// }
+												onChange={(e) => {
+													console.log(e.target.value);
+													setBrand(e.target.value);
+												}}
 												className="py-3 px-4 pe-9 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
 											>
-												{product?.size?.map((size, index) => (
-													<option key={index} value={size}>
-														{size}
-													</option>
-												))}
+												{phoneModel !== null &&
+													Object.entries(phoneModel)?.map(
+														([key, value], index) => (
+															<>
+																<option
+																	defaultChecked={index == 0}
+																	key={key}
+																	value={key}
+																>
+																	{key}
+																</option>
+															</>
+														)
+													)}
 											</select>
 										</fieldset>
 									</div>
 								</div>
+
+								{brand !== "" && (
+									<div className="flex items-center mb-8">
+										<h2 className="w-16 text-xl font-bold ">Model:</h2>
+										<div className="flex flex-wrap mx-2 -mb-2">
+											<fieldset className="flex flex-wrap gap-3">
+												<legend className="sr-only">size</legend>
+												<select
+													onChange={(e) => {
+														setModel(e.target.value);
+													}}
+													className="py-3 px-4 pe-9 block w-full border border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+												>
+													{phoneModel[brand].map((item) => (
+														<>
+															<option key={item} value={item}>
+																{item}
+															</option>
+														</>
+													))}
+												</select>
+											</fieldset>
+										</div>
+									</div>
+								)}
+
 								<div className="w-32 mb-8 ">
 									<label
 										htmlFor=""
