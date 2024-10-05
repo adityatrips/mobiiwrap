@@ -3,12 +3,12 @@ import { useParams } from "next/navigation";
 import Category from "./Category";
 
 const Cate = () => {
-  const params = useParams();
-  return (
-    <div>
-      <Category params={params.categories} />
-    </div>
-  );
+	const { id } = useParams();
+	return (
+		<div>
+			<Category params={id} />
+		</div>
+	);
 };
 
 export default Cate;

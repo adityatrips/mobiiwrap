@@ -346,7 +346,6 @@ const Products = () => {
 								))}
 							</form>
 
-							{/* Product grid */}
 							<div className="lg:col-span-3">
 								<HomeProducts show />
 							</div>

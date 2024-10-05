@@ -23,9 +23,18 @@ const productSchema = new Schema(
 			required: true,
 			default: 0,
 		},
+		mainImage: {
+			type: String,
+			required: true,
+		},
 		images: {
 			type: [String],
 			default: [],
+		},
+		slug: {
+			type: String,
+			required: true,
+			unique: true,
 		},
 		dateAdded: {
 			type: Date,

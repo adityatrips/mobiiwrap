@@ -15,7 +15,6 @@ const ProductProvider = ({ children }) => {
 			try {
 				const response = await axios.get("/api/product");
 				setProducts(response.data);
-				console.log(`ProductContext: ${JSON.stringify(response.data)}`);
 			} catch (error) {
 				console.error(`Error fetching products: ${error}`);
 				setProducts([]);

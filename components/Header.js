@@ -78,7 +78,7 @@ const Header = () => {
 												return (
 													<li key={category.name}>
 														<Link
-															href={`/category/${category.name}`}
+															href={`/category/${category._id}`}
 															className="block px-5 py-2.5 text-sm text-gray-800 transition hover:bg-gray-100"
 														>
 															{category.description}

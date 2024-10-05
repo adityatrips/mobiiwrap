@@ -1,13 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	images: {
-		domains: [
-			"tailwindui.com",
-			"images.unsplash.com",
-			"i.ibb.co",
-			"i.postimg.cc",
-			"firebasestorage.googleapis.com",
-			"www.apple.com",
+		remotePatterns: [
+			{ hostname: "www.apple.com" },
+			{ hostname: "tailwindui.com" },
+			{ hostname: "images.unsplash.com" },
+			{ hostname: "placehold.co" },
+			{ hostname: "i.ibb.co" },
 		],
 	},
 };

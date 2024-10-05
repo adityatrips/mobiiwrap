@@ -5,49 +5,37 @@ import Link from "next/link";
 import Image from "next/image";
 import axios from "axios";
 import Button from "@/utils/Button";
+import { AuthContext } from "@/context/AuthContext";
+import { useContext } from "react";
 
 const SideCart = ({ setIsCartOpen, isCartOpen }) => {
 	const [usersCart, setUserCart] = useState([]);
-	const totalPrice = usersCart?.reduce(
-		(total, item) =>
-			total +
-			item?.items?.reduce(
-				(total, item) => total + item?.price * item?.quantity,
-				0
-			),
-		0
-	);
+	const { user, isAuthenticated } = useContext(AuthContext);
 
-	// get user cart data
 	useEffect(() => {
 		const getCart = async () => {
 			try {
-				const res = await axios.post("/api/cart-item", {
-					userId: user?.data?._id,
+				const res = await axios.get(`/api/cart/${user._id}`, {
+					userId: user?._id,
 				});
-				if (res?.data?.cartItem?.length === 0) {
-					return null;
-				}
-
-				setUserCart(res?.data?.cartItem);
-			} catch (error) {
-				console.log(error);
-			}
+				setUserCart(res.data);
+			} catch (error) {}
 		};
 		user && getCart();
 	}, [user]);
 
-	// remove item from cart
 	const removeItem = async (productId) => {
 		try {
-			const res = await axios.delete("/api/cart", {
-				data: { id: productId },
+			const res = await axios.delete(`/api/cart/${user._id}`, {
+				productId,
 			});
 			if (res.status === 200) {
-				setUserCart(usersCart?.filter((item) => item?._id !== productId));
+				setUserCart(
+					usersCart?.products.filter((item) => item?._id !== productId)
+				);
 			}
 		} catch (error) {
-			console.log(error);
+			error;
 		}
 	};
 
@@ -105,75 +93,72 @@ const SideCart = ({ setIsCartOpen, isCartOpen }) => {
 
 											<div className="mt-8">
 												<div className="flow-root">
-													{user?.data ? (
+													{isAuthenticated ? (
 														<ul
 															role="list"
 															className="-my-6 divide-y divide-gray-200"
 														>
-															{usersCart?.length ? (
-																usersCart
-																	?.map((user, userIndex) => {
+															{usersCart?.products?.length > 0 ? (
+																usersCart?.products
+																	.map((item, userIndex) => {
+																		const { product } = item;
 																		return (
 																			<React.Fragment key={userIndex}>
-																				{user?.items?.map((item) => {
-																					return (
-																						<>
-																							<li
-																								key={item?._id}
-																								className="flex py-6"
-																							>
-																								<Link
-																									href={`/products/${item?.productId}`}
-																									className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md"
-																								>
-																									<Image
-																										height={200}
-																										width={200}
-																										src={item?.image}
-																										alt={item?.name}
-																										className="h-full w-full object-contain object-center"
-																									/>
-																								</Link>
+																				<>
+																					<li
+																						key={item?._id}
+																						className="flex py-6"
+																					>
+																						<Link
+																							href={`/products/${product._id}`}
+																							className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md"
+																						>
+																							<Image
+																								height={200}
+																								width={200}
+																								src={product.mainImage}
+																								alt={product.name}
+																								className="h-full w-full object-contain object-center"
+																							/>
+																						</Link>
 
-																								<div className="ml-4 flex flex-1 flex-col">
-																									<div>
-																										<div className="flex justify-between text-base font-medium text-gray-900">
-																											<h3>
-																												<a href={item?.href}>
-																													{item?.name}
-																												</a>
-																											</h3>
+																						<div className="ml-4 flex flex-1 flex-col">
+																							<div>
+																								<div className="flex justify-between text-base font-medium text-gray-900">
+																									<h3>
+																										<a href={product.href}>
+																											{product.name}
+																										</a>
+																									</h3>
 
-																											<p className="ml-4">
-																												₹{item?.price}
-																											</p>
-																										</div>
-																									</div>
-																									<p className="mt-4 text-[12px] text-gray-500">
-																										{item?.size}
+																									<p className="ml-4">
+																										₹{product.price}
 																									</p>
-																									<div className="flex flex-1 items-end justify-between text-sm">
-																										<p className="text-gray-500">
-																											Qty {item?.quantity}
-																										</p>
-
-																										<div className="flex">
-																											<button
-																												onClick={() =>
-																													removeItem(user?._id)
-																												}
-																												type="button"
-																												className="font-medium text-[#2f4550] hover:text-[#2f4550]"
-																											>
-																												Remove
-																											</button>
-																										</div>
-																									</div>
 																								</div>
-																							</li>
-																						</>
-																					);
-																				})}
+																							</div>
+																							<p className="mt-4 text-[12px] text-gray-500">
+																								{product.size}
+																							</p>
+																							<div className="flex flex-1 items-end justify-between text-sm">
+																								<p className="text-gray-500">
+																									Quantity: {item.quantity}
+																								</p>
+
+																								<div className="flex">
+																									<button
+																										onClick={() =>
+																											removeItem(user?._id)
+																										}
+																										type="button"
+																										className="font-medium text-[#2f4550] hover:text-[#2f4550]"
+																									>
+																										Remove
+																									</button>
+																								</div>
+																							</div>
+																						</div>
+																					</li>
+																				</>
 																			</React.Fragment>
 																		);
 																	})
@@ -181,7 +166,6 @@ const SideCart = ({ setIsCartOpen, isCartOpen }) => {
 															) : (
 																<>
 																	<div className="flex justify-center items-center h-40">
-																		{" "}
 																		<p className="text-lg font-medium text-gray-900">
 																			Cart is empty
 																		</p>
@@ -191,7 +175,6 @@ const SideCart = ({ setIsCartOpen, isCartOpen }) => {
 														</ul>
 													) : (
 														<div className="flex justify-center items-center h-40">
-															{" "}
 															<p className="text-lg font-medium text-gray-900">
 																Login to view cart
 															</p>
@@ -202,22 +185,22 @@ const SideCart = ({ setIsCartOpen, isCartOpen }) => {
 										</div>
 
 										<div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-											{user?.data && (
+											{isAuthenticated && (
 												<div className="flex justify-between text-base font-medium text-gray-900">
 													<p>Subtotal</p>
-													<p>₹ {totalPrice}.00</p>
+													<p>₹ {usersCart?.totalAmount}</p>
 												</div>
 											)}
-											{user?.data && (
+											{isAuthenticated && (
 												<p className="mt-0.5 text-sm text-gray-500">
 													Shipping and taxes calculated at checkout.
 												</p>
 											)}
 											<div className="mt-6">
-												{user?.data ? (
+												{isAuthenticated ? (
 													<div
 														className={`w-full mx-auto ${
-															totalPrice <= 0
+															usersCart?.totalAmount <= 0
 																? "opacity-50 cursor-not-allowed"
 																: ""
 														}`}

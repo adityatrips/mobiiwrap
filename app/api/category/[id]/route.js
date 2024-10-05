@@ -1,6 +1,31 @@
 import connectDB from "@/db/Database";
 import Category from "@/models/Category";
 
+export const GET = async (req, { params: { id } }) => {
+	connectDB();
+	try {
+		const category = await Category.findById(id).populate("products");
+
+		if (!category) {
+			return Response.json(
+				{ message: "Category not found" },
+				{
+					status: 404,
+				}
+			);
+		}
+
+		return Response.json(
+			{
+				category,
+			},
+			{ status: 200 }
+		);
+	} catch (error) {
+		return Response.json({ message: "Server error" }, { status: 500 });
+	}
+};
+
 export const POST = async (req, { params: { id } }) => {
 	connectDB();
 	try {

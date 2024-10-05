@@ -14,6 +14,7 @@ const Product = () => {
 	const { _id } = useParams();
 	const { user, isAuthenticated } = useContext(AuthContext);
 	const [loading, setLoading] = useState(false);
+	const [quantity, setQuantity] = useState(1);
 
 	useEffect(() => {
 		setLoading(true);
@@ -28,6 +29,23 @@ const Product = () => {
 	useEffect(() => {
 		window.scrollTo(0, 0);
 	}, []);
+
+	const addItemToCart = async (product) => {
+		try {
+			const res = await axios.put(`/api/cart`, {
+				user: user._id,
+				products: {
+					product: product._id,
+					totalAmount: product.price,
+					quantity,
+				},
+			});
+			if (res.status === 200) {
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	if (loading) return <Skeleton />;
 
@@ -164,14 +182,7 @@ const Product = () => {
 									<div className="relative flex flex-row w-full h-10 mt-4 bg-transparent rounded-lg">
 										<button
 											onClick={() => {
-												// const newQuantity =
-												// 	cartdetails.quantity === 1
-												// 		? 1
-												// 		: cartdetails.quantity - 1;
-												// setCartDetails({
-												// 	...cartdetails,
-												// 	quantity: newQuantity,
-												// });
+												setQuantity(quantity - 1);
 											}}
 											className="w-20 h-full text-gray-600 bg-gray-300 rounded-l outline-none cursor-pointer   hover:text-gray-700  hover:bg-gray-400"
 										>
@@ -180,16 +191,13 @@ const Product = () => {
 										<input
 											type="number"
 											className="flex base items-center w-full font-semibold text-center text-gray-700 placeholder-gray-700 bg-gray-300 outline-none   focus:outline-none text-md hover:text-black"
-											// value={cartdetails.quantity}
+											value={quantity}
+											onChange={(e) => setQuantity(e.target.value)}
 											readOnly
 										/>
 										<button
 											onClick={() => {
-												// const newQuantity = cartdetails.quantity + 1;
-												// setCartDetails({
-												// 	...cartdetails,
-												// 	quantity: newQuantity,
-												// });
+												setQuantity(quantity + 1);
 											}}
 											className="w-20 h-full text-gray-600 bg-gray-300 rounded-r outline-none cursor-pointer  hover:text-gray-700 hover:bg-gray-400"
 										>
@@ -214,11 +222,6 @@ const Product = () => {
 												Add to Cart
 											</Link>
 										)}
-									</div>
-									<div className="w-full px-4 mb-4 lg:mb-0 lg:w-1/2">
-										<button className="flex items-center bg-black justify-center w-full p-3 text-gray-200 font-semibold border border-gray-500 rounded-md  hover:bg-gray-800 hover:border-gray-600 hover:text-gray-50">
-											Add to wishlist
-										</button>
 									</div>
 								</div>
 							</div>
