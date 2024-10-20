@@ -33,6 +33,7 @@ export const useSignupMut = () => {
     }) => {
       return axios.post(`/api/auth/register`, {
         email: variables.email,
+        name: variables.name,
         password: variables.password,
       });
     },

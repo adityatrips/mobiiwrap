@@ -21,8 +21,14 @@ export const POST = async (req: NextRequest) => {
       token,
     });
   } catch (error: any) {
-    return Response.json({
-      error: error.message,
-    });
+    console.log(error);
+    return Response.json(
+      {
+        error: error.message,
+      },
+      {
+        status: 500,
+      }
+    );
   }
 };
