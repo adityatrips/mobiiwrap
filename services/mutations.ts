@@ -40,6 +40,20 @@ export const useSignupMut = () => {
   });
 };
 
+export const useRemoveFromCartMut = () => {
+  return useMutation({
+    mutationKey: ["remove-from-cart"],
+    mutationFn: (variables: { productId: string; userId: string }) => {
+      return axios.delete(`/api/cart`, {
+        data: {
+          productId: variables.productId,
+          userId: variables.userId,
+        },
+      });
+    },
+  });
+};
+
 export const useAddToCartMut = () => {
   return useMutation({
     mutationKey: ["add-to-cart"],
@@ -88,6 +102,33 @@ export const useProductFilter = () => {
           variables.rating === "all" ? "" : variables.rating
         }&deviceType=${variables.deviceType}`
       );
+    },
+  });
+};
+
+export const useSortByName = () => {
+  return useMutation({
+    mutationKey: ["sort-by-name"],
+    mutationFn: async (variables: { order: string }) => {
+      return axios.get(`/api/products?nameSort=${variables.order}`);
+    },
+  });
+};
+
+export const useSortByPrice = () => {
+  return useMutation({
+    mutationKey: ["sort-by-price"],
+    mutationFn: async (variables: { order: string }) => {
+      return axios.get(`/api/products?priceSort=${variables.order}`);
+    },
+  });
+};
+
+export const useSortByRating = () => {
+  return useMutation({
+    mutationKey: ["sort-by-rating"],
+    mutationFn: async (variables: { order: string }) => {
+      return axios.get(`/api/products?ratingSort=${variables.order}`);
     },
   });
 };

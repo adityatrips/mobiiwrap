@@ -44,4 +44,16 @@ const CartSchema = new Schema({
   },
 });
 
+CartSchema.pre("save", function (next) {
+  this.totalItems = this.products.reduce(
+    (acc, product) => acc + product.quantity,
+    0
+  );
+  this.total = this.products.reduce(
+    (acc, product) => acc + product.quantity * product.cost,
+    0
+  );
+  next();
+});
+
 export default models.Cart || model("Cart", CartSchema);

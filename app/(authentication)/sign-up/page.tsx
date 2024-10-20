@@ -32,7 +32,7 @@ const SignupPage = () => {
           toast.error("Internal server error");
         },
         onSuccess: () => {
-          toast.success("User createed successfully");
+          toast.success("User created successfully");
           logIn.mutate(
             {
               email,

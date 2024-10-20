@@ -16,11 +16,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { useRemoveFromCartMut } from "@/services/mutations";
+import { useQueryClient } from "@tanstack/react-query";
 
 const CartPage = () => {
   const userId = useSelector((state: AuthSliceState) => state.auth.user?._id);
   const { data, isSuccess, isError } = useGetCart(userId || "");
   const cart = data?.data.cart || [];
+  const queryClient = useQueryClient();
+  const removeFromCart = useRemoveFromCartMut();
 
   if (isError) {
     return (
@@ -47,11 +52,13 @@ const CartPage = () => {
               <TableHead>Price</TableHead>
               <TableHead>Quantity</TableHead>
               <TableHead>Total</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {cart.products.length == 0 ? (
               <TableRow>
+                <TableCell>-</TableCell>
                 <TableCell>-</TableCell>
                 <TableCell>-</TableCell>
                 <TableCell>-</TableCell>
@@ -87,6 +94,28 @@ const CartPage = () => {
                     <TableCell>{product.cost}</TableCell>
                     <TableCell>{product.quantity}</TableCell>
                     <TableCell>{product.quantity * product.cost}</TableCell>
+                    <TableCell>
+                      <Button
+                        onClick={() => {
+                          removeFromCart.mutate(
+                            {
+                              productId: product._id,
+                              userId: userId || "",
+                            },
+                            {
+                              onSuccess: async () => {
+                                await queryClient.invalidateQueries({
+                                  queryKey: ["cart", userId],
+                                });
+                              },
+                            }
+                          );
+                        }}
+                        variant={"destructive"}
+                      >
+                        Remove
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 );
               })

@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import Product from "@/models/Product";
 import Cart from "@/models/Cart";
 import { connectToDb } from "@/config/db";
 import { NextRequest } from "next/server";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import Product from "@/models/Product";
-
 export const GET = async (req: NextRequest) => {
   connectToDb();
   try {
+    const products = await Product.find();
+
     const cart = await Cart.findOne({
       user: req.nextUrl.searchParams.get("user"),
     }).populate("products.item");
@@ -51,6 +52,29 @@ export const POST = async (req: NextRequest) => {
     return Response.json(cart, { status: 201 });
   } catch (error: any) {
     return Response.json("There was some error creating the cart.", {
+      status: 500,
+    });
+  }
+};
+
+export const DELETE = async (req: NextRequest) => {
+  connectToDb();
+  const { productId, userId } = await req.json();
+
+  try {
+    const cart = await Cart.findOne({
+      user: userId,
+    });
+
+    cart.products = cart.products.filter(
+      (product: any) => product._id.toString() !== productId
+    );
+
+    await cart.save();
+
+    return Response.json(cart, { status: 200 });
+  } catch (error) {
+    return Response.json("There was some error deleting the cart.", {
       status: 500,
     });
   }
