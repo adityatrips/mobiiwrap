@@ -42,7 +42,7 @@ const Products = () => {
   const [filters, setFilters] = useState({
     category: "all",
     price: [0, 1000],
-    rating: "",
+    rating: "all",
     deviceType: "",
   });
 
