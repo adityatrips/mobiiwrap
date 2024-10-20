@@ -1,11 +1,11 @@
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Providers from "@/app/Providers";
+import { brandName } from "./constants";
 
 export const metadata = {
-  title: "MobiiWrap",
-  description:
-    "Experience top-quality wrapping services for mobile phones, earphones, and more at Mobiiwrap. Discover customizable skins that add style, protection, and personality to your devices.",
+  title: brandName,
+  description: `Experience top-quality wrapping services for mobile phones, earphones, and more at ${brandName}. Discover customizable skins that add style, protection, and personality to your devices.`,
   authors: [
     {
       name: "Aditya Tripathi",
@@ -31,7 +31,7 @@ export default function RootLayout({
           <Toaster
             toastOptions={{
               className: "bg-background text-foreground",
-              position: "bottom-right",
+              position: "bottom-left",
             }}
           />
           <main className="px-5 pb-5 mx-auto container">{children}</main>

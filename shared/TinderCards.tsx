@@ -26,7 +26,7 @@ const TinderCards = ({ className }: TinderCardsProps) => {
   }, [data]);
 
   useEffect(() => {
-    if (products?.length === 0) {
+    if (products?.length == 0) {
       queryClient.invalidateQueries({
         queryKey: ["products", 5],
       });
@@ -50,7 +50,7 @@ const TinderCards = ({ className }: TinderCardsProps) => {
     <CustomLoading />
   ) : (
     <>
-      <h3 className="text-center pb-5">Swipe em like it&apos;s hot</h3>
+      <h4 className="heading text-center pb-5">Swipe em like it&apos;s hot</h4>
       <div className={`${className} grid h-full w-full place-items-center`}>
         {products.map((card: Product) => {
           return (
@@ -94,7 +94,7 @@ const Card = ({
     <motion.img
       key={key}
       alt="Placeholder alt"
-      className="h-[calc(100vh-9rem)] origin-bottom rounded-lg object-cover hover:cursor-grab active:cursor-grabbing"
+      className="h-[calc(100vh-15rem)] origin-bottom rounded-lg object-cover hover:cursor-grab active:cursor-grabbing"
       drag={"x"}
       dragConstraints={{
         left: 0,

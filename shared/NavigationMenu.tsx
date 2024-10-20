@@ -28,24 +28,7 @@ import { Menu, Moon, ShoppingCart, Sun, User } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
-
-const links = [
-  {
-    name: "About",
-    url: "/about",
-    className: "",
-  },
-  {
-    name: "Products",
-    url: "/products",
-    className: "",
-  },
-  {
-    name: "Feeling Lucky",
-    url: "/feeling-lucky",
-    className: "block md:hidden",
-  },
-];
+import { brandName, links } from "@/app/constants";
 
 export default function NavigationMenu() {
   const router = useRouter();
@@ -94,11 +77,11 @@ export default function NavigationMenu() {
           <SheetContent side="left">
             <SheetHeader>
               <SheetTitle className="heading">
-                <Link href="/">MobiiWrap</Link>
+                <Link href="/">{brandName}</Link>
               </SheetTitle>
             </SheetHeader>
             <SheetDescription>
-              Welcome to MobiiWrap, your one-stop shop for all your wrapping.
+              Welcome to {brandName}, your one-stop shop for all your wrapping.
             </SheetDescription>
 
             <div className="flex flex-col gap-1 mt-5">
@@ -119,7 +102,11 @@ export default function NavigationMenu() {
               <Label htmlFor="airplane-mode">
                 <Moon />
               </Label>
-              <Switch onCheckedChange={handleToggleTheme} id="airplane-mode" />
+              <Switch
+                checked={!isDark}
+                onCheckedChange={handleToggleTheme}
+                id="airplane-mode"
+              />
               <Label htmlFor="airplane-mode">
                 <Sun />
               </Label>
@@ -127,7 +114,7 @@ export default function NavigationMenu() {
           </SheetContent>
         </Sheet>
         <Link href="/">
-          <h3>MobiiWrap</h3>
+          <h3>{brandName}</h3>
         </Link>
       </div>
 
@@ -169,10 +156,10 @@ export default function NavigationMenu() {
               <DropdownMenuItem
                 className="cursor-pointer"
                 onClick={() => {
-                  router.push("/cart");
+                  router.push("/profile");
                 }}
               >
-                Cart
+                Profile
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <Button

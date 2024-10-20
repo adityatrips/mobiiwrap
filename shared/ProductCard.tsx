@@ -5,9 +5,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ThemeSliceState } from "@/types";
 import { IndianRupee } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 
 interface ProductCardProps {
   slug: string;
@@ -18,10 +20,11 @@ interface ProductCardProps {
 
 const ProductCard = ({ slug, img, price, title }: ProductCardProps) => {
   const router = useRouter();
+  const {} = useSelector((state: ThemeSliceState) => state.theme);
 
   return (
     <Card
-      className="hover:shadow-[rgba(0,0,0,0.5)] hover:shadow-lg cursor-pointer transition-all"
+      className={`hover:shadow-foreground shadow-lg cursor-pointer transition-all`}
       onClick={() => {
         router.push(`/products/${slug}`);
       }}

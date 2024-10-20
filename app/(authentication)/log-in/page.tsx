@@ -9,23 +9,32 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
   const dispatch = useDispatch();
 
-  const { data, mutate, isSuccess } = useLoginMut();
+  const { mutate } = useLoginMut();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    mutate({ email, password });
-
-    if (isSuccess && data) {
-      dispatch(updateUser(data));
-      toast.success("Logged in successfully");
-    }
+    mutate(
+      { email, password },
+      {
+        onError: () => {
+          toast.error("Invalid email or password");
+        },
+        onSuccess: (data) => {
+          toast.success("Logged in successfully");
+          dispatch(updateUser(data.data));
+          router.push("/");
+        },
+      }
+    );
   };
 
   return (

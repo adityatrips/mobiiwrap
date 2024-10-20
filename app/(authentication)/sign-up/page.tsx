@@ -2,27 +2,56 @@
 
 import { useState } from "react";
 
-import { useSignupMut } from "@/services/mutations";
+import { useLoginMut, useSignupMut } from "@/services/mutations";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { updateUser } from "@/stores/authSlice";
+import { useDispatch } from "react-redux";
 
 const SignupPage = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
+  const dispatch = useDispatch();
 
   const signUp = useSignupMut();
+  const logIn = useLoginMut();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    signUp.mutate({ name: `${firstName} ${lastName}`, email, password });
-    if (signUp.isSuccess && signUp.data) {
-      toast.success("User createed successfully");
-    }
+    signUp.mutate(
+      { name: `${firstName} ${lastName}`, email, password },
+      {
+        onError: () => {
+          toast.error("Internal server error");
+        },
+        onSuccess: () => {
+          toast.success("User createed successfully");
+          logIn.mutate(
+            {
+              email,
+              password,
+            },
+            {
+              onError: () => {
+                toast.error("Invalid email or password");
+              },
+              onSuccess(data) {
+                toast.success("Logged in successfully");
+                router.push("/");
+                dispatch(updateUser(data.data));
+              },
+            }
+          );
+        },
+      }
+    );
   };
 
   return (

@@ -4,6 +4,7 @@ import { ThemeSliceState } from "@/types";
 import Image from "next/image";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { brandName } from "./constants";
 
 const IndexPage = () => {
   const { isDark } = useSelector((state: ThemeSliceState) => state.theme);
@@ -30,9 +31,9 @@ const IndexPage = () => {
           left: "50%",
         }}
       />
-      <h1>Mobii Wrap</h1>
+      <h1 className="tracking-widest uppercase">{brandName}</h1>
       <p className="mb-40 text-center mx-auto max-w-[80%]">
-        Welcome to Mobii Wrap! We are a mobile phone accessory store that
+        Welcome to {brandName}! We are a mobile phone accessory store that
         provides high-quality phone wraps and cases for your mobile devices.
       </p>
     </section>
