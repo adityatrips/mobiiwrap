@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface OneProductPageProps {
   params: {
@@ -28,6 +29,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
   const [model, setModel] = useState("16_pro");
   const [quantity, setQuantity] = useState(1);
   const addToCart = useAddToCartMut();
+  const router = useRouter();
   const { user } = useSelector((state: AuthSliceState) => state.auth);
 
   const { data, isSuccess, isError, isPending } = useGetOneProduct(productId);
@@ -131,6 +133,9 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
               className="flex w-full justify-between"
               color="primary"
               variant="outline"
+              onClick={() => {
+                router.push(`/checkout/${product.slug}`);
+              }}
             >
               Buy Now
               <IndianRupee />

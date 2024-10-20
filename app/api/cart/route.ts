@@ -39,19 +39,31 @@ export const POST = async (req: NextRequest) => {
   connectToDb();
 
   try {
-    const cart = await Cart.findOne({
-      user: userId,
-    });
+    const cart = await Cart.findOne({ user: userId });
 
-    cart.products.push({ item, quantity, cost, phoneBrand, phoneModel });
-    cart.totalItems += quantity;
-    cart.total += quantity * cost;
+    if (cart) {
+      const productIndex = cart.products.findIndex(
+        (product: any) => product.item.toString() === item
+      );
 
-    await cart.save();
+      if (productIndex > -1) {
+        cart.products[productIndex].quantity += quantity;
+        cart.products[productIndex].cost = cost;
+      } else {
+        cart.products.push({ item, quantity, cost, phoneBrand, phoneModel });
+      }
 
-    return Response.json(cart, { status: 201 });
+      cart.totalItems += quantity;
+      cart.total += quantity * cost;
+
+      await cart.save();
+
+      return Response.json(cart, { status: 201 });
+    } else {
+      return Response.json("Cart not found.", { status: 404 });
+    }
   } catch (error: any) {
-    return Response.json("There was some error creating the cart.", {
+    return Response.json("There was some error updating the cart.", {
       status: 500,
     });
   }
