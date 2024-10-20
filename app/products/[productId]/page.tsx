@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { Select, SelectContent, SelectItem } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import toast from "react-hot-toast";
 
 interface OneProductPageProps {
   params: {
@@ -145,6 +146,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
                   cost: product.price * quantity,
                   userId: user!._id,
                 });
+                toast.success("Added to cart");
               }}
             >
               Add to cart

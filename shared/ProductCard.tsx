@@ -21,6 +21,7 @@ const ProductCard = ({ slug, img, price, title }: ProductCardProps) => {
 
   return (
     <Card
+      className="hover:shadow-[rgba(0,0,0,0.5)] hover:shadow-lg cursor-pointer transition-all"
       onClick={() => {
         router.push(`/products/${slug}`);
       }}

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { Input } from "@/components/ui/input";
 import {
   Pagination,
   PaginationContent,
@@ -15,13 +16,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 import { useGetCategory, useProductFilter } from "@/services/mutations";
 import { useGetAllCategories, useGetProducts } from "@/services/queries";
 import CustomLoading from "@/shared/CustomLoading";
 import ProductCard from "@/shared/ProductCard";
 import { Category, Product } from "@/types";
-import { IndianRupee } from "lucide-react";
+import { Filter, IndianRupee } from "lucide-react";
 import { useState } from "react";
 
 const categoryNameMap: { [key: string]: string } = {
@@ -65,95 +74,113 @@ const Products = () => {
     <CustomLoading />
   ) : (
     <div className="flex flex-col items-center justify-center gap-5">
-      <Select
-        value={filters.category}
-        onValueChange={(e) => {
-          setPage(1);
-          setFilters((pv) => ({ ...pv, category: e }));
-          categoryQuery.mutate({ id: e });
-          filterQuery.mutate({
-            category: e,
-            price: `${filters.price[0]}_${filters.price[1]}`,
-            rating: filters.rating,
-            deviceType: filters.deviceType,
-          });
-        }}
-      >
-        <SelectTrigger>
-          <SelectValue>
-            {filters.category === "all"
-              ? "Choose a category"
-              : categoryNameMap[filters.category]}
-          </SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem key={"all"} value={"all"}>
-            All
-          </SelectItem>
-          {categoriesQuery.data?.data?.map((category: Category) => (
-            <SelectItem
-              aria-label={category.name}
-              key={category.name}
-              value={category._id}
-            >
-              {category.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Select
-        value={filters.rating}
-        onValueChange={(e) => {
-          setPage(1);
-          setFilters((pv) => ({ ...pv, rating: e }));
-          filterQuery.mutate({
-            category: filters.category,
-            price: `${filters.price[0]}_${filters.price[1]}`,
-            rating: e,
-            deviceType: filters.deviceType,
-          });
-        }}
-      >
-        <SelectTrigger>
-          <SelectValue>
-            {filters.rating === "all"
-              ? "Choose a rating"
-              : `${filters.rating}+`}
-          </SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          {["all", 1, 2, 3, 4, 5].map((rating) => (
-            <SelectItem key={rating} value={String(rating)}>
-              {rating === "all" ? "All" : `${rating}+`}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <div className="flex w-full flex-col gap-1">
-        <Slider
-          aria-label="price"
-          step={50}
-          defaultValue={[filters.price[1] || 1000]}
-          min={0}
-          max={1000}
-          onValueCommit={(value) => {
-            setPage(1);
-            setFilters((pv: any) => ({ ...pv, price: [0, value] }));
-            filterQuery.mutate({
-              category: filters.category,
-              rating: filters.rating,
-              price: `0_${value}`,
-              deviceType: filters.deviceType,
-            });
-          }}
-        />
-        <div className="flex justify-between items-center">
-          <span>Price</span>
-          <span className="flex gap-2 items-center">
-            <IndianRupee size={18} />
-            {filters.price[0]} - {filters.price[1]}
-          </span>
-        </div>
+      <div className="w-full flex justify-between">
+        <div></div>
+        <Sheet>
+          <SheetTrigger>
+            <Filter />
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>Filters</SheetTitle>
+            </SheetHeader>
+            <SheetDescription className="mb-5">
+              Tune your search results to get your desired product.
+            </SheetDescription>
+            <div className="flex flex-col justify-center items-center gap-5">
+              <Select
+                value={filters.category}
+                onValueChange={(e) => {
+                  setPage(1);
+                  setFilters((pv) => ({ ...pv, category: e }));
+                  categoryQuery.mutate({ id: e });
+                  filterQuery.mutate({
+                    category: e,
+                    price: `${filters.price[0]}_${filters.price[1]}`,
+                    rating: filters.rating,
+                    deviceType: filters.deviceType,
+                  });
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue>
+                    {filters.category === "all"
+                      ? "Choose a category"
+                      : categoryNameMap[filters.category]}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem key={"all"} value={"all"}>
+                    All
+                  </SelectItem>
+                  {categoriesQuery.data?.data?.map((category: Category) => (
+                    <SelectItem
+                      aria-label={category.name}
+                      key={category.name}
+                      value={category._id}
+                    >
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select
+                value={filters.rating}
+                onValueChange={(e) => {
+                  setPage(1);
+                  setFilters((pv) => ({ ...pv, rating: e }));
+                  filterQuery.mutate({
+                    category: filters.category,
+                    price: `${filters.price[0]}_${filters.price[1]}`,
+                    rating: e,
+                    deviceType: filters.deviceType,
+                  });
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue>
+                    {filters.rating === "all"
+                      ? "Choose a rating"
+                      : `${filters.rating}+`}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {["all", 1, 2, 3, 4, 5].map((rating) => (
+                    <SelectItem key={rating} value={String(rating)}>
+                      {rating === "all" ? "All" : `${rating}+`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <div className="flex w-full flex-col gap-1">
+                <Slider
+                  aria-label="price"
+                  step={50}
+                  defaultValue={[filters.price[1] || 1000]}
+                  min={0}
+                  max={1000}
+                  onValueCommit={(value) => {
+                    setPage(1);
+                    setFilters((pv: any) => ({ ...pv, price: [0, value] }));
+                    filterQuery.mutate({
+                      category: filters.category,
+                      rating: filters.rating,
+                      price: `0_${value}`,
+                      deviceType: filters.deviceType,
+                    });
+                  }}
+                />
+                <div className="flex justify-between items-center">
+                  <span>Price</span>
+                  <span className="flex gap-2 items-center">
+                    <IndianRupee size={18} />
+                    {filters.price[0]} - {filters.price[1]}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
         {!filterQuery.data &&
@@ -183,24 +210,41 @@ const Products = () => {
               );
             })}
       </div>
-      <Pagination
-      // total={Math.ceil(
-      //   (filterQuery.data?.data
-      //     ? filterQuery.data.data.length
-      //     : products.length) / 10
-      // )}
-      // page={page}
-      // onChange={(e) => {
-      //   window.location.href = "#";
-      //   setPage(e);
-      // }}
-      >
+      <Pagination>
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious href="#" />
+            <PaginationPrevious
+              onClick={() => {
+                if (page < 1) {
+                  setPage(1);
+                }
+                setPage(page - 1);
+              }}
+              href="#"
+            />
           </PaginationItem>
           <PaginationItem>
-            <PaginationNext href="#" />
+            <Input
+              min={1}
+              onChange={(e) => {
+                if (Number(e.target.value) == 0) {
+                  setPage(1);
+                }
+                setPage(Number(e.target.value));
+                window.location.href = "#";
+              }}
+              className="w-20 text-center"
+              type="number"
+              value={page}
+            />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext
+              onClick={() => {
+                setPage(page + 1);
+              }}
+              href="#"
+            />
           </PaginationItem>
         </PaginationContent>
       </Pagination>

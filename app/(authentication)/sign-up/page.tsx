@@ -6,6 +6,7 @@ import { useSignupMut } from "@/services/mutations";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 const SignupPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -19,6 +20,9 @@ const SignupPage = () => {
     e.preventDefault();
 
     signUp.mutate({ name: `${firstName} ${lastName}`, email, password });
+    if (signUp.isSuccess && signUp.data) {
+      toast.success("User createed successfully");
+    }
   };
 
   return (

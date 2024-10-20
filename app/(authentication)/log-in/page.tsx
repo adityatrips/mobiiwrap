@@ -8,6 +8,7 @@ import { updateUser } from "@/stores/authSlice";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -23,6 +24,7 @@ const LoginPage = () => {
 
     if (isSuccess && data) {
       dispatch(updateUser(data));
+      toast.success("Logged in successfully");
     }
   };
 

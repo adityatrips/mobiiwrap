@@ -24,9 +24,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, Moon, Sun, User } from "lucide-react";
+import { Menu, Moon, ShoppingCart, Sun, User } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import toast from "react-hot-toast";
 
 const links = [
   {
@@ -72,6 +73,7 @@ export default function NavigationMenu() {
   const handleLogout = () => {
     dispatch(removeUser());
     window.localStorage.removeItem("token");
+    toast.success("Logged out successfully");
   };
 
   const dropdownRef = React.useRef(null);
@@ -137,7 +139,11 @@ export default function NavigationMenu() {
         ))}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex items-center gap-2">
+        <Button onClick={() => router.push("/cart")}>
+          <ShoppingCart size={24} />
+        </Button>
+
         <div className="hidden md:flex items-center space-x-2">
           <Label htmlFor="airplane-mode">
             <Moon />

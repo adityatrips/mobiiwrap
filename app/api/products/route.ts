@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Category } from "@/types";
 import { connectToDb } from "@/config/db";
 import Product from "@/models/Product";
 import { NextRequest } from "next/server";
@@ -18,6 +20,11 @@ export const GET = async (req: NextRequest) => {
 
   if (qty) {
     const products = await Product.aggregate().sample(parseInt(qty));
+    return Response.json(products, { status: 200 });
+  }
+
+  if (!category && !price && !rating && !device) {
+    const products = await Product.find({});
     return Response.json(products, { status: 200 });
   }
 
