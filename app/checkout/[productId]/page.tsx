@@ -110,6 +110,7 @@ const CheckoutOneProduct = ({
           <Cards
             cvc={formData.cvc}
             expiry={formData.expiry}
+            // @ts-expect-error This works don't touch.
             focused={formData.focus}
             name={formData.name}
             number={formData.number}

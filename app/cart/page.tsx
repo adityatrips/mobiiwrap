@@ -19,6 +19,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useRemoveFromCartMut } from "@/services/mutations";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const CartPage = () => {
   const userId = useSelector((state: AuthSliceState) => state.auth.user?._id);
@@ -26,6 +28,7 @@ const CartPage = () => {
   const cart = data?.data.cart || [];
   const queryClient = useQueryClient();
   const removeFromCart = useRemoveFromCartMut();
+  const router = useRouter();
 
   if (isError) {
     return (
@@ -107,6 +110,7 @@ const CartPage = () => {
                                 await queryClient.invalidateQueries({
                                   queryKey: ["cart", userId],
                                 });
+                                toast.success("Product removed from cart");
                               },
                             }
                           );
@@ -136,8 +140,15 @@ const CartPage = () => {
             </span>
           </div>
         </div>
+        <Button
+          onClick={() => {
+            router.push("/checkout");
+          }}
+          className="w-full"
+        >
+          Proceed to Checkout
+        </Button>
       </div>
-      {/* <h1>World</h1> */}
     </section>
   );
 };

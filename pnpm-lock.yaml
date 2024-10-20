@@ -207,6 +207,9 @@ importers:
       '@types/react':
         specifier: ^18
         version: 18.3.11
+      '@types/react-credit-cards':
+        specifier: ^0.8.4
+        version: 0.8.4
       '@types/react-dom':
         specifier: ^18
         version: 18.3.1
@@ -1247,6 +1250,9 @@ packages:
 
   '@types/prop-types@15.7.13':
     resolution: {integrity: sha512-hCZTSvwbzWGvhqxp/RqVqwU999pBf2vp7hzIjiYOsl8wqOmUxkQ6ddw1cV3l8811+kdUFus/q4d1Y3E3SyEifA==}
+
+  '@types/react-credit-cards@0.8.4':
+    resolution: {integrity: sha512-K2/duK/eHKwlcik+KbalhhlsljIuLmYQTPVNYKrTxFeA7tHySN54wL5ahJswthRQ4hWb+RzdxIoOxz7C1k+xsw==}
 
   '@types/react-dom@18.3.1':
     resolution: {integrity: sha512-qW1Mfv8taImTthu4KoXgDfLuk4bydU6Q/TkADnDWWHwi4NX4BR+LWfTp2sVmTqRrsHvyDDTelgelxJ+SsejKKQ==}
@@ -4118,6 +4124,10 @@ snapshots:
       undici-types: 6.19.8
 
   '@types/prop-types@15.7.13': {}
+
+  '@types/react-credit-cards@0.8.4':
+    dependencies:
+      '@types/react': 18.3.11
 
   '@types/react-dom@18.3.1':
     dependencies:

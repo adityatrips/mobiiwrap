@@ -118,7 +118,7 @@ export default function NavigationMenu() {
         </Link>
       </div>
 
-      <div className="md:flex hidden gap-2">
+      <div className="md:flex hidden gap-5">
         {links.map((link, i) => (
           <Link href={link.url} key={i} className={link.className}>
             {link.name}
@@ -173,7 +173,30 @@ export default function NavigationMenu() {
           </DropdownMenu>
         ) : (
           <>
-            <Button
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant={"outline"}>Authenticate</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side="bottom">
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    router.push("/log-in");
+                  }}
+                >
+                  Login
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    router.push("/sign-up");
+                  }}
+                >
+                  Register
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            {/* <Button
               onClick={() => {
                 router.push("/log-in");
               }}
@@ -187,7 +210,7 @@ export default function NavigationMenu() {
               }}
             >
               Register
-            </Button>
+            </Button> */}
           </>
         )}
       </div>
