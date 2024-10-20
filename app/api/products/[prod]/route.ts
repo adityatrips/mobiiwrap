@@ -8,11 +8,18 @@ export const GET = async (
   req: NextRequest,
   { params }: { params: { prod: string } }
 ) => {
-  connectToDb();
+  try {
+    connectToDb();
+    await Category.find();
+    const products = await Product.findOne({
+      slug: params.prod,
+    }).populate("category");
 
-  const products = await Product.findOne({
-    slug: params.prod,
-  }).populate("category");
-
-  return Response.json(products);
+    return Response.json(products);
+  } catch (error) {
+    console.error(error);
+    return Response.json("There was some error fetching the product.", {
+      status: 500,
+    });
+  }
 };

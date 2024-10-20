@@ -6,10 +6,9 @@ import { connectToDb } from "@/config/db";
 import { NextRequest } from "next/server";
 
 export const GET = async (req: NextRequest) => {
-  connectToDb();
   try {
-    const products = await Product.find();
-
+    connectToDb();
+    await Product.find();
     const cart = await Cart.findOne({
       user: req.nextUrl.searchParams.get("user"),
     }).populate("products.item");
@@ -34,11 +33,10 @@ export const GET = async (req: NextRequest) => {
 };
 
 export const POST = async (req: NextRequest) => {
-  const { item, quantity, userId, cost, phoneBrand, phoneModel } =
-    await req.json();
-  connectToDb();
-
   try {
+    const { item, quantity, userId, cost, phoneBrand, phoneModel } =
+      await req.json();
+    connectToDb();
     const cart = await Cart.findOne({ user: userId });
 
     if (cart) {
@@ -70,10 +68,9 @@ export const POST = async (req: NextRequest) => {
 };
 
 export const DELETE = async (req: NextRequest) => {
-  connectToDb();
-  const { productId, userId } = await req.json();
-
   try {
+    connectToDb();
+    const { productId, userId } = await req.json();
     const cart = await Cart.findOne({
       user: userId,
     });
