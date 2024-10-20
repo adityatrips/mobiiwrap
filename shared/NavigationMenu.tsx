@@ -77,7 +77,11 @@ export default function NavigationMenu() {
   const dropdownRef = React.useRef(null);
 
   return (
-    <nav className="z-20 fixed h-16 w-full bg-[rgba(10,10,10,0.5)] px-10 flex justify-between items-center backdrop-blur-md">
+    <nav
+      className={`z-20 fixed h-16 w-full ${
+        isDark ? "bg-[rgba(10,10,10,0.5)]" : "bg-[rgba(255,255,255,0.5)]"
+      } px-10 flex justify-between items-center backdrop-blur-md`}
+    >
       <div className="flex items-center gap-2">
         <Sheet>
           <SheetTrigger>
