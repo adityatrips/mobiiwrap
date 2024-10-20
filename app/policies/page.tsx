@@ -124,7 +124,7 @@ const Policies = () => {
               </p>
             </li>
             <li className="flex flex-col">
-              <h4>Children's Privacy</h4>
+              <h4>Children&apos;s Privacy</h4>
               <p>
                 Our services are not directed to individuals under the age of
                 13. We do not knowingly collect personal information from
@@ -212,8 +212,8 @@ const Policies = () => {
             <small>
               Throughout this policy, {brandName} refers to {brandName} LLC
               having its registered office at [Your Office Address], including
-              its affiliates and subsidiaries (also referred to as "we", "us",
-              or "our").
+              its affiliates and subsidiaries (also referred to as
+              &ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;).
             </small>
           </b>
           <br />
@@ -237,7 +237,7 @@ const Policies = () => {
               <h4>Use License</h4>
               <p>
                 Permission is granted to temporarily download one copy of the
-                materials on {brandName} LLC's website for personal,
+                materials on {brandName} LLC&apos;s website for personal,
                 non-commercial transitory viewing only. This is the grant of a
                 license, not a transfer of title, and under this license, you
                 may not:
@@ -249,15 +249,15 @@ const Policies = () => {
                   </li>
                   <li>
                     Attempt to decompile or reverse engineer any software
-                    contained on {brandName} LLC's website;
+                    contained on {brandName} LLC&apos;s website;
                   </li>
                   <li>
                     Remove any copyright or other proprietary notations from the
                     materials; or
                   </li>
                   <li>
-                    Transfer the materials to another person or "mirror" the
-                    materials on any other server.
+                    Transfer the materials to another person or
+                    &ldquo;mirror&rdquo; the materials on any other server.
                   </li>
                 </ul>
                 {brandName} LLC may terminate this license upon violations of
@@ -271,12 +271,12 @@ const Policies = () => {
               <h4>Disclaimer</h4>
               <p>
                 All the materials on {brandName} LLC&apos;s website are provided
-                "as is". {brandName} LLC makes no warranties, expressed or
-                implied, and hereby disclaims and negates all other warranties.
-                Furthermore, {brandName} LLC makes no representations concerning
-                the accuracy or reliability of the use of the materials on its
-                website or otherwise relating to such materials or any sites
-                linked to this site.
+                &ldquo;as is&rdquo;. {brandName} LLC makes no warranties,
+                expressed or implied, and hereby disclaims and negates all other
+                warranties. Furthermore, {brandName} LLC makes no
+                representations concerning the accuracy or reliability of the
+                use of the materials on its website or otherwise relating to
+                such materials or any sites linked to this site.
               </p>
             </li>
             <li className="flex flex-col">
@@ -322,9 +322,9 @@ const Policies = () => {
             <li className="flex flex-col">
               <h4>Governing Law</h4>
               <p>
-                Any claim related to {brandName} LLC's website shall be governed
-                by the laws of [Your State/Country] without regard to its
-                conflict of law provisions.
+                Any claim related to {brandName} LLC&apos;s website shall be
+                governed by the laws of [Your State/Country] without regard to
+                its conflict of law provisions.
               </p>
             </li>
           </ul>
@@ -369,7 +369,7 @@ const Policies = () => {
                 Once your order has shipped, you will receive a shipping
                 confirmation email containing a tracking number. You can track
                 the status of your shipment on our website or directly through
-                the carrier's website using the provided tracking number.
+                the carrier&apos;s website using the provided tracking number.
               </p>
             </li>
             <li className="flex flex-col">
@@ -378,7 +378,8 @@ const Policies = () => {
                 We ship to most countries worldwide. However, please note that
                 shipping times may vary depending on your location.
                 International customers are responsible for any customs duties,
-                taxes, or fees imposed by their country's customs regulations.
+                taxes, or fees imposed by their country&apos;s customs
+                regulations.
               </p>
             </li>
             <li className="flex flex-col">
