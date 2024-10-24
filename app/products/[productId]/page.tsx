@@ -84,7 +84,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
           <Select
             value={brand}
             onValueChange={(e: any) => {
-              setBrand(e.currentKey!);
+              setBrand(e);
             }}
           >
             <SelectTrigger>{toTitleCase(brand)}</SelectTrigger>
@@ -100,7 +100,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
           <Select
             value={model}
             onValueChange={(e: any) => {
-              setModel(e.currentKey);
+              setModel(e);
             }}
           >
             <SelectTrigger>

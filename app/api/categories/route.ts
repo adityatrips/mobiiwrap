@@ -5,7 +5,7 @@ export const GET = async () => {
   connectToDb();
 
   try {
-    const categories = await Category.find();
+    const categories = await Category.find({});
 
     return Response.json(categories, { status: 200 });
   } catch (error) {
