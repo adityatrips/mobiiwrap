@@ -33,7 +33,9 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
   const [model, setModel] = useState("16_pro");
   const [quantity, setQuantity] = useState(1);
   const addToCart = useAddToCartMut();
-  const { user } = useSelector((state: AuthSliceState) => state.auth);
+  const { isLoggedIn, user } = useSelector(
+    (state: AuthSliceState) => state.auth
+  );
 
   const { data, isSuccess, isError, isPending } = useGetOneProduct(productId);
 
@@ -143,11 +145,15 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
               <Plus size={28} />
             </Button>
           </div>
-          <div className="flex flex-row md:flex-col gap-4 w-full">
+          <div className="flex flex-row md:flex-col w-full">
             <form id="rzp_payment_form"></form>
             <Button
               className="flex w-full justify-between"
               onClick={() => {
+                if (!isLoggedIn) {
+                  toast.error("Please login to add to cart");
+                  return;
+                }
                 addToCart.mutate({
                   productId: product._id,
                   quantity: quantity,
