@@ -84,10 +84,10 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
             {toTitleCase(productId!.replaceAll("-", " "))}
           </h2>
           <div className="flex items-start">
-            <span>₹</span>
+            <span className="mr-1">₹</span>
             <span className="flex items-end">
               <span className="text-4xl">{product.price}</span>
-              <span>00</span>
+              <span className="ml-1 line-through">899</span>
             </span>
           </div>
 
@@ -143,7 +143,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
               <Plus size={28} />
             </Button>
           </div>
-          <div className="flex gap-4 w-full">
+          <div className="flex flex-row md:flex-col gap-4 w-full">
             <form id="rzp_payment_form"></form>
             <Button
               className="flex w-full justify-between"
