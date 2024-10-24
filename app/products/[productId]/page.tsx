@@ -12,7 +12,12 @@ import CustomLoading from "@/shared/CustomLoading";
 import Image from "next/image";
 import { useAddToCartMut } from "@/services/mutations";
 import { useSelector } from "react-redux";
-import { Select, SelectContent, SelectItem } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import toast from "react-hot-toast";
@@ -82,14 +87,13 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
               setBrand(e.currentKey!);
             }}
           >
+            <SelectTrigger>{toTitleCase(brand)}</SelectTrigger>
             <SelectContent>
-              {Object.keys(mobiles).map((product) => {
-                return (
-                  <SelectItem key={product} value={product}>
-                    {toTitleCase(product)}
-                  </SelectItem>
-                );
-              })}
+              {Object.keys(mobiles).map((product) => (
+                <SelectItem key={product} value={product}>
+                  {toTitleCase(product)}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
@@ -99,14 +103,15 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
               setModel(e.currentKey);
             }}
           >
+            <SelectTrigger>
+              {toTitleCase(model.replaceAll("_", " "))}
+            </SelectTrigger>
             <SelectContent>
-              {mobiles[brand].map((product) => {
-                return (
-                  <SelectItem key={product} value={product}>
-                    {toTitleCase(product.replaceAll("_", " "))}
-                  </SelectItem>
-                );
-              })}
+              {mobiles[brand].map((product) => (
+                <SelectItem key={product} value={product}>
+                  {toTitleCase(product.replaceAll("_", " "))}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           <div className="w-full gap-5 flex items-center justify-between">
