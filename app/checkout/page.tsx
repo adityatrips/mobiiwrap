@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetCart } from "@/services/queries";
+import withAuth from "@/shared/withAuth";
 import { AuthSliceState, UserCart } from "@/types";
 import { Check, IndianRupee } from "lucide-react";
 import Image from "next/image";
@@ -75,7 +76,7 @@ const CheckoutOneProduct = () => {
               console.log(product);
               return (
                 <div
-                  className="flex w-full items-center justify-between gap-5 border rounded-lg px-10 py-5"
+                  className="flex w-full items-center justify-between gap-5 border rounded-lg py-5"
                   key={product._id}
                 >
                   <div>
@@ -185,4 +186,4 @@ const CheckoutOneProduct = () => {
   );
 };
 
-export default CheckoutOneProduct;
+export default withAuth(CheckoutOneProduct);

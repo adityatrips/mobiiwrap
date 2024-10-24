@@ -21,6 +21,7 @@ import { useRemoveFromCartMut } from "@/services/mutations";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import withAuth from "../../shared/withAuth";
 
 const CartPage = () => {
   const userId = useSelector((state: AuthSliceState) => state.auth.user?._id);
@@ -153,4 +154,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;
+export default withAuth(CartPage);

@@ -34,7 +34,7 @@ export default function RootLayout({
               position: "bottom-left",
             }}
           />
-          <main className="px-5 pb-5 mx-auto container">{children}</main>
+          <main className="px-2 pb-5 mx-auto container">{children}</main>
         </Providers>
       </body>
     </html>

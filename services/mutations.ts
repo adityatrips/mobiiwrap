@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { User } from "@/types";
 import { updateUser } from "@/stores/authSlice";
+import Cookies from "js-cookie";
 
 export const useLoginMut = () => {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ export const useLoginMut = () => {
     onSuccess: ({ data }: { data: User }) => {
       dispatch(updateUser(data));
       localStorage.setItem("token", data.token);
+      Cookies.set("token", data.token);
     },
   });
 };

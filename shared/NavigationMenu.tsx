@@ -36,6 +36,7 @@ export default function NavigationMenu() {
 
   const { isDark } = useSelector((state: ThemeSliceState) => state.theme);
 
+  const [open, setOpen] = React.useState(false);
   const user = useSelector((state: AuthSliceState) => state.auth.user);
   const isLoggedIn = useSelector(
     (state: AuthSliceState) => state.auth.isLoggedIn
@@ -65,18 +66,22 @@ export default function NavigationMenu() {
     <nav
       className={`z-20 fixed h-16 w-full ${
         isDark ? "bg-[rgba(10,10,10,0.5)]" : "bg-[rgba(255,255,255,0.5)]"
-      } px-10 flex justify-between items-center backdrop-blur-md`}
+      } flex justify-between items-center backdrop-blur-md px-2`}
     >
       <div className="flex items-center gap-2">
-        <Sheet>
-          <SheetTrigger>
+        <Sheet open={open}>
+          <SheetTrigger
+            onClick={() => {
+              setOpen((pv) => !pv);
+            }}
+          >
             <Button variant={"outline"} className="md:hidden">
               <Menu size={24} />
             </Button>
           </SheetTrigger>
           <SheetContent side="left">
             <SheetHeader>
-              <SheetTitle className="heading">
+              <SheetTitle className="heading text">
                 <Link href="/">{brandName}</Link>
               </SheetTitle>
             </SheetHeader>
@@ -89,6 +94,7 @@ export default function NavigationMenu() {
                 <Button
                   key={i}
                   onClick={() => {
+                    setOpen(false);
                     router.push(link.url);
                   }}
                   variant={"ghost"}
@@ -114,7 +120,7 @@ export default function NavigationMenu() {
           </SheetContent>
         </Sheet>
         <Link href="/">
-          <h3>{brandName}</h3>
+          <h4 className="heading">{brandName}</h4>
         </Link>
       </div>
 
@@ -127,7 +133,10 @@ export default function NavigationMenu() {
       </div>
 
       <div className="flex items-center gap-2">
-        <Button onClick={() => router.push("/cart")}>
+        <Button
+          className={`${isLoggedIn ? "block" : "hidden"}`}
+          onClick={() => router.push("/cart")}
+        >
           <ShoppingCart size={24} />
         </Button>
 
