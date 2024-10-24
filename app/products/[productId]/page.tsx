@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
-import { IndianRupee, Minus, Plus, ShoppingCart } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Minus, Plus, ShoppingCart } from "lucide-react";
 
 import { toTitleCase } from "@/utils/str_fuctions";
 import { mobiles } from "@/app/models";
@@ -19,9 +19,8 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
 
 interface OneProductPageProps {
   params: {
@@ -34,12 +33,23 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
   const [model, setModel] = useState("16_pro");
   const [quantity, setQuantity] = useState(1);
   const addToCart = useAddToCartMut();
-  const router = useRouter();
   const { user } = useSelector((state: AuthSliceState) => state.auth);
 
   const { data, isSuccess, isError, isPending } = useGetOneProduct(productId);
 
   const product: Product = data?.data;
+
+  useEffect(() => {
+    const rzpPaymentForm = document.getElementById("rzp_payment_form");
+
+    if (!rzpPaymentForm?.hasChildNodes()) {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/payment-button.js";
+      script.async = true;
+      script.dataset.payment_button_id = "pl_PCy6jdzV9SFLCC";
+      rzpPaymentForm?.appendChild(script);
+    }
+  });
 
   if (isError) {
     return (
@@ -58,7 +68,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
     <CustomLoading />
   ) : (
     <>
-      <div className="flex flex-col md:flex-row gap-4 container justify-between items-center mx-auto">
+      <div className="flex flex-col md:flex-row gap-4 container justify-start items-center mx-auto">
         <Image
           alt={"Apple iPhone"}
           className="h-auto w-full md:w-2/6 rounded-lg object-cover"
@@ -66,7 +76,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
           src={product.image}
           width={720}
         />
-        <div className="flex flex-col w-full md:w-4/6 justify-start gap-2">
+        <div className="flex flex-col w-full md:w-4/6 max-w-[30%] justify-start gap-2">
           <p className="text-sm text-primary my-0 py-0 font-[900] tracking-widest">
             {product.category.name.toLowerCase()}
           </p>
@@ -114,18 +124,18 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
               ))}
             </SelectContent>
           </Select>
-          <div className="w-full gap-5 flex items-center justify-between">
+          <div className="border border-white rounded-lg w-full  gap-5 flex items-center justify-between">
             <Button
-              className="flex-[0.2]"
+              className="rounded-r-none"
               onClick={() => {
                 if (quantity > 1) setQuantity(quantity - 1);
               }}
             >
               <Minus size={28} />
             </Button>
-            <span className="flex-[0.6] text-center">{quantity}</span>
+            <span className="text-center">{quantity}</span>
             <Button
-              className="flex-[0.2]"
+              className="rounded-l-none"
               onClick={() => {
                 setQuantity(quantity + 1);
               }}
@@ -134,17 +144,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
             </Button>
           </div>
           <div className="flex gap-4 w-full">
-            <Button
-              className="flex w-full justify-between"
-              color="primary"
-              variant="outline"
-              onClick={() => {
-                router.push(`/checkout/${product.slug}`);
-              }}
-            >
-              Buy Now
-              <IndianRupee />
-            </Button>
+            <form id="rzp_payment_form"></form>
             <Button
               className="flex w-full justify-between"
               onClick={() => {
@@ -166,7 +166,34 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
         </div>
       </div>
       <Separator className="my-5" />
-      <h3>You might also like (WIP)</h3>
+      <div className="flex flex-col mb-5 w-full md:w-[30%]">
+        <h3 className="text-lg font-semibold">
+          Watch our expert apply the skin.
+        </h3>
+        <small className="text-sm">(because why not?)</small>
+      </div>
+      <iframe
+        className="w-full h-auto aspect-video rounded-lg"
+        src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+        title="Rick Astley - Never Gonna Give You Up (Official Music Video)"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      ></iframe>
+      <h4 className="mt-5 text-lg font-semibold">
+        Some use&ldquo;less&rdquo; information
+      </h4>
+      <p className="text-sm leading-relaxed">
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quo ipsum in
+        quia quaerat culpa ipsa sunt deserunt modi sapiente eos, numquam nulla
+        adipisci tempora eveniet veniam error neque? At facilis nulla,
+        reprehenderit eligendi omnis et delectus tenetur ab aspernatur voluptate
+        placeat quidem quisquam dolorum neque cupiditate ipsam quaerat eos amet
+        ratione consectetur fugiat consequuntur quo? Nesciunt, totam alias?
+        Laudantium vitae ullam a culpa, accusamus optio ut ad. Molestias ab
+        libero veritatis laudantium, consequuntur nemo maxime aspernatur optio
+        minus praesentium nihil, voluptas nam esse debitis! Nemo, perferendis!
+        Quam ad cumque atque magni? Optio commodi harum laudantium sapiente
+        ullam maxime obcaecati eaque.
+      </p>
     </>
   );
 };
