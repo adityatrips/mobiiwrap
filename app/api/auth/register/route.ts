@@ -1,5 +1,6 @@
 import { connectToDb } from "@/config/db";
 import User from "@/models/User";
+import Cart from "@/models/Cart";
 import { NextRequest } from "next/server";
 
 export const POST = async (req: NextRequest) => {
@@ -16,6 +17,15 @@ export const POST = async (req: NextRequest) => {
     await newUser.save();
 
     const token = newUser.generateJWT();
+
+    const newCart = new Cart({
+      user: newUser._id,
+      products: [],
+      totalItems: 0,
+      total: 0,
+    });
+
+    await newCart.save();
 
     return Response.json({
       token,
