@@ -19,8 +19,8 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import toast from "react-hot-toast";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
 
 interface OneProductPageProps {
   params: {
@@ -29,6 +29,8 @@ interface OneProductPageProps {
 }
 
 const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
+  const { toast } = useToast();
+
   const [brand, setBrand] = useState<keyof typeof mobiles>("apple");
   const [model, setModel] = useState("16_pro");
   const [quantity, setQuantity] = useState(1);
@@ -155,7 +157,11 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
               className="flex w-full justify-between"
               onClick={() => {
                 if (!isLoggedIn) {
-                  toast.error("Please login to add to cart");
+                  toast({
+                    title: "Error",
+                    description: "Please login to add to cart",
+                    variant: "destructive",
+                  });
                   return;
                 }
                 addToCart.mutate({
@@ -166,7 +172,10 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
                   cost: product.price * quantity,
                   userId: user!._id,
                 });
-                toast.success("Added to cart");
+                toast({
+                  title: "Success",
+                  description: "Product added to cart",
+                });
               }}
             >
               Add to cart

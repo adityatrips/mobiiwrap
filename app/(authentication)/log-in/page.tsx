@@ -8,10 +8,12 @@ import { updateUser } from "@/stores/authSlice";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 const LoginPage = () => {
+  const { toast } = useToast();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -25,11 +27,18 @@ const LoginPage = () => {
     mutate(
       { email, password },
       {
-        onError: () => {
-          toast.error("Invalid email or password");
+        onError: (error) => {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: error.name ?? "Internal server error",
+          });
         },
         onSuccess: (data) => {
-          toast.success("Logged in successfully");
+          toast({
+            title: "Success",
+            description: "Logged in successfully",
+          });
           dispatch(updateUser(data.data));
           router.push("/");
         },

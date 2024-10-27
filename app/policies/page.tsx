@@ -4,7 +4,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { brandName } from "../constants";
+import { brandName, email, phone } from "../constants";
+import Link from "next/link";
 
 const Policies = () => {
   return (
@@ -14,12 +15,13 @@ const Policies = () => {
           <h3>Privacy Policy</h3>
         </AccordionTrigger>
         <AccordionContent>
-          <b>
+          <b className="text-blue-400">
             <small>
-              Welcome to {brandName}. We value your privacy and are committed to
-              protecting your personal information. This Privacy Policy outlines
-              how we collect, use, and safeguard your data when you visit our
-              website and purchase our products.
+              Welcome to <b className="text-blue-400">{brandName}</b>. We value
+              your privacy and are committed to protecting your personal
+              information. This Privacy Policy outlines how we collect, use, and
+              safeguard your data when you visit our website and purchase our
+              products.
             </small>
           </b>
           <br />
@@ -59,14 +61,15 @@ const Policies = () => {
                 information with third parties in the following circumstances:
                 <ul className="flex flex-col ml-5">
                   <li>
-                    <b>Service Providers</b>: We engage third-party service
-                    providers to perform functions on our behalf, such as
-                    payment processing, shipping, and marketing services.
+                    <b className="text-blue-400">Service Providers</b>: We
+                    engage third-party service providers to perform functions on
+                    our behalf, such as payment processing, shipping, and
+                    marketing services.
                   </li>
                   <li>
-                    <b>Legal Requirements</b>: We may disclose your information
-                    if required to do so by law or in response to valid requests
-                    by public authorities.
+                    <b className="text-blue-400">Legal Requirements</b>: We may
+                    disclose your information if required to do so by law or in
+                    response to valid requests by public authorities.
                   </li>
                 </ul>
               </p>
@@ -118,9 +121,9 @@ const Policies = () => {
                 If you have any questions or concerns about this Privacy Policy
                 or our data practices, please contact us at:
                 <br />
-                {brandName}
+                <b className="text-blue-400">{brandName}</b>
                 <br />
-                Email: [your email address]
+                Email: <b className="text-blue-400">{email}</b>
               </p>
             </li>
             <li className="flex flex-col">
@@ -148,19 +151,21 @@ const Policies = () => {
             <li className="flex flex-col">
               <h4>No Returns or Exchanges</h4>
               <p>
-                At {brandName}, we strive to ensure that our device skins meet
-                the highest standards of quality. As a result, we do not accept
-                returns or exchanges for any items purchased.
+                At <b className="text-blue-400">{brandName}</b>, we strive to
+                ensure that our device skins meet the highest standards of
+                quality. As a result, we do not accept returns or exchanges for
+                any items purchased.
               </p>
             </li>
             <li className="flex flex-col">
               <h4>Defective Products</h4>
               <p>
                 If you receive a defective device skin, please contact our
-                customer service team immediately at [your email address]. We
-                are committed to resolving such issues to your satisfaction. In
-                the case of a defective product, we will provide you with a
-                discount on your next purchase.
+                customer service team immediately at{" "}
+                <b className="text-blue-400">{email}</b>. We are committed to
+                resolving such issues to your satisfaction. In the case of a
+                defective product, we will provide you with a discount on your
+                next purchase.
               </p>
             </li>
             <li className="flex flex-col">
@@ -170,8 +175,9 @@ const Policies = () => {
                 product, follow these steps:
                 <ul className="ml-5">
                   <li>
-                    Contact our customer service team at [your email address] to
-                    report the defect.
+                    Contact our customer service team at{" "}
+                    <b className="text-blue-400">{email}</b> to report the
+                    defect.
                   </li>
                   <li>
                     Provide proof of purchase (order number or receipt) and
@@ -195,9 +201,9 @@ const Policies = () => {
               <h4>Contact Us</h4>
               <p>
                 If you have any questions or concerns about our policy, please
-                reach out to our customer service team at [your email address].
-                We are here to assist you and ensure your satisfaction with
-                every purchase.
+                reach out to our customer service team at{" "}
+                <b className="text-blue-400">{email}</b>. We are here to assist
+                you and ensure your satisfaction with every purchase.
               </p>
             </li>
           </ul>
@@ -208,16 +214,18 @@ const Policies = () => {
           <h3>Terms and Conditions</h3>
         </AccordionTrigger>
         <AccordionContent>
-          <b>
+          <b className="text-blue-400">
             <small>
-              Throughout this policy, {brandName} refers to {brandName} LLC
-              having its registered office at [Your Office Address], including
-              its affiliates and subsidiaries (also referred to as
-              &ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;).
+              Throughout this policy,{" "}
+              <b className="text-blue-400">{brandName}</b> refers to{" "}
+              <b className="text-blue-400">{brandName}</b> LLC having its
+              registered office at [Your Office Address], including its
+              affiliates and subsidiaries (also referred to as &ldquo;we&rdquo;,
+              &ldquo;us&rdquo;, or &ldquo;our&rdquo;).
             </small>
           </b>
           <br />
-          <b>
+          <b className="text-blue-400">
             <small>Last Updated: 20th October 2024</small>
           </b>
           <ul className="mt-5 flex flex-col gap-5">
@@ -237,10 +245,10 @@ const Policies = () => {
               <h4>Use License</h4>
               <p>
                 Permission is granted to temporarily download one copy of the
-                materials on {brandName} LLC&apos;s website for personal,
-                non-commercial transitory viewing only. This is the grant of a
-                license, not a transfer of title, and under this license, you
-                may not:
+                materials on <b className="text-blue-400">{brandName}</b>{" "}
+                LLC&apos;s website for personal, non-commercial transitory
+                viewing only. This is the grant of a license, not a transfer of
+                title, and under this license, you may not:
                 <ul className="ml-5">
                   <li>Modify or copy the materials;</li>
                   <li>
@@ -249,7 +257,8 @@ const Policies = () => {
                   </li>
                   <li>
                     Attempt to decompile or reverse engineer any software
-                    contained on {brandName} LLC&apos;s website;
+                    contained on <b className="text-blue-400">{brandName}</b>{" "}
+                    LLC&apos;s website;
                   </li>
                   <li>
                     Remove any copyright or other proprietary notations from the
@@ -260,20 +269,23 @@ const Policies = () => {
                     &ldquo;mirror&rdquo; the materials on any other server.
                   </li>
                 </ul>
-                {brandName} LLC may terminate this license upon violations of
-                any of these restrictions. Upon termination, your right to view
-                these materials will also be terminated, and you must destroy
-                any downloaded materials in your possession, whether in printed
-                or electronic format.
+                <b className="text-blue-400">{brandName}</b> LLC may terminate
+                this license upon violations of any of these restrictions. Upon
+                termination, your right to view these materials will also be
+                terminated, and you must destroy any downloaded materials in
+                your possession, whether in printed or electronic format.
               </p>
             </li>
             <li className="flex flex-col">
               <h4>Disclaimer</h4>
               <p>
-                All the materials on {brandName} LLC&apos;s website are provided
-                &ldquo;as is&rdquo;. {brandName} LLC makes no warranties,
-                expressed or implied, and hereby disclaims and negates all other
-                warranties. Furthermore, {brandName} LLC makes no
+                All the materials on{" "}
+                <b className="text-blue-400">{brandName}</b> LLC&apos;s website
+                are provided &ldquo;as is&rdquo;.{" "}
+                <b className="text-blue-400">{brandName}</b> LLC makes no
+                warranties, expressed or implied, and hereby disclaims and
+                negates all other warranties. Furthermore,{" "}
+                <b className="text-blue-400">{brandName}</b> LLC makes no
                 representations concerning the accuracy or reliability of the
                 use of the materials on its website or otherwise relating to
                 such materials or any sites linked to this site.
@@ -282,37 +294,44 @@ const Policies = () => {
             <li className="flex flex-col">
               <h4>Limitations</h4>
               <p>
-                In no event shall {brandName} LLC or its suppliers be liable for
-                any damages (including, without limitation, damages for loss of
-                data or profit, or due to business interruption) arising out of
-                the use or inability to use the materials on {brandName}
-                LLC&apos;s website, even if {brandName} LLC or an authorized
-                representative has been notified orally or in writing of the
-                possibility of such damage. Some jurisdictions do not allow
-                limitations on implied warranties or limitations of liability
-                for incidental or consequential damages; these limitations may
-                not apply to you.
+                In no event shall <b className="text-blue-400">{brandName}</b>{" "}
+                LLC or its suppliers be liable for any damages (including,
+                without limitation, damages for loss of data or profit, or due
+                to business interruption) arising out of the use or inability to
+                use the materials on{" "}
+                <b className="text-blue-400">{brandName}</b>
+                LLC&apos;s website, even if{" "}
+                <b className="text-blue-400">{brandName}</b> LLC or an
+                authorized representative has been notified orally or in writing
+                of the possibility of such damage. Some jurisdictions do not
+                allow limitations on implied warranties or limitations of
+                liability for incidental or consequential damages; these
+                limitations may not apply to you.
               </p>
             </li>
             <li className="flex flex-col">
               <h4>Revisions and Errata</h4>
               <p>
-                The materials appearing on {brandName} LLC&apos;s website may
-                include technical, typographical, or photographic errors.
-                {brandName} LLC does not warrant that any of the materials on
-                its website are accurate, complete, or current. {brandName} LLC
-                may make changes to the materials contained on its website at
-                any time without notice. However, {brandName} LLC does not make
+                The materials appearing on{" "}
+                <b className="text-blue-400">{brandName}</b> LLC&apos;s website
+                may include technical, typographical, or photographic errors.
+                <b className="text-blue-400">{brandName}</b> LLC does not
+                warrant that any of the materials on its website are accurate,
+                complete, or current.{" "}
+                <b className="text-blue-400">{brandName}</b> LLC may make
+                changes to the materials contained on its website at any time
+                without notice. However,{" "}
+                <b className="text-blue-400">{brandName}</b> LLC does not make
                 any commitment to update the materials.
               </p>
             </li>
             <li className="flex flex-col">
               <h4>Site Terms of Use Modifications</h4>
               <p>
-                {brandName} LLC may revise these Terms of Use for its website at
-                any time without prior notice. By using this website, you agree
-                to be bound by the current version of these Terms and Conditions
-                of Use.
+                <b className="text-blue-400">{brandName}</b> LLC may revise
+                these Terms of Use for its website at any time without prior
+                notice. By using this website, you agree to be bound by the
+                current version of these Terms and Conditions of Use.
               </p>
             </li>
             <li className="flex flex-col">
@@ -322,9 +341,10 @@ const Policies = () => {
             <li className="flex flex-col">
               <h4>Governing Law</h4>
               <p>
-                Any claim related to {brandName} LLC&apos;s website shall be
-                governed by the laws of [Your State/Country] without regard to
-                its conflict of law provisions.
+                Any claim related to{" "}
+                <b className="text-blue-400">{brandName}</b> LLC&apos;s website
+                shall be governed by the laws of [Your State/Country] without
+                regard to its conflict of law provisions.
               </p>
             </li>
           </ul>
@@ -342,9 +362,10 @@ const Policies = () => {
             <li className="flex flex-col">
               <h4>Order Processing</h4>
               <p>
-                Orders placed on {brandName} are typically processed within 1-2
-                business days. Once your order is processed, you will receive a
-                confirmation email with your order details.
+                Orders placed on <b className="text-blue-400">{brandName}</b>{" "}
+                are typically processed within 1-2 business days. Once your
+                order is processed, you will receive a confirmation email with
+                your order details.
               </p>
             </li>
             <li className="flex flex-col">
@@ -424,10 +445,32 @@ const Policies = () => {
               <p>
                 If you have any questions or concerns about our shipping policy
                 or need assistance with your order, please contact our customer
-                service team at [your email address]. We are here to help!
+                service team at <b className="text-blue-400">{email}</b>. We are
+                here to help!
               </p>
             </li>
           </ul>
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="contact">
+        <AccordionTrigger>
+          <h3>Contact Us</h3>
+        </AccordionTrigger>
+        <AccordionContent>
+          <p>
+            If you have any questions or need further assistance, please contact
+            our customer service team at{" "}
+            <b className="text-blue-400">{email}</b> or WhatsApp at{" "}
+            <b className="text-blue-400">{phone}</b>. You can also reach us
+            through our Contact Us page on the website.
+          </p>
+          <br />
+          <Link
+            className="text-blue-400 underline cursor-pointer"
+            href="/contact-us"
+          >
+            Not satisfied? Submit a ticket!
+          </Link>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

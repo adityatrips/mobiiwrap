@@ -1,8 +1,7 @@
 import "./globals.css";
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/app/Providers";
 import { brandName } from "./constants";
-import { SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata = {
   title: brandName,

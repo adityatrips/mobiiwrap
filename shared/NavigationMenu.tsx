@@ -35,16 +35,17 @@ import {
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import toast from "react-hot-toast";
 import { brandName, links } from "@/app/constants";
 import { useGetCart } from "@/services/mutations";
 import Image from "next/image";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRemoveFromCartMut } from "@/services/mutations";
+import { useToast } from "@/hooks/use-toast";
 
 export default function NavigationMenu() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { toast } = useToast();
 
   const { user } = useSelector((state: AuthSliceState) => state.auth);
   const { isDark } = useSelector((state: ThemeSliceState) => state.theme);
@@ -78,7 +79,10 @@ export default function NavigationMenu() {
   const handleLogout = () => {
     dispatch(removeUser());
     window.localStorage.removeItem("token");
-    toast.success("Logged out successfully");
+    toast({
+      title: "Success",
+      description: "Logged out successfully",
+    });
   };
 
   const dropdownRef = React.useRef(null);
@@ -213,7 +217,10 @@ export default function NavigationMenu() {
                                     queryKey: ["cart", user?._id],
                                   });
                                   mutate(window.localStorage.getItem("uid")!);
-                                  toast.success("Product removed from cart");
+                                  toast({
+                                    title: "Success",
+                                    description: "Product removed from cart",
+                                  });
                                 },
                               }
                             );
@@ -280,7 +287,10 @@ export default function NavigationMenu() {
           <>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant={"outline"}>Authenticate</Button>
+                <Button variant={"outline"}>
+                  <span className="block md:hidden">Auth</span>
+                  <span className="hidden md:block">Authenticate</span>
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent side="bottom">
                 <DropdownMenuItem

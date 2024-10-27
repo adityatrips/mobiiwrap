@@ -2,18 +2,23 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { AuthSliceState } from "@/types";
+import { useToast } from "@/hooks/use-toast";
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
   const AuthenticatedComponent = (props: any) => {
     const router = useRouter();
     const { isLoggedIn } = useSelector((state: AuthSliceState) => state.auth);
+    const { toast } = useToast();
 
     useEffect(() => {
       if (!isLoggedIn) {
-        toast.error("You need to log in to access this page");
+        toast({
+          title: "Unauthorized",
+          description: "You need to be logged in to access this page",
+          variant: "destructive",
+        });
         router.push("/log-in");
       }
     }, [isLoggedIn, router]);

@@ -3,12 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 import { useSubmitContactForm } from "@/services/mutations";
 import Image from "next/image";
 import React, { useState } from "react";
-import toast from "react-hot-toast";
 
 const ContactUs = () => {
+  const { toast } = useToast();
+
   const submitContactForm = useSubmitContactForm();
 
   const [name, setName] = useState("");
@@ -27,7 +29,10 @@ const ContactUs = () => {
       },
       {
         onSuccess: () => {
-          toast.success("Query form submitted successfully");
+          toast({
+            title: "Success",
+            description: "Message sent successfully",
+          });
 
           setName("");
           setEmail("");
@@ -35,7 +40,11 @@ const ContactUs = () => {
           setMessage("");
         },
         onError: (error) => {
-          toast.error(error.message);
+          toast({
+            title: "Error",
+            description: error.name ?? "Internal server error",
+            variant: "destructive",
+          });
 
           setName("");
           setEmail("");
@@ -91,6 +100,10 @@ const ContactUs = () => {
         />
 
         <Button type="submit">Submit</Button>
+
+        <b className="mt-5">
+          Address: Shop no 38, Gaffar market, Karol Bagh, New Delhi, Delhi
+        </b>
       </form>
       <Image
         alt="Login page image"

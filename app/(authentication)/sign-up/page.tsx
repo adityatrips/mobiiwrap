@@ -6,12 +6,14 @@ import { useLoginMut, useSignupMut } from "@/services/mutations";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { updateUser } from "@/stores/authSlice";
 import { useDispatch } from "react-redux";
+import { useToast } from "@/hooks/use-toast";
 
 const SignupPage = () => {
+  const { toast } = useToast();
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");

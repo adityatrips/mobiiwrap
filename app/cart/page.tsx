@@ -156,10 +156,13 @@
 
 // export default withAuth(CartPage);
 
+"use client";
+
+import withAuth from "@/shared/withAuth";
 import React from "react";
 
 const CartPage = () => {
   return <div>CartPage</div>;
 };
 
-export default CartPage;
+export default withAuth(CartPage);

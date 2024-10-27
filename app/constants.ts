@@ -1,4 +1,6 @@
 export const brandName = "MobiiWrap";
+export const email = "contact@mobiiwrap.in";
+export const phone = "+91 7838880955";
 export const links = [
   {
     name: "About",
