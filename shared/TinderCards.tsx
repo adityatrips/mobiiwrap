@@ -2,11 +2,10 @@
 
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 
 import CustomLoading from "@/shared/CustomLoading";
 
-import { useGetNProducts } from "@/services/queries";
+import { useGetNProducts } from "@/services/mutations";
 import { useRouter } from "next/navigation";
 import { Product } from "@/types";
 
@@ -16,19 +15,26 @@ interface TinderCardsProps {
 
 const TinderCards = ({ className }: TinderCardsProps) => {
   const [products, setProducts] = useState<[] | null>(null);
-  const { data, isPending, isError } = useGetNProducts(5);
-  const queryClient = useQueryClient();
+  const { isPending, isError, mutate } = useGetNProducts();
 
   useEffect(() => {
-    if (data) {
-      setProducts(data.data);
-    }
-  }, [data]);
+    setProducts(null);
+    mutate(5, {
+      onSuccess: (data) => {
+        setProducts(data.data.products);
+        console.log(data.data.products);
+      },
+    });
+  }, []);
 
   useEffect(() => {
     if (products?.length == 0) {
-      queryClient.invalidateQueries({
-        queryKey: ["products", 5],
+      setProducts(null);
+      mutate(5, {
+        onSuccess: (data) => {
+          setProducts(data.data.products);
+          console.log(data.data.products);
+        },
       });
     }
   });
@@ -46,13 +52,13 @@ const TinderCards = ({ className }: TinderCardsProps) => {
     );
   }
 
-  return isPending || products == null ? (
+  return isPending ? (
     <CustomLoading />
   ) : (
     <>
       <h4 className="heading text-center pb-5">Swipe em like it&apos;s hot</h4>
       <div className={`${className} grid h-full w-full place-items-center`}>
-        {products.map((card: Product) => {
+        {products?.map((card: Product) => {
           return (
             <Card
               key={card.slug}

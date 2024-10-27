@@ -28,12 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={"antialiased dark bg-background text-foreground"}>
         <Providers>
-          <Toaster
-            toastOptions={{
-              className: "bg-background text-foreground",
-              position: "bottom-left",
-            }}
-          />
+          <Toaster />
           <main className="px-2 pb-5 mx-auto container">{children}</main>
         </Providers>
       </body>

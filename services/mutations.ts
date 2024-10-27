@@ -156,7 +156,7 @@ export const useGetNProducts = () => {
   return useMutation({
     mutationKey: ["list-n-products"],
     mutationFn: async (n: number) => {
-      return axios.get(`/api/products?qty=${n}`);
+      return axios.get(`/api/feeling-lucky?qty=${n}`);
     },
   });
 };

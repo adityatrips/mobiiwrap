@@ -31,10 +31,17 @@ const SignupPage = () => {
       { name: `${firstName} ${lastName}`, email, password },
       {
         onError: () => {
-          toast.error("Internal server error");
+          toast({
+            title: "An error occurred",
+            description: "Please try again",
+            variant: "destructive",
+          });
         },
         onSuccess: () => {
-          toast.success("User created successfully");
+          toast({
+            title: "Account created successfully",
+            description: "You can now login",
+          });
           logIn.mutate(
             {
               email,
@@ -42,10 +49,17 @@ const SignupPage = () => {
             },
             {
               onError: () => {
-                toast.error("Invalid email or password");
+                toast({
+                  title: "An error occurred",
+                  description: "Please try again",
+                  variant: "destructive",
+                });
               },
               onSuccess(data) {
-                toast.success("Logged in successfully");
+                toast({
+                  title: "Welcome back!",
+                  description: "You are now logged in",
+                });
                 router.push("/");
                 dispatch(updateUser(data.data));
               },

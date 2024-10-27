@@ -45,6 +45,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
 
   useEffect(() => {
     mutate(productId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

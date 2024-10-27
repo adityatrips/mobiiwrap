@@ -76,6 +76,7 @@ const Products = () => {
         },
       }
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, itemsPerPage]);
 
   if (productsQuery.isError || categoriesQuery.isError) {
