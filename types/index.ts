@@ -55,6 +55,8 @@ export interface Category {
 }
 
 export interface CartProduct {
+  phoneBrand: string;
+  phoneModel: string;
   item: {
     _id: string;
     name: string;

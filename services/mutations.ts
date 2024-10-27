@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 
 import { User } from "@/types";
 import { updateUser } from "@/stores/authSlice";
-import Cookies from "js-cookie";
 
 export const useLoginMut = () => {
   const dispatch = useDispatch();
@@ -20,7 +19,7 @@ export const useLoginMut = () => {
     onSuccess: ({ data }: { data: User }) => {
       dispatch(updateUser(data));
       localStorage.setItem("token", data.token);
-      Cookies.set("token", data.token);
+      localStorage.setItem("uid", data._id);
     },
   });
 };
@@ -131,6 +130,65 @@ export const useSortByRating = () => {
     mutationKey: ["sort-by-rating"],
     mutationFn: async (variables: { order: string }) => {
       return axios.get(`/api/products?ratingSort=${variables.order}`);
+    },
+  });
+};
+
+export const useGetProducts = () => {
+  return useMutation({
+    mutationKey: ["product-with-page-and-limit"],
+    mutationFn: async ({ page, limit }: { page: number; limit: number }) => {
+      return axios.get(`/api/products?page=${page}&limit=${limit}`);
+    },
+  });
+};
+
+export const useGetOneProduct = () => {
+  return useMutation({
+    mutationKey: ["products"],
+    mutationFn: async (id: string) => {
+      return axios.get(`/api/products/${id}`);
+    },
+  });
+};
+
+export const useGetNProducts = () => {
+  return useMutation({
+    mutationKey: ["list-n-products"],
+    mutationFn: async (n: number) => {
+      return axios.get(`/api/products?qty=${n}`);
+    },
+  });
+};
+
+export const useGetCart = () => {
+  return useMutation({
+    mutationKey: ["cart"],
+    mutationFn: async (id: string) => {
+      return axios.get(`/api/cart?user=${id}`);
+    },
+  });
+};
+
+export const useGetAllCategories = () => {
+  return useMutation({
+    mutationKey: ["categories"],
+    mutationFn: async () => {
+      return axios.get(`/api/categories`);
+    },
+  });
+};
+
+export const useSubmitContactForm = () => {
+  return useMutation({
+    mutationKey: ["contact-form"],
+    mutationFn: async (variables: {
+      name: string;
+      email: string;
+      phone: string;
+      message: string;
+    }) => {
+      return axios.post(`/api/contact-us`, variables);
     },
   });
 };

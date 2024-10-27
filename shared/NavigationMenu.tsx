@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { removeUser } from "@/stores/authSlice";
-import { AuthSliceState, ThemeSliceState } from "@/types";
+import { AuthSliceState, CartProduct, ThemeSliceState } from "@/types";
 import { useRouter } from "next/navigation";
 import { toggleTheme } from "@/stores/themeSlice";
 import Link from "next/link";
@@ -20,27 +20,48 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, Moon, ShoppingCart, Sun, User } from "lucide-react";
+import {
+  ChevronRight,
+  Menu,
+  Moon,
+  ShoppingCart,
+  Sun,
+  User,
+} from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
 import { brandName, links } from "@/app/constants";
+import { useGetCart } from "@/services/mutations";
+import Image from "next/image";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRemoveFromCartMut } from "@/services/mutations";
 
 export default function NavigationMenu() {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  const { user } = useSelector((state: AuthSliceState) => state.auth);
   const { isDark } = useSelector((state: ThemeSliceState) => state.theme);
+  const { data, mutate } = useGetCart();
+  const cart = data?.data.cart || [];
+  const queryClient = useQueryClient();
+  const removeFromCart = useRemoveFromCartMut();
 
   const [open, setOpen] = React.useState(false);
-  const user = useSelector((state: AuthSliceState) => state.auth.user);
+  const [cartOpen, setCartOpen] = useState(false);
   const isLoggedIn = useSelector(
     (state: AuthSliceState) => state.auth.isLoggedIn
   );
+
+  useEffect(() => {
+    mutate(window.localStorage.getItem("uid")!);
+  }, [cartOpen]);
 
   const handleToggleTheme = () => {
     dispatch(toggleTheme());
@@ -52,7 +73,7 @@ export default function NavigationMenu() {
     } else {
       document.querySelector("body")!.classList.remove("dark");
     }
-  }, []);
+  }, [isDark]);
 
   const handleLogout = () => {
     dispatch(removeUser());
@@ -69,7 +90,7 @@ export default function NavigationMenu() {
       } flex justify-between items-center backdrop-blur-md px-2`}
     >
       <div className="flex items-center gap-2">
-        <Sheet open={open}>
+        <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger
             onClick={() => {
               setOpen((pv) => !pv);
@@ -133,13 +154,88 @@ export default function NavigationMenu() {
       </div>
 
       <div className="flex items-center gap-2">
-        <Button
-          className={`${isLoggedIn ? "block" : "hidden"}`}
-          onClick={() => router.push("/cart")}
-        >
-          <ShoppingCart size={24} />
-        </Button>
-
+        <Sheet open={cartOpen} onOpenChange={setCartOpen}>
+          <SheetTrigger className={`${isLoggedIn ? "block" : "hidden"}`}>
+            <Button>
+              <ShoppingCart size={24} />
+            </Button>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <h2>My Cart</h2>
+            </SheetHeader>
+            <SheetDescription>
+              <span
+                className="mt-2 mb-5 flex items-center underline uppercase font-[100] cursor-pointer"
+                onClick={() => {
+                  setCartOpen(false);
+                }}
+              >
+                Continue shopping
+                <ChevronRight />
+              </span>
+            </SheetDescription>
+            <div className="flex flex-col gap-2">
+              {cart?.products?.length == 0 ? (
+                <p>
+                  Your cart is empty. <br /> Add some items to get started
+                </p>
+              ) : (
+                cart?.products?.map((product: CartProduct, index: number) => {
+                  return (
+                    <div
+                      key={index}
+                      className="border rounded-md flex w-full gap-2 p-2"
+                    >
+                      <Image
+                        className="aspect-square rounded-md"
+                        src={product.item.image}
+                        alt={product.item.name}
+                        height={100}
+                        width={100}
+                      />
+                      <div className="w-full flex justify-center flex-col gap-2">
+                        {product.item.name}
+                        <div className="flex justify-between items-center">
+                          <span className="mr-3">Qty: {product.quantity}</span>
+                          <span>$ {product.item.price}</span>
+                        </div>
+                        <Button
+                          onClick={() => {
+                            removeFromCart.mutate(
+                              {
+                                productId: product._id,
+                                userId: user?._id ?? "",
+                              },
+                              {
+                                onSuccess: async () => {
+                                  await queryClient.invalidateQueries({
+                                    queryKey: ["cart", user?._id],
+                                  });
+                                  mutate(window.localStorage.getItem("uid")!);
+                                  toast.success("Product removed from cart");
+                                },
+                              }
+                            );
+                          }}
+                          variant={"destructive"}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+            <SheetFooter>
+              <div className="mt-5 flex w-full flex-col gap-2">
+                <Button>View Cart</Button>
+                <Button variant={"secondary"}>Checkout</Button>
+              </div>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
         <div className="hidden md:flex items-center space-x-2">
           <Label htmlFor="airplane-mode">
             <Moon />
@@ -205,21 +301,6 @@ export default function NavigationMenu() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            {/* <Button
-              onClick={() => {
-                router.push("/log-in");
-              }}
-              variant={"outline"}
-            >
-              Login
-            </Button>
-            <Button
-              onClick={() => {
-                router.push("/sign-up");
-              }}
-            >
-              Register
-            </Button> */}
           </>
         )}
       </div>

@@ -6,7 +6,7 @@ import { Minus, Plus, ShoppingCart } from "lucide-react";
 
 import { toTitleCase } from "@/utils/str_fuctions";
 import { mobiles } from "@/app/models";
-import { useGetOneProduct } from "@/services/queries";
+import { useGetOneProduct } from "@/services/mutations";
 import { AuthSliceState, Product } from "@/types";
 import CustomLoading from "@/shared/CustomLoading";
 import Image from "next/image";
@@ -37,9 +37,13 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
     (state: AuthSliceState) => state.auth
   );
 
-  const { data, isSuccess, isError, isPending } = useGetOneProduct(productId);
+  const { data, isSuccess, isError, isPending, mutate } = useGetOneProduct();
 
   const product: Product = data?.data;
+
+  useEffect(() => {
+    mutate(productId);
+  }, []);
 
   useEffect(() => {
     const rzpPaymentForm = document.getElementById("rzp_payment_form");
@@ -70,7 +74,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
     <CustomLoading />
   ) : (
     <>
-      <div className="flex flex-col md:flex-row gap-4 container justify-start items-center mx-auto">
+      <div className="flex flex-col md:flex-row gap-4 justify-start items-center">
         <Image
           alt={"Apple iPhone"}
           className="h-auto w-full md:w-2/6 rounded-lg object-cover"

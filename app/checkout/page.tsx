@@ -3,19 +3,19 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetCart } from "@/services/queries";
+import { useGetCart } from "@/services/mutations";
 import withAuth from "@/shared/withAuth";
 import { AuthSliceState, UserCart } from "@/types";
 import { Check, IndianRupee } from "lucide-react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cards from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
 import { useSelector } from "react-redux";
 
 const CheckoutOneProduct = () => {
   const { user } = useSelector((state: AuthSliceState) => state.auth);
-  const oneProduct = useGetCart(user!._id);
+  const oneProduct = useGetCart();
   const productData = oneProduct.data?.data as UserCart;
   const [selectedTab, setSelectedTab] = useState("overview");
   const [formData, setFormData] = useState({
@@ -25,6 +25,10 @@ const CheckoutOneProduct = () => {
     name: "",
     number: "",
   });
+
+  useEffect(() => {
+    oneProduct.mutate(user!._id);
+  }, [user]);
 
   const handleInputFocus = (e: any) => {
     setFormData({ ...formData, focus: e.target.name });
@@ -71,7 +75,7 @@ const CheckoutOneProduct = () => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
-          <div className="flex flex-col gap-2 container justify-between items-center mx-auto">
+          <div className="flex flex-col gap-2 justify-between items-center">
             {productData.cart.products.map((product) => {
               console.log(product);
               return (

@@ -20,6 +20,16 @@ export const links = [
     url: "/policies",
     className: "",
   },
+  {
+    name: "FAQ",
+    url: "/faq",
+    className: "",
+  },
+  {
+    name: "Contact Us",
+    url: "/contact-us",
+    className: "",
+  },
 ];
 export const faqs = [
   {

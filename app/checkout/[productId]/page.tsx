@@ -3,12 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetOneProduct } from "@/services/queries";
+import { useGetOneProduct } from "@/services/mutations";
 import CustomLoading from "@/shared/CustomLoading";
 import { toTitleCase } from "@/utils/str_fuctions";
 import { Check } from "lucide-react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cards from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
 
@@ -19,7 +19,7 @@ const CheckoutOneProduct = ({
     productId: string;
   };
 }) => {
-  const oneProduct = useGetOneProduct(productId);
+  const { data, isError, isPending, mutate } = useGetOneProduct();
   const [selectedTab, setSelectedTab] = useState("overview");
   const [formData, setFormData] = useState({
     cvc: "",
@@ -28,6 +28,10 @@ const CheckoutOneProduct = ({
     name: "",
     number: "",
   });
+
+  useEffect(() => {
+    mutate(productId);
+  }, []);
 
   const handleInputFocus = (e: any) => {
     setFormData({ ...formData, focus: e.target.name });
@@ -38,7 +42,7 @@ const CheckoutOneProduct = ({
     setFormData({ ...formData, [name]: value });
   };
 
-  if (oneProduct.isError) {
+  if (isError) {
     return (
       <div className="flex min-h-nav-full justify-center items-center">
         <div className="text-center">
@@ -51,9 +55,7 @@ const CheckoutOneProduct = ({
     );
   }
 
-  console.log(oneProduct.data?.data);
-
-  return oneProduct.isPending ? (
+  return isPending ? (
     <CustomLoading />
   ) : (
     <Tabs
@@ -74,17 +76,17 @@ const CheckoutOneProduct = ({
         </TabsTrigger>
       </TabsList>
       <TabsContent value="overview">
-        <div className="flex flex-col md:flex-row gap-4 container justify-between items-center mx-auto">
+        <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
           <Image
             alt={"Apple iPhone"}
             className="h-auto w-full md:w-2/6 rounded-lg object-cover"
             height={1280}
-            src={oneProduct.data.data.image}
+            src={data?.data.image}
             width={720}
           />
           <div className="flex flex-col w-full md:w-4/6 justify-start gap-2">
             <p className="text-sm text-primary my-0 py-0 font-[900] tracking-widest">
-              {oneProduct.data.data.category.name.toLowerCase()}
+              {data?.data.category.name.toLowerCase()}
             </p>
             <h2 className="mt-0 pt-0">
               {toTitleCase(productId!.replaceAll("-", " "))}
@@ -92,7 +94,7 @@ const CheckoutOneProduct = ({
             <div className="flex items-start">
               <span>₹</span>
               <span className="flex items-end">
-                <span className="text-4xl">{oneProduct.data.data.price}</span>
+                <span className="text-4xl">{data?.data.price}</span>
                 <span>00</span>
               </span>
             </div>
