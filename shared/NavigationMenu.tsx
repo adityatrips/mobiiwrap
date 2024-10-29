@@ -237,7 +237,13 @@ export default function NavigationMenu() {
             </div>
             <SheetFooter>
               <div className="mt-5 flex w-full flex-col gap-2">
-                <Button>View Cart</Button>
+                <Button
+                  onClick={() => {
+                    router.push("/cart");
+                  }}
+                >
+                  View Cart
+                </Button>
                 <Button variant={"secondary"}>Checkout</Button>
               </div>
             </SheetFooter>
