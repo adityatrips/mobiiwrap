@@ -192,3 +192,33 @@ export const useSubmitContactForm = () => {
     },
   });
 };
+
+export const usePlaceOrder = () => {
+  return useMutation({
+    mutationKey: ["place-order"],
+    mutationFn: async (variables: {
+      products: any[];
+      userId: string;
+      address: string;
+      phone: string;
+      pincode: string;
+      payment: string;
+      total: string;
+    }) => {
+      return axios.post(`/api/orders`, variables);
+    },
+  });
+};
+
+export const useClearCart = () => {
+  return useMutation({
+    mutationKey: ["clear-cart"],
+    mutationFn: async (userId: string) => {
+      return axios.delete(`/api/cart/clear`, {
+        data: {
+          userId,
+        },
+      });
+    },
+  });
+};

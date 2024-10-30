@@ -264,7 +264,7 @@ const CartPage = () => {
           <h2>Total</h2>
           <h2>{cart.total}</h2>
         </div>
-        <Button>Checkout</Button>
+        <Button onClick={() => router.push("/checkout")}>Checkout</Button>
       </div>
     </div>
   );
