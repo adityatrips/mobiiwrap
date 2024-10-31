@@ -1,11 +1,20 @@
+'use client';
+
 // app/orders/[id]/page.tsx
 import React from 'react';
 
 import OrderDetails from '@/components/ui/OrderDetails';
-const OrderPage: React.FC = () => {
+import { useRouter } from 'next/navigation';
+
+interface OrderDetailsPageProps {
+  params: {
+    id: string;
+  };
+}
+const OrderPage = ({ params: { id } }: OrderDetailsPageProps) => {
   return (
     <div>
-      <OrderDetails />
+      <OrderDetails orderId={id} />
     </div>
   );
 };

@@ -84,8 +84,8 @@ const IndexPage = () => {
           <div className='flex flex-col md:flex-row justify-center gap-6'>
             <div className='bg-white dark:bg-gray-900 p-6 rounded-lg shadow-lg max-w-xs'>
               <p className='italic text-gray-700 dark:text-gray-300'>
-                "I absolutely love my new phone wrap! It's a perfect fit and
-                looks amazing!"
+                &ldquo;I absolutely love my new phone wrap! It&quot;s a perfect
+                fit and looks amazing!&rdquo;
               </p>
               <p className='mt-4 font-semibold text-black dark:text-white'>
                 - Priya S.
@@ -93,8 +93,8 @@ const IndexPage = () => {
             </div>
             <div className='bg-white dark:bg-gray-900 p-6 rounded-lg shadow-lg max-w-xs'>
               <p className='italic text-gray-700 dark:text-gray-300'>
-                "The quality is fantastic, and I was impressed with the fast
-                shipping."
+                &ldquo;The quality is fantastic, and I was impressed with the
+                fast shipping.&rdquo;
               </p>
               <p className='mt-4 font-semibold text-black dark:text-white'>
                 - Rajesh M.
@@ -102,8 +102,8 @@ const IndexPage = () => {
             </div>
             <div className='bg-white dark:bg-gray-900 p-6 rounded-lg shadow-lg max-w-xs'>
               <p className='italic text-gray-700 dark:text-gray-300'>
-                "So many design options! I found the perfect wrap to match my
-                style."
+                &ldquo;So many design options! I found the perfect wrap to match
+                my style.&rdquo;
               </p>
               <p className='mt-4 font-semibold text-black dark:text-white'>
                 - Sneha K.
