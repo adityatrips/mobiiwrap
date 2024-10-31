@@ -244,7 +244,10 @@ export default function NavigationMenu() {
                 >
                   View Cart
                 </Button>
-                <Button variant={'secondary'}>Checkout</Button>
+                {/* <Button variant={'secondary'}>Checkout</Button> */}
+                {/* <Button variant={'secondary'} onClick={handleCheckout}>
+                  Checkout
+                </Button> */}
               </div>
             </SheetFooter>
           </SheetContent>
