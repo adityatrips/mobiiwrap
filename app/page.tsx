@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { brandName } from './constants';
 import { ShoppingCart, Phone, ShieldCheck } from 'lucide-react'; // Importing icons
+import Footer from '@/components/ui/Footer';
 
 const IndexPage = () => {
   const { isDark } = useSelector((state: ThemeSliceState) => state.theme);
@@ -36,7 +37,6 @@ const IndexPage = () => {
           Shop Now
         </a>
       </section>
-
       {/* Features Section */}
       <section className='py-20 container mx-auto text-center'>
         <h2 className='text-3xl font-bold mb-10 text-black dark:text-white'>
@@ -75,7 +75,6 @@ const IndexPage = () => {
           </div>
         </div>
       </section>
-
       {/* Testimonials Section */}
       <section className='py-20 bg-white dark:bg-black'>
         <div className='container mx-auto text-center'>
@@ -113,7 +112,6 @@ const IndexPage = () => {
           </div>
         </div>
       </section>
-
       {/* Call to Action Section */}
       <section className='py-20'>
         <div className='container mx-auto text-center'>
@@ -131,9 +129,8 @@ const IndexPage = () => {
           </a>
         </div>
       </section>
-
       {/* Footer Section */}
-      <footer className='py-10 bg-white dark:bg-black text-center'>
+      {/* <footer className='py-10 bg-white dark:bg-black text-center'>
         <p className='text-gray-700 dark:text-gray-300'>
           &copy; {new Date().getFullYear()} {brandName}. All rights reserved.
         </p>
@@ -169,7 +166,8 @@ const IndexPage = () => {
             Contact Us
           </a>
         </div>
-      </footer>
+      </footer> */}
+      <Footer /> {/* Add Footer here */}
     </div>
   );
 };

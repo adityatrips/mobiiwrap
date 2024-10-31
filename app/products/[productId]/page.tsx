@@ -21,6 +21,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
+import Footer from '@/components/ui/Footer';
 
 interface OneProductPageProps {
   params: {
@@ -186,19 +187,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
         </div>
       </div>
       <Separator className='my-5' />
-      {/* <div className='flex flex-col mb-5 w-full md:w-[30%]'>
-        <h3 className='text-lg font-semibold'>
-          Watch our expert apply the skin.
-        </h3>
-        <small className='text-sm'>(because why not?)</small>
-      </div> */}
-      {/* <iframe
-        className='w-full h-auto aspect-video rounded-lg'
-        src='https://www.youtube.com/embed/dQw4w9WgXcQ'
-        title='Rick Astley - Never Gonna Give You Up (Official Music Video)'
-        allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-      ></iframe> */}
-      <div className='p-6 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100'>
+      <div className='p-6 rounded-lg shadow-lg bg-gray-50 dark:bg-black text-gray-900 dark:text-white'>
         <h4 className='mt-5 text-lg font-semibold text-center text-gray-900 dark:text-white'>
           Why Mobiiwrap?
         </h4>
@@ -274,9 +263,110 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
             best combination of style and protection.
           </p>
         </div>
+        <Footer />
       </div>
+      {/* <div className='p-6 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100'>
+        <h4 className='mt-5 text-lg font-semibold text-center text-gray-900 dark:text-white'>
+          Why Mobiiwrap?
+        </h4>
+        <p className='text-sm leading-relaxed mt-3 text-center text-gray-700 dark:text-gray-300'>
+          Discover our premium phone skins, designed to provide both style and
+          protection. Each Mobiiwrap skin offers a precision fit, enhancing your
+          device with a sleek look, without the bulk of a traditional case.
+        </p>
 
-      {/* <p className='text-sm leading-relaxed'>
+        <div className='mt-6 space-y-4'>
+          <div className='flex items-start gap-3'>
+            <span className='text-green-600 dark:text-green-400 text-lg'>
+              ✔
+            </span>
+            <div>
+              <strong className='text-md font-semibold text-gray-900 dark:text-white'>
+                High-Quality Materials
+              </strong>
+              <p className='text-sm text-gray-700 dark:text-gray-300'>
+                Durable and resilient, offering long-lasting style for any
+                lifestyle.
+              </p>
+            </div>
+          </div>
+
+          <div className='flex items-start gap-3'>
+            <span className='text-green-600 dark:text-green-400 text-lg'>
+              ✔
+            </span>
+            <div>
+              <strong className='text-md font-semibold text-gray-900 dark:text-white'>
+                Precision Fit
+              </strong>
+              <p className='text-sm text-gray-700 dark:text-gray-300'>
+                Designed to fit perfectly, giving your device a sleek, premium
+                look.
+              </p>
+            </div>
+          </div>
+
+          <div className='flex items-start gap-3'>
+            <span className='text-green-600 dark:text-green-400 text-lg'>
+              ✔
+            </span>
+            <div>
+              <strong className='text-md font-semibold text-gray-900 dark:text-white'>
+                Residue-Free Removal
+              </strong>
+              <p className='text-sm text-gray-700 dark:text-gray-300'>
+                Easily removable without leaving any residue behind.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className='mt-6'>
+          <h5 className='text-md font-semibold text-gray-900 dark:text-white'>
+            Application Tips
+          </h5>
+          <p className='text-sm text-gray-700 dark:text-gray-300 mt-2'>
+            Ensure a smooth, bubble-free application by starting from the center
+            and pressing outward. Align carefully and press firmly for a
+            flawless finish.
+          </p>
+        </div>
+
+        <div className='mt-6'>
+          <h5 className='text-md font-semibold text-gray-900 dark:text-white'>
+            Our Guarantee
+          </h5>
+          <p className='text-sm text-gray-700 dark:text-gray-300 mt-2'>
+            Each Mobiiwrap skin is crafted with quality, ensuring you get the
+            best combination of style and protection.
+          </p>
+        </div>
+      </div> */}
+    </>
+  );
+};
+
+export default OneProductPage;
+
+{
+  /* <div className='flex flex-col mb-5 w-full md:w-[30%]'>
+        <h3 className='text-lg font-semibold'>
+          Watch our expert apply the skin.
+        </h3>
+        <small className='text-sm'>(because why not?)</small>
+      </div> */
+}
+{
+  /* <iframe
+        className='w-full h-auto aspect-video rounded-lg'
+        src='https://www.youtube.com/embed/dQw4w9WgXcQ'
+        title='Rick Astley - Never Gonna Give You Up (Official Music Video)'
+        allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+      ></iframe> */
+}
+
+{
+  /* <p className='text-sm leading-relaxed'>
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quo ipsum in
         quia quaerat culpa ipsa sunt deserunt modi sapiente eos, numquam nulla
         adipisci tempora eveniet veniam error neque? At facilis nulla,
@@ -288,9 +378,5 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
         minus praesentium nihil, voluptas nam esse debitis! Nemo, perferendis!
         Quam ad cumque atque magni? Optio commodi harum laudantium sapiente
         ullam maxime obcaecati eaque.
-      </p> */}
-    </>
-  );
-};
-
-export default OneProductPage;
+      </p> */
+}
