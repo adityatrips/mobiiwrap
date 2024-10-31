@@ -1,26 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { Minus, Plus, ShoppingCart } from "lucide-react";
+import { useEffect, useState } from 'react';
+import { Minus, Plus, ShoppingCart } from 'lucide-react';
 
-import { toTitleCase } from "@/utils/str_fuctions";
-import { mobiles } from "@/app/models";
-import { useGetOneProduct } from "@/services/mutations";
-import { AuthSliceState, Product } from "@/types";
-import CustomLoading from "@/shared/CustomLoading";
-import Image from "next/image";
-import { useAddToCartMut } from "@/services/mutations";
-import { useSelector } from "react-redux";
+import { toTitleCase } from '@/utils/str_fuctions';
+import { mobiles } from '@/app/models';
+import { useGetOneProduct } from '@/services/mutations';
+import { AuthSliceState, Product } from '@/types';
+import CustomLoading from '@/shared/CustomLoading';
+import Image from 'next/image';
+import { useAddToCartMut } from '@/services/mutations';
+import { useSelector } from 'react-redux';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/hooks/use-toast";
+} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/hooks/use-toast';
 
 interface OneProductPageProps {
   params: {
@@ -31,8 +31,8 @@ interface OneProductPageProps {
 const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
   const { toast } = useToast();
 
-  const [brand, setBrand] = useState<keyof typeof mobiles>("apple");
-  const [model, setModel] = useState("16_pro");
+  const [brand, setBrand] = useState<keyof typeof mobiles>('apple');
+  const [model, setModel] = useState('16_pro');
   const [quantity, setQuantity] = useState(1);
   const addToCart = useAddToCartMut();
   const { isLoggedIn, user } = useSelector(
@@ -49,23 +49,23 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
   }, []);
 
   useEffect(() => {
-    const rzpPaymentForm = document.getElementById("rzp_payment_form");
+    const rzpPaymentForm = document.getElementById('rzp_payment_form');
 
     if (!rzpPaymentForm?.hasChildNodes()) {
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/payment-button.js";
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/payment-button.js';
       script.async = true;
-      script.dataset.payment_button_id = "pl_PCy6jdzV9SFLCC";
+      script.dataset.payment_button_id = 'pl_PCy6jdzV9SFLCC';
       rzpPaymentForm?.appendChild(script);
     }
   });
 
   if (isError) {
     return (
-      <div className="flex min-h-nav-full justify-center items-center">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold">Error Fetching Products</h1>
-          <p className="text-lg mt-4">
+      <div className='flex min-h-nav-full justify-center items-center'>
+        <div className='text-center'>
+          <h1 className='text-3xl font-bold'>Error Fetching Products</h1>
+          <p className='text-lg mt-4'>
             An error occurred while fetching products. Please try again later
           </p>
         </div>
@@ -77,26 +77,26 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
     <CustomLoading />
   ) : (
     <>
-      <div className="flex flex-col md:flex-row gap-4 justify-start items-center">
+      <div className='flex flex-col md:flex-row gap-4 justify-start items-center'>
         <Image
-          alt={"Apple iPhone"}
-          className="h-auto w-full md:w-2/6 rounded-lg object-cover"
+          alt={'Apple iPhone'}
+          className='h-auto w-full md:w-2/6 rounded-lg object-cover'
           height={1280}
           src={product.image}
           width={720}
         />
-        <div className="flex flex-col w-full md:w-4/6 max-w-[30%] justify-start gap-2">
-          <p className="text-sm text-primary my-0 py-0 font-[900] tracking-widest">
+        <div className='flex flex-col w-full md:w-4/6 max-w-[30%] justify-start gap-2'>
+          <p className='text-sm text-primary my-0 py-0 font-[900] tracking-widest'>
             {product.category.name.toLowerCase()}
           </p>
-          <h2 className="mt-0 pt-0">
-            {toTitleCase(productId!.replaceAll("-", " "))}
+          <h2 className='mt-0 pt-0'>
+            {toTitleCase(productId!.replaceAll('-', ' '))}
           </h2>
-          <div className="flex items-start">
-            <span className="mr-1">₹</span>
-            <span className="flex items-end">
-              <span className="text-4xl">{product.price}</span>
-              <span className="ml-1 line-through">899</span>
+          <div className='flex items-start'>
+            <span className='mr-1'>₹</span>
+            <span className='flex items-end'>
+              <span className='text-4xl'>{product.price}</span>
+              <span className='ml-1 line-through'>899</span>
             </span>
           </div>
 
@@ -123,28 +123,28 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
             }}
           >
             <SelectTrigger>
-              {toTitleCase(model.replaceAll("_", " "))}
+              {toTitleCase(model.replaceAll('_', ' '))}
             </SelectTrigger>
             <SelectContent>
               {mobiles[brand].map((product) => (
                 <SelectItem key={product} value={product}>
-                  {toTitleCase(product.replaceAll("_", " "))}
+                  {toTitleCase(product.replaceAll('_', ' '))}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <div className="border border-white rounded-lg w-full  gap-5 flex items-center justify-between">
+          <div className='border border-white rounded-lg w-full  gap-5 flex items-center justify-between'>
             <Button
-              className="rounded-r-none"
+              className='rounded-r-none'
               onClick={() => {
                 if (quantity > 1) setQuantity(quantity - 1);
               }}
             >
               <Minus size={28} />
             </Button>
-            <span className="text-center">{quantity}</span>
+            <span className='text-center'>{quantity}</span>
             <Button
-              className="rounded-l-none"
+              className='rounded-l-none'
               onClick={() => {
                 setQuantity(quantity + 1);
               }}
@@ -152,16 +152,16 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
               <Plus size={28} />
             </Button>
           </div>
-          <div className="flex flex-row md:flex-col w-full">
-            <form id="rzp_payment_form"></form>
+          <div className='flex flex-row md:flex-col w-full'>
+            {/* <form id='rzp_payment_form'></form> */}
             <Button
-              className="flex w-full justify-between"
+              className='flex w-full justify-between'
               onClick={() => {
                 if (!isLoggedIn) {
                   toast({
-                    title: "Error",
-                    description: "Please login to add to cart",
-                    variant: "destructive",
+                    title: 'Error',
+                    description: 'Please login to add to cart',
+                    variant: 'destructive',
                   });
                   return;
                 }
@@ -174,8 +174,8 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
                   userId: user!._id,
                 });
                 toast({
-                  title: "Success",
-                  description: "Product added to cart",
+                  title: 'Success',
+                  description: 'Product added to cart',
                 });
               }}
             >
@@ -185,23 +185,98 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
           </div>
         </div>
       </div>
-      <Separator className="my-5" />
-      <div className="flex flex-col mb-5 w-full md:w-[30%]">
-        <h3 className="text-lg font-semibold">
+      <Separator className='my-5' />
+      {/* <div className='flex flex-col mb-5 w-full md:w-[30%]'>
+        <h3 className='text-lg font-semibold'>
           Watch our expert apply the skin.
         </h3>
-        <small className="text-sm">(because why not?)</small>
+        <small className='text-sm'>(because why not?)</small>
+      </div> */}
+      {/* <iframe
+        className='w-full h-auto aspect-video rounded-lg'
+        src='https://www.youtube.com/embed/dQw4w9WgXcQ'
+        title='Rick Astley - Never Gonna Give You Up (Official Music Video)'
+        allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+      ></iframe> */}
+      <div className='p-6 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100'>
+        <h4 className='mt-5 text-lg font-semibold text-center text-gray-900 dark:text-white'>
+          Why Mobiiwrap?
+        </h4>
+        <p className='text-sm leading-relaxed mt-3 text-center text-gray-700 dark:text-gray-300'>
+          Discover our premium phone skins, designed to provide both style and
+          protection. Each Mobiiwrap skin offers a precision fit, enhancing your
+          device with a sleek look, without the bulk of a traditional case.
+        </p>
+
+        <div className='mt-6 space-y-4'>
+          <div className='flex items-start gap-3'>
+            <span className='text-green-600 dark:text-green-400 text-lg'>
+              ✔
+            </span>
+            <div>
+              <strong className='text-md font-semibold text-gray-900 dark:text-white'>
+                High-Quality Materials
+              </strong>
+              <p className='text-sm text-gray-700 dark:text-gray-300'>
+                Durable and resilient, offering long-lasting style for any
+                lifestyle.
+              </p>
+            </div>
+          </div>
+
+          <div className='flex items-start gap-3'>
+            <span className='text-green-600 dark:text-green-400 text-lg'>
+              ✔
+            </span>
+            <div>
+              <strong className='text-md font-semibold text-gray-900 dark:text-white'>
+                Precision Fit
+              </strong>
+              <p className='text-sm text-gray-700 dark:text-gray-300'>
+                Designed to fit perfectly, giving your device a sleek, premium
+                look.
+              </p>
+            </div>
+          </div>
+
+          <div className='flex items-start gap-3'>
+            <span className='text-green-600 dark:text-green-400 text-lg'>
+              ✔
+            </span>
+            <div>
+              <strong className='text-md font-semibold text-gray-900 dark:text-white'>
+                Residue-Free Removal
+              </strong>
+              <p className='text-sm text-gray-700 dark:text-gray-300'>
+                Easily removable without leaving any residue behind.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className='mt-6'>
+          <h5 className='text-md font-semibold text-gray-900 dark:text-white'>
+            Application Tips
+          </h5>
+          <p className='text-sm text-gray-700 dark:text-gray-300 mt-2'>
+            Ensure a smooth, bubble-free application by starting from the center
+            and pressing outward. Align carefully and press firmly for a
+            flawless finish.
+          </p>
+        </div>
+
+        <div className='mt-6'>
+          <h5 className='text-md font-semibold text-gray-900 dark:text-white'>
+            Our Guarantee
+          </h5>
+          <p className='text-sm text-gray-700 dark:text-gray-300 mt-2'>
+            Each Mobiiwrap skin is crafted with quality, ensuring you get the
+            best combination of style and protection.
+          </p>
+        </div>
       </div>
-      <iframe
-        className="w-full h-auto aspect-video rounded-lg"
-        src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-        title="Rick Astley - Never Gonna Give You Up (Official Music Video)"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      ></iframe>
-      <h4 className="mt-5 text-lg font-semibold">
-        Some use&ldquo;less&rdquo; information
-      </h4>
-      <p className="text-sm leading-relaxed">
+
+      {/* <p className='text-sm leading-relaxed'>
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quo ipsum in
         quia quaerat culpa ipsa sunt deserunt modi sapiente eos, numquam nulla
         adipisci tempora eveniet veniam error neque? At facilis nulla,
@@ -213,7 +288,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
         minus praesentium nihil, voluptas nam esse debitis! Nemo, perferendis!
         Quam ad cumque atque magni? Optio commodi harum laudantium sapiente
         ullam maxime obcaecati eaque.
-      </p>
+      </p> */}
     </>
   );
 };
