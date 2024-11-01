@@ -1,0 +1,292 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
+import { useEffect, useState } from "react";
+import { IndianRupee, Minus, Plus, ShoppingCart } from "lucide-react";
+
+import { toTitleCase } from "@/utils/str_fuctions";
+import { mobiles } from "@/app/models";
+import { useGetOneProduct } from "@/services/mutations";
+import { AuthSliceState, Product } from "@/types";
+import CustomLoading from "@/shared/CustomLoading";
+import Image from "next/image";
+import { useAddToCartMut } from "@/services/mutations";
+import { useSelector } from "react-redux";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+
+interface OneProductPageProps {
+  params: {
+    productId: string;
+  };
+}
+
+const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
+  const { toast } = useToast();
+
+  const [brand, setBrand] = useState<keyof typeof mobiles>("apple");
+  const [model, setModel] = useState("16_pro");
+  const [quantity, setQuantity] = useState(1);
+  const addToCart = useAddToCartMut();
+  const { isLoggedIn, user } = useSelector(
+    (state: AuthSliceState) => state.auth
+  );
+
+  const { data, isSuccess, isError, isPending, mutate } = useGetOneProduct();
+
+  const product: Product = data?.data;
+  const router = useRouter();
+
+  const handleAddToCart = () => {
+    if (!isLoggedIn) {
+      toast({
+        title: "Error",
+        description: "Please login to add to cart",
+        variant: "destructive",
+      });
+      return;
+    }
+    addToCart.mutate({
+      productId: product._id,
+      quantity,
+      phoneBrand: brand,
+      phoneModel: model,
+      cost: product.price * quantity,
+      userId: user!._id,
+    });
+    toast({
+      title: "Success",
+      description: "Product added to cart",
+    });
+  };
+
+  const handleBuyNow = () => {
+    if (!isLoggedIn) {
+      toast({
+        title: "Error",
+        description: "Please login to buy",
+        variant: "destructive",
+      });
+      return;
+    }
+    addToCart.mutate(
+      {
+        productId: product._id,
+        quantity,
+        phoneBrand: brand,
+        phoneModel: model,
+        cost: product.price * quantity,
+        userId: user!._id,
+      },
+      {
+        onSuccess: () => {
+          router.push("/checkout");
+        },
+      }
+    );
+  };
+
+  useEffect(() => {
+    mutate(productId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (isError) {
+    return (
+      <div className="flex min-h-nav-full justify-center items-center">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold">Error Fetching Products</h1>
+          <p className="text-lg mt-4">
+            An error occurred while fetching products. Please try again later
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return !isSuccess || isPending ? (
+    <CustomLoading />
+  ) : (
+    <>
+      <div className="container mx-auto px-2 mt-20 flex flex-col md:flex-row gap-4 justify-start items-center">
+        <Image
+          alt={"Apple iPhone"}
+          className="h-auto w-full md:w-2/6 rounded-lg object-cover"
+          height={1280}
+          src={product.image}
+          width={720}
+        />
+        <div className="flex flex-col w-full md:w-4/6 md:max-w-[30%] justify-start gap-2">
+          <p className="text-sm text-primary my-0 py-0 font-[900] tracking-widest">
+            {product.category.name.toLowerCase()}
+          </p>
+          <h2 className="mt-0 pt-0">
+            {toTitleCase(productId!.replaceAll("-", " "))}
+          </h2>
+          <div className="flex items-start">
+            <span className="mr-1">₹</span>
+            <span className="flex items-end">
+              <span className="text-4xl">{product.price}</span>
+              <span className="ml-1 line-through">
+                {product.slug === "dirty-money" ? "2000" : product.price}
+              </span>
+            </span>
+          </div>
+
+          <Select
+            value={brand}
+            onValueChange={(e: keyof typeof mobiles) => {
+              setBrand(e);
+              setModel(mobiles[e][0]);
+            }}
+          >
+            <SelectTrigger>{toTitleCase(brand)}</SelectTrigger>
+            <SelectContent>
+              {Object.keys(mobiles).map((product) => (
+                <SelectItem key={product} value={product}>
+                  {toTitleCase(product)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={model}
+            onValueChange={(e: any) => {
+              setModel(e);
+            }}
+          >
+            <SelectTrigger>
+              {toTitleCase(model.replaceAll("_", " "))}
+            </SelectTrigger>
+            <SelectContent>
+              {mobiles[brand].map((product) => (
+                <SelectItem key={product} value={product}>
+                  {toTitleCase(product.replaceAll("_", " "))}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <div className="border border-white rounded-lg w-full  gap-5 flex items-center justify-between">
+            <Button
+              className="rounded-r-none"
+              onClick={() => {
+                if (quantity > 1) setQuantity(quantity - 1);
+              }}
+            >
+              <Minus size={28} />
+            </Button>
+            <span className="text-center">{quantity}</span>
+            <Button
+              className="rounded-l-none"
+              onClick={() => {
+                setQuantity(quantity + 1);
+              }}
+            >
+              <Plus size={28} />
+            </Button>
+          </div>
+          <div className="flex gap-2 flex-row w-full">
+            <Button
+              className="flex w-full justify-between"
+              onClick={handleAddToCart}
+            >
+              Add to cart
+              <ShoppingCart />
+            </Button>
+            <Button
+              variant={"secondary"}
+              className="flex w-full justify-between"
+              onClick={handleBuyNow}
+            >
+              Buy Now
+              <IndianRupee />
+            </Button>
+          </div>
+        </div>
+      </div>
+      <Separator className="my-5" />
+      <div className="mx-auto container p-6 rounded-lg shadow-lg">
+        <h4 className="mt-5 text-lg font-semibold text-center ">
+          Why Mobiiwrap?
+        </h4>
+        <p className="text-sm leading-relaxed mt-3 text-center">
+          Discover our premium phone skins, designed to provide both style and
+          protection. Each Mobiiwrap skin offers a precision fit, enhancing your
+          device with a sleek look, without the bulk of a traditional case.
+        </p>
+
+        <div className="mt-6 space-y-4">
+          <div className="flex items-start gap-3">
+            <span className="text-green-600 dark:text-green-400 text-lg">
+              ✔
+            </span>
+            <div>
+              <strong className="text-md font-semibold ">
+                High-Quality Materials
+              </strong>
+              <p className="text-sm">
+                Durable and resilient, offering long-lasting style for any
+                lifestyle.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <span className="text-green-600 dark:text-green-400 text-lg">
+              ✔
+            </span>
+            <div>
+              <strong className="text-md font-semibold ">Precision Fit</strong>
+              <p className="text-sm">
+                Designed to fit perfectly, giving your device a sleek, premium
+                look.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <span className="text-green-600 dark:text-green-400 text-lg">
+              ✔
+            </span>
+            <div>
+              <strong className="text-md font-semibold ">
+                Residue-Free Removal
+              </strong>
+              <p className="text-sm">
+                Easily removable without leaving any residue behind.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6">
+          <h5 className="text-md font-semibold ">Application Tips</h5>
+          <p className="text-sm mt-2">
+            Ensure a smooth, bubble-free application by starting from the center
+            and pressing outward. Align carefully and press firmly for a
+            flawless finish.
+          </p>
+        </div>
+
+        <div className="mt-6">
+          <h5 className="text-md font-semibold ">Our Guarantee</h5>
+          <p className="text-sm mt-2">
+            Each Mobiiwrap skin is crafted with quality, ensuring you get the
+            best combination of style and protection.
+          </p>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default OneProductPage;
