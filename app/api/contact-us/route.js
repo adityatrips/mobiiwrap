@@ -15,6 +15,7 @@ export const POST = async (req) => {
 
     return Response.json({ message: "Query form submitted successfully" });
   } catch (error) {
+    console.error(error);
     return Response.json({ error }, { status: 500 });
   }
 };

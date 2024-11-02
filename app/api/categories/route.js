@@ -9,6 +9,7 @@ export const GET = async () => {
 
     return Response.json(categories, { status: 200 });
   } catch (error) {
+    console.error(error);
     return Response.json(
       { message: "Error retrieving categories", error },
       { status: 500 }

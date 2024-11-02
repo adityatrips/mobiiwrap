@@ -13,6 +13,7 @@ export const GET = async (req, { params }) => {
     }
     return Response.json(order);
   } catch (error) {
+    console.error(error);
     return Response.json({ message: "Server error", error }, { status: 500 });
   }
 };

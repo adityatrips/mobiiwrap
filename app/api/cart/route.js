@@ -24,6 +24,7 @@ export const GET = async (req) => {
       { status: 200 }
     );
   } catch (error) {
+    console.error(error);
     return Response.json("There was some error fetching the cart.", {
       status: 500,
     });
@@ -59,6 +60,7 @@ export const POST = async (req) => {
       return Response.json("Cart not found.", { status: 404 });
     }
   } catch (error) {
+    console.error(error);
     return Response.json("There was some error updating the cart.", {
       status: 500,
     });
@@ -81,6 +83,7 @@ export const DELETE = async (req) => {
 
     return Response.json(cart, { status: 200 });
   } catch (error) {
+    console.error(error);
     return Response.json("There was some error deleting the cart.", {
       status: 500,
     });

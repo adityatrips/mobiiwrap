@@ -8,6 +8,7 @@ export const GET = async (req, { params }) => {
     const category = await Category.findById(params.categoryId);
     return Response.json(category, { status: 200 });
   } catch (error) {
+    console.error(error);
     return Response.json(
       { message: "Error retrieving category", error },
       { status: 500 }

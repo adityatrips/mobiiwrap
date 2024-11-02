@@ -19,6 +19,7 @@ export const DELETE = async (req) => {
 
     return Response.json(cart, { status: 200 });
   } catch (error) {
+    console.error(error);
     return Response.json("There was some error deleting the cart.", {
       status: 500,
     });

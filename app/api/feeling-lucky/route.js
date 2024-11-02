@@ -15,6 +15,7 @@ export const GET = async (req) => {
       { status: 200 }
     );
   } catch (error) {
+    console.error(error);
     return Response.json({ message: "Internal Server Error" }, { status: 500 });
   }
 };

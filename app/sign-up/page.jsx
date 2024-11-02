@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { useToast } from "@/hooks/use-toast";
 import { useLoginModal } from "@/context/LoginModalContext";
 
-const AuthenticationLayout = ({ children }) => {
+const SignUp = () => {
   const { toast } = useToast();
 
   const [firstName, setFirstName] = useState("");
@@ -157,4 +157,4 @@ const AuthenticationLayout = ({ children }) => {
   );
 };
 
-export default AuthenticationLayout;
+export default SignUp;

@@ -13,6 +13,7 @@ export const GET = async (req, { params }) => {
 
     return Response.json(products);
   } catch (error) {
+    console.error(error);
     return Response.json("There was some error fetching the product.", {
       status: 500,
     });

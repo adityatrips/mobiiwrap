@@ -44,6 +44,7 @@ export async function GET() {
     ); // Fetch all orders
     return NextResponse.json(orders, { status: 200 });
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { message: "Server error", error },
       { status: 500 }

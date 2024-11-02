@@ -41,6 +41,7 @@ export const POST = async (req) => {
       { status: 200 }
     );
   } catch (error) {
+    console.error(error);
     return Response.json(
       {
         error,

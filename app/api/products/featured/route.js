@@ -3,12 +3,17 @@ import Product from "@/models/Product";
 
 export const GET = async (req, res) => {
   connectToDb();
-  const products = await Product.find({ featured: true });
+  try {
+    const products = await Product.find({ featured: true });
 
-  return Response.json(
-    {
-      products,
-    },
-    { status: 200 }
-  );
+    return Response.json(
+      {
+        products,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(error);
+    return Response.json({ message: "Internal Server Error" }, { status: 500 });
+  }
 };

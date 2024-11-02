@@ -30,6 +30,7 @@ export const POST = async (req) => {
       token,
     });
   } catch (error) {
+    console.error(error);
     return Response.json(
       {
         error: error.message,
