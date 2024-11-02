@@ -1,11 +1,7 @@
 import { connectToDb } from "@/config/db";
 import Category from "@/models/Category";
-import { NextRequest } from "next/server";
 
-export const GET = async (
-  req: NextRequest,
-  { params }: { params: { categoryId: string } }
-) => {
+export const GET = async (req, { params }) => {
   connectToDb();
 
   try {

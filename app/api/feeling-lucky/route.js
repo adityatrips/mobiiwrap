@@ -1,8 +1,7 @@
 import { connectToDb } from "@/config/db";
 import Product from "@/models/Product";
-import { NextRequest } from "next/server";
 
-export const GET = async (req: NextRequest) => {
+export const GET = async (req) => {
   const qty = parseInt(req.nextUrl.searchParams.get("qty") || "1");
   connectToDb();
 

@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 
@@ -107,33 +107,6 @@ export const useProductFilter = () => {
   });
 };
 
-export const useSortByName = () => {
-  return useMutation({
-    mutationKey: ["sort-by-name"],
-    mutationFn: async (variables: { order: string }) => {
-      return axios.get(`/api/products?nameSort=${variables.order}`);
-    },
-  });
-};
-
-export const useSortByPrice = () => {
-  return useMutation({
-    mutationKey: ["sort-by-price"],
-    mutationFn: async (variables: { order: string }) => {
-      return axios.get(`/api/products?priceSort=${variables.order}`);
-    },
-  });
-};
-
-export const useSortByRating = () => {
-  return useMutation({
-    mutationKey: ["sort-by-rating"],
-    mutationFn: async (variables: { order: string }) => {
-      return axios.get(`/api/products?ratingSort=${variables.order}`);
-    },
-  });
-};
-
 export const useGetProducts = () => {
   return useMutation({
     mutationKey: ["product-with-page-and-limit"],
@@ -191,9 +164,9 @@ export const useGetCart = () => {
 };
 
 export const useGetAllCategories = () => {
-  return useMutation({
-    mutationKey: ["categories"],
-    mutationFn: async () => {
+  return useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
       return axios.get(`/api/categories`);
     },
   });
@@ -241,9 +214,9 @@ export const usePlaceOrder = () => {
 };
 
 export const useGetFeaturedProducts = () => {
-  return useMutation({
-    mutationKey: ["featured-products"],
-    mutationFn: async () => {
+  return useQuery({
+    queryKey: ["featured-products"],
+    queryFn: async () => {
       return axios.get(`/api/products/featured`);
     },
   });

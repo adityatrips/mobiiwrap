@@ -1,8 +1,7 @@
 import { connectToDb } from "@/config/db";
 import Cart from "@/models/Cart";
-import { NextRequest } from "next/server";
 
-export const DELETE = async (req: NextRequest) => {
+export const DELETE = async (req) => {
   try {
     connectToDb();
     const { userId } = await req.json();

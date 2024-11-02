@@ -16,11 +16,11 @@ interface TinderCardsProps {
 
 const TinderCards = ({ className }: TinderCardsProps) => {
   const [products, setProducts] = useState<[] | null>(null);
-  const { isPending, isError, mutate } = useGetNProducts();
+  const nProducts = useGetNProducts();
 
   useEffect(() => {
     setProducts(null);
-    mutate(5, {
+    nProducts.mutate(5, {
       onSuccess: (data) => {
         setProducts(data.data.products);
       },
@@ -30,7 +30,7 @@ const TinderCards = ({ className }: TinderCardsProps) => {
   useEffect(() => {
     if (products?.length == 0) {
       setProducts(null);
-      mutate(5, {
+      nProducts.mutate(5, {
         onSuccess: (data) => {
           setProducts(data.data.products);
         },
@@ -38,7 +38,7 @@ const TinderCards = ({ className }: TinderCardsProps) => {
     }
   });
 
-  if (isError) {
+  if (nProducts.isError) {
     return (
       <div className="flex min-h-nav-full justify-center items-center">
         <div className="text-center">
@@ -51,7 +51,7 @@ const TinderCards = ({ className }: TinderCardsProps) => {
     );
   }
 
-  return isPending ? (
+  return nProducts.isPending ? (
     <CustomLoading />
   ) : (
     <div className="w-full">

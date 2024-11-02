@@ -3,9 +3,8 @@
 import Product from "@/models/Product";
 import Cart from "@/models/Cart";
 import { connectToDb } from "@/config/db";
-import { NextRequest } from "next/server";
 
-export const GET = async (req: NextRequest) => {
+export const GET = async (req) => {
   try {
     connectToDb();
     await Product.find();
@@ -31,7 +30,7 @@ export const GET = async (req: NextRequest) => {
   }
 };
 
-export const POST = async (req: NextRequest) => {
+export const POST = async (req) => {
   try {
     const { item, quantity, userId, cost, phoneBrand, phoneModel } =
       await req.json();
@@ -40,7 +39,7 @@ export const POST = async (req: NextRequest) => {
 
     if (cart) {
       const productIndex = cart.products.findIndex(
-        (product: any) => product.item.toString() === item
+        (product) => product.item.toString() === item
       );
 
       if (productIndex > -1) {
@@ -59,14 +58,14 @@ export const POST = async (req: NextRequest) => {
     } else {
       return Response.json("Cart not found.", { status: 404 });
     }
-  } catch (error: any) {
+  } catch (error) {
     return Response.json("There was some error updating the cart.", {
       status: 500,
     });
   }
 };
 
-export const DELETE = async (req: NextRequest) => {
+export const DELETE = async (req) => {
   try {
     connectToDb();
     const { productId, userId } = await req.json();
@@ -75,7 +74,7 @@ export const DELETE = async (req: NextRequest) => {
     });
 
     cart.products = cart.products.filter(
-      (product: any) => product._id.toString() !== productId
+      (product) => product._id.toString() !== productId
     );
 
     await cart.save();

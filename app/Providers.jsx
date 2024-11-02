@@ -10,7 +10,7 @@ import { ThemeSliceState } from "@/types";
 import Footer from "@/components/ui/Footer";
 import LoginModalProvider from "@/context/LoginModalContext";
 
-const Providers = ({ children }: { children: React.ReactNode }) => {
+const Providers = ({ children }) => {
   const queryClient = new QueryClient();
 
   return (

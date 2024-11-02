@@ -1,9 +1,8 @@
 import { connectToDb } from "@/config/db";
 import User from "@/models/User";
 import Cart from "@/models/Cart";
-import { NextRequest } from "next/server";
 
-export const POST = async (req: NextRequest) => {
+export const POST = async (req) => {
   const { email, password, name } = await req.json();
   connectToDb();
 
@@ -30,7 +29,7 @@ export const POST = async (req: NextRequest) => {
     return Response.json({
       token,
     });
-  } catch (error: any) {
+  } catch (error) {
     return Response.json(
       {
         error: error.message,

@@ -2,12 +2,8 @@ import { connectToDb } from "@/config/db";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Category from "@/models/Category";
 import Product from "@/models/Product";
-import { NextRequest } from "next/server";
 
-export const GET = async (
-  req: NextRequest,
-  { params }: { params: { prod: string } }
-) => {
+export const GET = async (req, { params }) => {
   try {
     connectToDb();
     await Category.find();

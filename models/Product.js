@@ -20,7 +20,7 @@ const ProductSchema = new Schema({
     type: Number,
     required: true,
     validate: {
-      validator: function (value: number) {
+      validator: function (value) {
         return value > 0;
       },
       message: "Price must be a positive number",

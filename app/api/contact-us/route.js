@@ -1,7 +1,6 @@
 import QueryForm from "@/models/QueryForm";
-import { NextRequest } from "next/server";
 
-export const POST = async (req: NextRequest) => {
+export const POST = async (req) => {
   const { name, email, phone, message } = await req.json();
 
   try {

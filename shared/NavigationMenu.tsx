@@ -24,10 +24,13 @@ import { Menu, Moon, ShoppingCart, Sun, User } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { brandName, links, brandAbbr } from "@/app/constants";
-import { useGetCart, useLoginMut } from "@/services/mutations";
+import {
+  useGetCart,
+  useLoginMut,
+  useRemoveFromCartMut,
+} from "@/services/mutations";
 import Image from "next/image";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRemoveFromCartMut } from "@/services/mutations";
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -47,9 +50,9 @@ export default function NavigationMenu() {
 
   const { user } = useSelector((state: AuthSliceState) => state.auth);
   const { isDark } = useSelector((state: ThemeSliceState) => state.theme);
-  const { data, mutate } = useGetCart();
+  const getCart = useGetCart();
   const login = useLoginMut();
-  const cart = data?.data.cart || [];
+  const cart = getCart.data?.data.cart || [];
   const queryClient = useQueryClient();
   const removeFromCart = useRemoveFromCartMut();
 
@@ -62,7 +65,10 @@ export default function NavigationMenu() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+
   const handleSubmit = () => {
+    setIsLoggingIn(true);
     login.mutate(
       { email, password },
       {
@@ -80,12 +86,15 @@ export default function NavigationMenu() {
           });
           dispatch(updateUser(data.data));
         },
+        onSettled: () => {
+          setIsLoggingIn(false);
+        },
       }
     );
   };
 
   useEffect(() => {
-    mutate(window.localStorage.getItem("uid")!);
+    getCart.mutate(window.localStorage.getItem("uid")!);
   }, [cartOpen]);
 
   const handleToggleTheme = () => {
@@ -217,7 +226,9 @@ export default function NavigationMenu() {
                                 await queryClient.invalidateQueries({
                                   queryKey: ["cart", user?._id],
                                 });
-                                mutate(window.localStorage.getItem("uid")!);
+                                getCart.mutate(
+                                  window.localStorage.getItem("uid")!
+                                );
                                 toast({
                                   title: "Success",
                                   description: "Product removed from cart",
@@ -328,8 +339,9 @@ export default function NavigationMenu() {
                   className="w-2/5"
                   color="primary"
                   onClick={handleSubmit}
+                  disabled={isLoggingIn}
                 >
-                  Login
+                  {isLoggingIn ? "Logging in..." : "Login"}
                 </Button>
               </div>
             </DialogContent>

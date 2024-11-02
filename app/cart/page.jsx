@@ -6,7 +6,6 @@ import { useToast } from "@/hooks/use-toast";
 import { useGetCart, useRemoveFromCartMut } from "@/services/mutations";
 import CustomLoading from "@/shared/CustomLoading";
 import withAuth from "@/shared/withAuth";
-import { AuthSliceState } from "@/types";
 import { toTitleCase } from "@/utils/str_fuctions";
 import { useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
@@ -16,29 +15,28 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const CartPage = () => {
-  const userId = useSelector((state: AuthSliceState) => state.auth.user?._id);
-  const { data, isPending, isError, mutate } = useGetCart();
-  const queryClient = useQueryClient();
+  const userId = useSelector((state) => state.auth.user?._id);
+  const getCart = useGetCart();
   const removeFromCart = useRemoveFromCartMut();
   const router = useRouter();
   const { toast } = useToast();
 
-  const cart = data?.data.cart || [];
+  const cart = getCart.data?.data.cart || [];
 
   useEffect(() => {
-    mutate(userId!);
+    getCart.mutate(userId);
   }, []);
 
-  const handleRemoveFromCart = async (productId: string) => {
+  const handleRemoveFromCart = async (productId) => {
     await removeFromCart.mutateAsync(
-      { userId: userId!, productId },
+      { userId: userId, productId },
       {
         onSuccess: async () => {
           toast({
             title: "Success",
             description: "Product removed from cart",
           });
-          mutate(userId!);
+          getCart.mutate(userId);
         },
       }
     );
@@ -59,7 +57,7 @@ const CartPage = () => {
     router.push("/checkout");
   };
 
-  if (isError) {
+  if (getCart.isError) {
     return (
       <div className="container mx-auto px-2 mt-20 flex min-h-nav-full justify-center items-center">
         <div className="text-center">
@@ -72,7 +70,7 @@ const CartPage = () => {
     );
   }
 
-  return isPending || data == undefined ? (
+  return getCart.isPending || getCart.data == undefined ? (
     <CustomLoading />
   ) : (
     <div className="flex min-h-nav-full">
@@ -81,7 +79,7 @@ const CartPage = () => {
       </div>
 
       <div className="flex flex-col justify-center gap-5">
-        {cart.products.map((product: any, index: number) => (
+        {cart.products.map((product, index) => (
           <div key={index} className="flex gap-5 border rounded-md p-5">
             <div className="relative">
               <Image

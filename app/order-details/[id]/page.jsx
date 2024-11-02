@@ -5,41 +5,10 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import CustomLoading from "@/shared/CustomLoading";
 
-interface Product {
-  product: {
-    _id: string;
-    name: string;
-    price: number;
-    image: string;
-  };
-  quantity: number;
-  _id: string;
-}
-
-interface Order {
-  _id: string;
-  user: string;
-  products: Product[];
-  address: string;
-  phone: string;
-  pincode: string;
-  status: string;
-  payment: string;
-  total: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface OrderDetailsPageProps {
-  params: {
-    id: string;
-  };
-}
-
-const OrderPage = ({ params: { id } }: OrderDetailsPageProps) => {
-  const [order, setOrder] = useState<Order | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+const OrderPage = ({ params: { id } }) => {
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchOrder = async () => {
     try {
@@ -47,7 +16,7 @@ const OrderPage = ({ params: { id } }: OrderDetailsPageProps) => {
       if (!response.ok) {
         throw new Error("Order not found");
       }
-      const data: Order = await response.json();
+      const data = await response.json();
       setOrder(data);
     } catch (error) {
       if (error instanceof Error) {

@@ -33,7 +33,7 @@ import { useDebounce } from "use-debounce";
 import { Filter, IndianRupee } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const categoryNameMap: { [key: string]: string } = {
+const categoryNameMap = {
   "6713e23a97fba66950fec8a9": "Brands and Logos",
   "6713e23a97fba66950fec8aa": "Superheroes",
   "6713e23a97fba66950fec8ab": "Travel",
@@ -60,10 +60,6 @@ const Products = () => {
   const [itemsPerPage, setItemsPerPage] = useState("20");
 
   useEffect(() => {
-    categoriesQuery.mutate();
-  }, []);
-
-  useEffect(() => {
     applyFilter(initialFilters);
   }, [page, itemsPerPage, filters]);
 
@@ -73,7 +69,7 @@ const Products = () => {
     applyFilter(initialFilters);
   };
 
-  const applyFilter = (acceptedFilters: any) => {
+  const applyFilter = (acceptedFilters) => {
     productsQuery.mutate(
       {
         page: page.toString(),
@@ -110,7 +106,7 @@ const Products = () => {
     );
   }
 
-  const handleTempFilterChange = (key: any, value: any) => {
+  const handleTempFilterChange = (key, value) => {
     setTempFilters((prev) => ({ ...prev, [key]: value }));
     setPage(1);
   };
@@ -154,7 +150,7 @@ const Products = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All</SelectItem>
-                  {categoriesQuery.data?.data?.map((category: Category) => (
+                  {categoriesQuery.data?.data?.map((category) => (
                     <SelectItem key={category._id} value={category._id}>
                       {category.name}
                     </SelectItem>
@@ -271,7 +267,7 @@ const Products = () => {
 
       {/* Product Grid and Pagination */}
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-        {productsQuery.data?.data.products.map((product: Product) => (
+        {productsQuery.data?.data.products.map((product) => (
           <ProductCard
             key={product.slug}
             img={product.image}

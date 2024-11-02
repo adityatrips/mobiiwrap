@@ -2,11 +2,10 @@ import React from "react";
 // import { brandName } from '@/constants';
 import { brandName } from "../constants";
 import { Phone, Headphones, Star } from "lucide-react"; // Example icon imports from Lucide
-import Footer from "@/components/ui/Footer";
 
 const AboutPage = () => {
   return (
-    <div className="container mx-auto px-2 mt-20 flex flex-col gap-8 justify-center min-h-nav-full px-6 py-10 transition-all duration-300">
+    <div className="container mx-auto px-2 mt-20 flex flex-col gap-8 justify-center min-h-nav-full py-10 transition-all duration-300">
       <div className="text-center">
         <p className="text-xs uppercase tracking-widest font-semibold">
           Why Choose Us?

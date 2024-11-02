@@ -4,10 +4,10 @@ import React from "react";
 
 const LoginModalContext = React.createContext({
   isLoginOpen: false,
-  setIsLoginOpen: (value: boolean) => {},
+  setIsLoginOpen: (value) => {},
 });
 
-const LoginModalProvider = ({ children }: { children: React.ReactNode }) => {
+const LoginModalProvider = ({ children }) => {
   const [isLoginOpen, setIsLoginOpen] = React.useState(false);
 
   return (

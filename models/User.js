@@ -67,12 +67,12 @@ UserSchema.pre("save", function (next) {
   next();
 });
 
-UserSchema.methods.comparePassword = function (password: string) {
+UserSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 
 UserSchema.methods.generateJWT = function () {
-  return jwt.sign({ ...this._doc }, process.env.JWT_SECRET!, {
+  return jwt.sign({ ...this._doc }, process.env.JWT_SECRET, {
     expiresIn: "24h",
   });
 };

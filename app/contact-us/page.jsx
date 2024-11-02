@@ -18,7 +18,7 @@ const ContactUs = () => {
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     submitContactForm.mutate(
       {

@@ -1,9 +1,8 @@
 import { connectToDb } from "@/config/db";
 import Category from "@/models/Category";
 import Product from "@/models/Product";
-import { NextRequest } from "next/server";
 
-export const GET = async (req: NextRequest) => {
+export const GET = async (req) => {
   try {
     await connectToDb();
     await Category.find();
@@ -13,13 +12,13 @@ export const GET = async (req: NextRequest) => {
     const skip = (page - 1) * limit;
 
     const search = req.nextUrl.searchParams.get("search") || "";
-    const minPrice = parseFloat(req.nextUrl.searchParams.get("minPrice")!);
-    const maxPrice = parseFloat(req.nextUrl.searchParams.get("maxPrice")!);
+    const minPrice = parseFloat(req.nextUrl.searchParams.get("minPrice"));
+    const maxPrice = parseFloat(req.nextUrl.searchParams.get("maxPrice"));
     const category = req.nextUrl.searchParams.get("category");
-    const rating = parseInt(req.nextUrl.searchParams.get("rating")!);
+    const rating = parseInt(req.nextUrl.searchParams.get("rating"));
     const sort = req.nextUrl.searchParams.get("sort");
 
-    const filter: Record<string, any> = {};
+    const filter = {};
 
     // Search filter
     if (search) {
@@ -49,7 +48,7 @@ export const GET = async (req: NextRequest) => {
     }
 
     // Parse sort
-    let sortOptions: Record<string, 1 | -1> = { name: 1 }; // default sort by name ascending
+    let sortOptions = { name: 1 }; // default sort by name ascending
     if (sort) {
       const [field, order] = sort.split("_");
       sortOptions = { [field]: order === "asc" ? 1 : -1 };

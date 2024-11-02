@@ -25,8 +25,9 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "shared/TinderCards.jsx"
+    "**/*.js",
+    "**/*.jsx",
+    ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

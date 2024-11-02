@@ -15,17 +15,13 @@ import TinderCards from "@/shared/TinderCards";
 import { AuroraBackground } from "@/components/aurora-background";
 
 const IndexPage = () => {
-  const { isDark } = useSelector((state: ThemeSliceState) => state.theme);
+  const { isDark } = useSelector((state) => state.theme);
   const featuredProducts = useGetFeaturedProducts();
   const router = useRouter();
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDark);
   }, [isDark]);
-
-  useEffect(() => {
-    featuredProducts.mutate();
-  }, []);
 
   const renderFeaturedProducts = () => {
     if (featuredProducts.isPending) {
@@ -34,7 +30,7 @@ const IndexPage = () => {
 
     return (
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {featuredProducts.data?.data.products.map((product: any) => (
+        {featuredProducts.data?.data.products.map((product) => (
           <div
             onClick={() => router.push(`/products/${product.slug}`)}
             className="w-full border p-4 rounded-lg flex flex-col justify-between"

@@ -6,11 +6,10 @@ import { IndianRupee, Minus, Plus, ShoppingCart } from "lucide-react";
 
 import { toTitleCase } from "@/utils/str_fuctions";
 import { mobiles } from "@/app/models";
-import { useGetOneProduct } from "@/services/mutations";
 import { AuthSliceState, Product } from "@/types";
 import CustomLoading from "@/shared/CustomLoading";
 import Image from "next/image";
-import { useAddToCartMut } from "@/services/mutations";
+import { useAddToCartMut, useGetOneProduct } from "@/services/mutations";
 import { useSelector } from "react-redux";
 import {
   Select,
@@ -23,26 +22,18 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 
-interface OneProductPageProps {
-  params: {
-    productId: string;
-  };
-}
-
-const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
+const OneProductPage = ({ params: { productId } }) => {
   const { toast } = useToast();
 
-  const [brand, setBrand] = useState<keyof typeof mobiles>("apple");
+  const [brand, setBrand] = useState("apple");
   const [model, setModel] = useState("16_pro");
   const [quantity, setQuantity] = useState(1);
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
+
   const addToCart = useAddToCartMut();
-  const { isLoggedIn, user } = useSelector(
-    (state: AuthSliceState) => state.auth
-  );
+  const getOneProduct = useGetOneProduct();
+  const product = getOneProduct.data?.data;
 
-  const { data, isSuccess, isError, isPending, mutate } = useGetOneProduct();
-
-  const product: Product = data?.data;
   const router = useRouter();
 
   const handleAddToCart = () => {
@@ -60,7 +51,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
       phoneBrand: brand,
       phoneModel: model,
       cost: product.price * quantity,
-      userId: user!._id,
+      userId: user._id,
     });
     toast({
       title: "Success",
@@ -84,7 +75,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
         phoneBrand: brand,
         phoneModel: model,
         cost: product.price * quantity,
-        userId: user!._id,
+        userId: user._id,
       },
       {
         onSuccess: () => {
@@ -95,11 +86,10 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
   };
 
   useEffect(() => {
-    mutate(productId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getOneProduct.mutate(productId);
   }, []);
 
-  if (isError) {
+  if (getOneProduct.isError) {
     return (
       <div className="flex min-h-nav-full justify-center items-center">
         <div className="text-center">
@@ -112,7 +102,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
     );
   }
 
-  return !isSuccess || isPending ? (
+  return getOneProduct.isPending ? (
     <CustomLoading />
   ) : (
     <>
@@ -121,29 +111,31 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
           alt={"Apple iPhone"}
           className="h-auto w-full md:w-2/6 rounded-lg object-cover"
           height={1280}
-          src={product.image}
+          src={getOneProduct.data?.data?.image}
           width={720}
         />
         <div className="flex flex-col w-full md:w-4/6 md:max-w-[30%] justify-start gap-2">
           <p className="text-sm text-primary my-0 py-0 font-[900] tracking-widest">
-            {product.category.name.toLowerCase()}
+            {getOneProduct.data?.data.category.name.toLowerCase()}
           </p>
           <h2 className="mt-0 pt-0">
-            {toTitleCase(productId!.replaceAll("-", " "))}
+            {toTitleCase(productId.replaceAll("-", " "))}
           </h2>
           <div className="flex items-start">
             <span className="mr-1">₹</span>
             <span className="flex items-end">
-              <span className="text-4xl">{product.price}</span>
+              <span className="text-4xl">{getOneProduct.data?.data.price}</span>
               <span className="ml-1 line-through">
-                {product.slug === "dirty-money" ? "2000" : product.price}
+                {getOneProduct.data?.data.slug === "dirty-money"
+                  ? "2000"
+                  : "899"}
               </span>
             </span>
           </div>
 
           <Select
             value={brand}
-            onValueChange={(e: keyof typeof mobiles) => {
+            onValueChange={(e) => {
               setBrand(e);
               setModel(mobiles[e][0]);
             }}
@@ -160,7 +152,7 @@ const OneProductPage = ({ params: { productId } }: OneProductPageProps) => {
 
           <Select
             value={model}
-            onValueChange={(e: any) => {
+            onValueChange={(e) => {
               setModel(e);
             }}
           >
