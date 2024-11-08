@@ -3,40 +3,44 @@ const User = require("../../models/User");
 const bcrypt = require("bcrypt");
 
 const login = async (req, res) => {
-  const result = validationResult(req);
+  try {
+    const result = validationResult(req);
 
-  if (!result.isEmpty()) {
-    return res.status(400).json({
-      errors: result.array(),
+    if (!result.isEmpty()) {
+      return res.status(400).json({
+        errors: result.array(),
+      });
+    }
+
+    const { email, password } = req.body;
+
+    const user = await User.findOne({
+      email,
     });
-  }
 
-  const { email, password } = req.body;
+    if (!user) {
+      return res.status(401).json({
+        message: "Invalid credentials",
+      });
+    }
 
-  const user = await User.findOne({
-    email,
-  });
+    const isMatch = bcrypt.compareSync(password, user._doc.password);
 
-  if (!user) {
-    return res.status(401).json({
-      message: "Invalid credentials",
+    if (!isMatch) {
+      return res.status(401).json({
+        message: "Invalid credentials",
+      });
+    }
+
+    const token = user.generateJWT();
+
+    return res.status(200).json({
+      token,
+      ...user._doc,
     });
+  } catch (error) {
+    return res.status(500).json({ error: "Server error" });
   }
-
-  const isMatch = bcrypt.compareSync(password, user._doc.password);
-
-  if (!isMatch) {
-    return res.status(401).json({
-      message: "Invalid credentials",
-    });
-  }
-
-  const token = user.generateJWT();
-
-  return res.status(200).json({
-    token,
-    ...user._doc,
-  });
 };
 
 module.exports = login;

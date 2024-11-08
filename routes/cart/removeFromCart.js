@@ -1,18 +1,29 @@
+const { validationResult } = require("express-validator");
 const Cart = require("../../models/Cart");
 
 const removeFromCart = async (req, res) => {
-  const { productId, userId } = req.body;
-  const cart = await Cart.findOne({
-    user: userId,
-  });
+  const result = validationResult(req);
 
-  cart.products = cart.products.filter(
-    (product) => product._id.toString() !== productId
-  );
+  if (!result.isEmpty()) {
+    return res.status(400).json({ errors: result.array() });
+  }
 
-  await cart.save();
+  try {
+    const { productId, userId } = req.body;
+    const cart = await Cart.findOne({
+      user: userId,
+    });
 
-  return res.status(200).json(cart);
+    cart.products = cart.products.filter(
+      (product) => product._id.toString() !== productId
+    );
+
+    await cart.save();
+
+    return res.status(200).json(cart);
+  } catch (error) {
+    return res.status(500).json({ error: "Server error" });
+  }
 };
 
 module.exports = removeFromCart;

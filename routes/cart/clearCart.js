@@ -1,20 +1,31 @@
+const { validationResult } = require("express-validator");
 const Cart = require("../../models/Cart");
 
-const clearCart = async (req) => {
-  const { userId } = await req.json();
-  const cart = await Cart.findOne({
-    user: userId,
-  });
+const clearCart = async (req, res) => {
+  const result = validationResult(req);
 
-  if (!cart) {
-    return Response.json("Cart not found", { status: 404 });
+  if (!result.isEmpty()) {
+    return res.status(400).json({ errors: result.array() });
   }
 
-  cart.products = [];
+  try {
+    const { userId } = req.body;
+    const cart = await Cart.findOne({
+      user: userId,
+    });
 
-  await cart.save();
+    if (!cart) {
+      return res.status(404).json("Cart not found");
+    }
 
-  return Response.json(cart, { status: 200 });
+    cart.products = [];
+
+    await cart.save();
+
+    return res.status(200).json(cart);
+  } catch (error) {
+    return res.status(500).json({ error: "Server error" });
+  }
 };
 
 module.exports = clearCart;
