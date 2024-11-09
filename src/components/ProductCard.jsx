@@ -8,12 +8,22 @@ import {
 import { IndianRupee } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const ProductCard = ({ slug, img, price, title }) => {
+// Define a pricing function (optional)
+const getDiscountedPrice = (slug) => {
+  switch (slug) {
+    case "dirty-money":
+      return 2000; // original price for "dirty-money"
+    default:
+      return 899; // default original price
+  }
+};
+
+const ProductCard = ({ slug, img, price = 0, title }) => {
   const navigate = useNavigate();
 
   return (
     <Card
-      className={`hover:shadow-foreground shadow-lg cursor-pointer transition-all`}
+      className="hover:scale-105 cursor-pointer transition-all"
       onClick={() => {
         navigate(`/products/${slug}`);
       }}
@@ -25,16 +35,18 @@ const ProductCard = ({ slug, img, price, title }) => {
       </CardHeader>
       <CardContent>
         <img
-          alt={title}
+          alt={`Image of ${title}`} // More descriptive alt text
           className="h-auto w-full aspect-[3/4] object-cover"
           src={img}
         />
       </CardContent>
       <CardFooter className="flex items-center justify-end">
+        {/* Discounted Price (if applicable) */}
         <span className="flex line-through gap-1 items-center">
           <IndianRupee size={16} />
-          <span className="mr-3">{slug === "dirty-money" ? 2000 : 899}</span>
+          <span className="mr-3">{getDiscountedPrice(slug)}</span>
         </span>
+        {/* Current Price */}
         <span className="flex gap-1 items-center">
           <IndianRupee size={16} />
           <span className="mr-3">{price}</span>

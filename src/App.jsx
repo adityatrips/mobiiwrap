@@ -1,15 +1,16 @@
-"use client";
-
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { brandName } from "@/lib/constants";
+import { useNavigate } from "react-router-dom";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+import { useGetFeaturedProducts } from "@/services";
+
 import { ShoppingCart, Phone, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useGetFeaturedProducts } from "@/services";
 import CustomLoading from "@/components/Loader";
-import { useNavigate } from "react-router-dom";
 import TinderCards from "@/components/TinderCards";
-import { AuroraBackground } from "@/components/aurora-background";
 
 const IndexPage = () => {
   const { isDark } = useSelector((state) => state.theme);
@@ -21,11 +22,7 @@ const IndexPage = () => {
   }, [isDark]);
 
   const renderFeaturedProducts = () => {
-    if (featuredProducts.isPending) {
-      return <CustomLoading />;
-    }
-
-    console.log(featuredProducts.data.data);
+    if (featuredProducts.isPending) return <CustomLoading />;
 
     return (
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -54,8 +51,8 @@ const IndexPage = () => {
     );
   };
 
-  const renderCustomerReviews = () => {
-    const reviews = [
+  const renderCustomerReviews = () =>
+    [
       {
         quote:
           "I absolutely love my new phone wrap! It's a perfect fit and looks amazing!",
@@ -71,32 +68,151 @@ const IndexPage = () => {
           "So many design options! I found the perfect wrap to match my style.",
         author: "- Sneha K.",
       },
-    ];
-
-    return reviews.map((review, index) => (
-      <div className="border w-full p-6 rounded-lg shadow-lg" key={index}>
+    ].map((review, index) => (
+      <div
+        className="hover:scale-110 transition-all border w-full p-6 rounded-lg shadow-lg"
+        key={index}
+      >
         <p className="italic text-foreground">{`“${review.quote}”`}</p>
         <p className="mt-4 font-semibold text-foreground">{review.author}</p>
       </div>
     ));
-  };
+
+  const featureItems = [
+    {
+      Icon: ShoppingCart,
+      title: "Wide Selection",
+      description:
+        "Explore a wide variety of designs and styles to match your personality.",
+    },
+    {
+      Icon: Phone,
+      title: "Top-Notch Quality",
+      description:
+        "Our products are made with attention to detail, ensuring both durability and style.",
+    },
+    {
+      Icon: ShieldCheck,
+      title: "Satisfaction Guaranteed",
+      description:
+        "We stand behind our products, ensuring your satisfaction with every purchase.",
+    },
+  ];
 
   return (
     <div className="transition-all duration-300 font-sans">
-      <AuroraBackground>
-        <section className="flex flex-col justify-center items-center h-screen relative text-center px-4">
-          <h1 className="tracking-wider uppercase text-5xl md:text-6xl font-extrabold text-foreground mb-6">
-            {brandName}
-          </h1>
-          <p className="mb-12 text-foreground text-lg max-w-2xl leading-relaxed">
-            Welcome to {brandName}! Discover premium mobile wraps and cases that
-            offer both style and protection for your devices.
-          </p>
-          <Button onClick={() => (window.location.href = "/products")}>
-            Shop Now
-          </Button>
-        </section>
-      </AuroraBackground>
+      <Slider
+        className="min-h-nav-full mt-20"
+        dots={false}
+        infinite
+        speed={500}
+        slidesToScroll={1}
+        slidesToShow={1}
+        arrows={false}
+      >
+        <div className="relative w-full h-nav-full">
+          <img
+            className="z-[-1] absolute w-full h-nav-full opacity-60 object-cover"
+            src="/1.jpg"
+            alt="Slide 1"
+          />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mx-auto flex flex-col items-center p-5 bg-secondary rounded-2xl">
+            <h2 className="text-center">
+              Elevate Your Device&apos;s Look with MobiiWrap
+            </h2>
+            <p className="text-center">
+              Discover our premium skins designed to enhance both style and
+              protection. Available in a variety of designs, MobiiWrap fits your
+              phone seamlessly, offering the perfect combination of form and
+              function.
+            </p>
+          </div>
+        </div>
+        <div className="relative w-full h-nav-full">
+          <img
+            className="z-[-1] absolute w-full h-nav-full opacity-60 object-cover"
+            src="/2.jpg"
+            alt="Slide 2"
+          />
+
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mx-auto flex flex-col items-center p-5 bg-secondary rounded-2xl">
+            <h2 className="text-center">Precision Fit for Every Model</h2>
+            <p className="text-center">
+              Our phone skins are meticulously crafted to fit your device like a
+              glove. Slim, sleek, and ultra-lightweight, MobiiWrap adds no
+              unnecessary bulk.
+            </p>
+          </div>
+        </div>
+        <div className="relative w-full h-nav-full">
+          <img
+            className="z-[-1] absolute w-full h-nav-full opacity-60 object-cover"
+            src="/3.jpg"
+            alt="Slide 3"
+          />
+
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mx-auto flex flex-col items-center p-5 bg-secondary rounded-2xl">
+            <h2 className="text-center">
+              Built to Last with Premium Materials
+            </h2>
+            <p className="text-center">
+              MobiiWrap skins are made from durable materials, ensuring
+              long-lasting protection against scratches and scuffs while
+              maintaining a smooth finish.
+            </p>
+          </div>
+        </div>
+        <div className="relative w-full h-nav-full">
+          <img
+            className="z-[-1] absolute w-full h-nav-full opacity-60 object-cover"
+            src="/4.jpg"
+            alt="Slide 4"
+          />
+
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mx-auto flex flex-col items-center p-5 bg-secondary rounded-2xl">
+            <h2 className="text-center">No Mess, Just Perfection</h2>
+            <p className="text-center">
+              Easily apply or remove your MobiiWrap skin without leaving any
+              sticky residue behind. Perfect for those who like to change things
+              up.
+            </p>
+          </div>
+        </div>
+        <div className="relative w-full h-nav-full">
+          <img
+            className="z-[-1] absolute w-full h-nav-full opacity-60 object-cover"
+            src="/5.jpg"
+            alt="Slide 5"
+          />
+
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mx-auto flex flex-col items-center p-5 bg-secondary rounded-2xl">
+            <h2 className="text-center">
+              Sustainable Style with Eco-Friendly Materials
+            </h2>
+            <p className="text-center">
+              Not only do MobiiWrap skins offer premium protection, but
+              they&spos;re also made with eco-conscious materials, giving you
+              style that&spos;s kind to the planet.
+            </p>
+          </div>
+        </div>
+        <div className="relative w-full h-nav-full">
+          <img
+            className="z-[-1] absolute w-full h-nav-full opacity-60 object-cover"
+            src="/6.jpg"
+            alt="Slide 6"
+          />
+
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mx-auto flex flex-col items-center p-5 bg-secondary rounded-2xl">
+            <h2 className="text-center">Stand Out with Custom Designs</h2>
+            <p className="text-center">
+              Personalize your device with our wide range of colors, textures,
+              and designs. Whether you&apos;re into minimalistic, bold, or
+              creative styles, we&apos;ve got you covered.
+            </p>
+          </div>
+        </div>
+      </Slider>
 
       <section className="mx-auto container px-2">
         <h2 className="mt-10 text-3xl font-bold mb-10 text-foreground">
@@ -110,28 +226,9 @@ const IndexPage = () => {
           Why Choose Us?
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {[
-            {
-              Icon: ShoppingCart,
-              title: "Wide Selection",
-              description:
-                "Explore a wide variety of designs and styles to match your personality.",
-            },
-            {
-              Icon: Phone,
-              title: "Top-Notch Quality",
-              description:
-                "Our products are made with attention to detail, ensuring both durability and style.",
-            },
-            {
-              Icon: ShieldCheck,
-              title: "Satisfaction Guaranteed",
-              description:
-                "We stand behind our products, ensuring your satisfaction with every purchase.",
-            },
-          ].map(({ Icon, title, description }, index) => (
+          {featureItems.map(({ Icon, title, description }, index) => (
             <div
-              className="border p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300"
+              className="hover:scale-110 transition-all border p-6 rounded-lg shadow-lg hover:shadow-xl"
               key={index}
             >
               <Icon className="mx-auto mb-4 h-10 w-10 text-foreground" />

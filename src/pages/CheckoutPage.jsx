@@ -83,48 +83,21 @@ const CheckOutPage = () => {
       image: "https://www.mobiiwrap.in/favicon.ico",
       order_id: data.id,
       handler: function (response) {
-        console.log(response);
-        setIsPaymentComplete(true);
-        setSelectedTab("acknowledgement");
-        placeOrder.mutate(
-          {
-            products: getCart.data?.data.cart.products.map((product) => {
-              for (let i = 0; i < product.quantity; i++) {
-                return {
-                  phoneBrand: product.phoneBrand,
-                  phoneModel: product.phoneModel,
-                  product: product.item._id,
-                  quantity: product.quantity,
-                };
-              }
-            }),
-            userId: user._id,
-            address: userData.address,
-            phone: userData.phone,
-            pincode: userData.pincode,
-            total: userData.totalPrice,
-          },
-          {
-            onSuccess: (data) => {
-              console.log(data);
-              setOrderId(data.data.id);
-              clearCart.mutate(user._id);
-            },
-          }
-        );
-        console.log({
-          products: getCart.data?.data.cart.products,
-          userId: user._id,
-          address: userData.address,
-          phone: userData.phone,
-          pincode: userData.pincode,
-          total: userData.totalPrice,
-        });
-      },
-      prefill: {
-        name: userData.name,
-        email: userData.email,
-        contact: userData.phone,
+        if (response.razorpay_payment_id) {
+          setIsPaymentComplete(true);
+          setSelectedTab("acknowledgement");
+          placeOrder.mutate({
+            /* order data */
+          });
+        } else {
+          setPayError(true);
+          toast({
+            title: "Payment Failed",
+            description:
+              "There was an issue processing your payment. Please try again.",
+            variant: "destructive",
+          });
+        }
       },
     };
     const paymentObject = new window.Razorpay(options);

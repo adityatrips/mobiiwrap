@@ -1,4 +1,11 @@
+import React, { useEffect, useState } from "react";
+import { Filter, IndianRupee } from "lucide-react";
+
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import ProductCard from "@/components/ProductCard";
+import CustomLoading from "@/components/Loader";
+
 import {
   Pagination,
   PaginationContent,
@@ -22,12 +29,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
+
 import { useGetAllCategories, useGetProducts } from "@/services";
-import CustomLoading from "@/components/Loader";
-import ProductCard from "@/components/ProductCard";
-import { useEffect, useState } from "react";
-import { Filter, IndianRupee } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const categoryNameMap = {
   "6713e23a97fba66950fec8a9": "Brands and Logos",
@@ -114,16 +117,19 @@ const AllProductsPage = () => {
       <div className="w-full flex gap-5 justify-end">
         <Sheet>
           <SheetTrigger>
-            <Button>
+            <Button className="hover:bg-primary-500 transition duration-300">
               <Filter size={28} />
             </Button>
           </SheetTrigger>
           <SheetContent>
             <SheetHeader>
-              <SheetTitle>Filters</SheetTitle>
+              <SheetTitle className="text-2xl font-semibold">
+                Filters
+              </SheetTitle>
             </SheetHeader>
             <SheetDescription className="mb-5">
-              Tune your search results to get your desired product.
+              Refine your search with filters that help you find your ideal
+              product.
             </SheetDescription>
             <div className="flex flex-col gap-5">
               <Input
@@ -131,7 +137,8 @@ const AllProductsPage = () => {
                 onChange={(e) =>
                   handleTempFilterChange("search", e.target.value)
                 }
-                placeholder="Search..."
+                placeholder="Search Products..."
+                className="border-2 border-gray-300 rounded-lg p-3"
               />
               <Select
                 value={filters.category}
@@ -140,12 +147,12 @@ const AllProductsPage = () => {
                 <SelectTrigger>
                   <SelectValue>
                     {filters.category === "all"
-                      ? "Choose a category"
+                      ? "Select Category"
                       : categoryNameMap[filters.category]}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="all">All Categories</SelectItem>
                   {categoriesQuery.data?.data?.map((category) => (
                     <SelectItem key={category._id} value={category._id}>
                       {category.name}
@@ -161,14 +168,14 @@ const AllProductsPage = () => {
                 <SelectTrigger>
                   <SelectValue>
                     {filters.rating === "all"
-                      ? "Choose a rating"
+                      ? "Choose Rating"
                       : `${filters.rating}+`}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {["all", 1, 2, 3, 4, 5].map((rating) => (
                     <SelectItem key={rating} value={String(rating)}>
-                      {rating === "all" ? "All" : `${rating}+`}
+                      {rating === "all" ? "All Ratings" : `${rating}+`}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -186,20 +193,18 @@ const AllProductsPage = () => {
                   }}
                 />
                 <div className="flex justify-between items-center">
-                  <span>Price</span>
+                  <span>Price Range</span>
                   <span className="flex gap-2 items-center">
                     <IndianRupee size={18} />
-                    {tempFilters.price[0].toString()}, 2000
+                    {tempFilters.price[0]} - 2000
                   </span>
                 </div>
               </div>
 
-              {/* Sort Options */}
               <Select
                 value={filters.sort}
                 onValueChange={(value) => {
                   handleTempFilterChange("sort", value);
-                  console.log(value);
                 }}
               >
                 <SelectTrigger>
@@ -230,8 +235,8 @@ const AllProductsPage = () => {
                   setPage(1);
                 }}
               >
-                <SelectTrigger className="w-full border py-2 px-5 rounded">
-                  <SelectValue>Products per page: {itemsPerPage}</SelectValue>
+                <SelectTrigger>
+                  <SelectValue>{itemsPerPage} products per page</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {[5, 10, 15, 20].map((item) => (
@@ -243,23 +248,23 @@ const AllProductsPage = () => {
               </Select>
 
               <Button
-                className="w-full"
-                onClick={() => {
-                  applyFilter(tempFilters);
-                }}
+                className="w-full mt-4 bg-primary-500 text-white hover:bg-primary-600"
+                onClick={() => applyFilter(tempFilters)}
               >
-                Apply
+                Apply Filters
               </Button>
-              <Button className="w-full" onClick={handleResetFilter}>
-                Reset
+              <Button
+                className="w-full mt-2 text-gray-700 hover:bg-gray-200"
+                onClick={handleResetFilter}
+              >
+                Reset Filters
               </Button>
             </div>
           </SheetContent>
         </Sheet>
       </div>
 
-      {/* Product Grid and Pagination */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5">
         {productsQuery.data?.data.products.map((product) => (
           <ProductCard
             key={product.slug}
@@ -271,7 +276,6 @@ const AllProductsPage = () => {
         ))}
       </div>
 
-      {/* Pagination */}
       <Pagination>
         <PaginationContent>
           <PaginationPrevious

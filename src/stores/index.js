@@ -21,12 +21,11 @@ const persistConfig = {
 };
 
 const persistedAuthReducer = persistReducer(persistConfig, authSlice);
-const persistedThemeReducer = persistReducer(persistConfig, themeSlice);
 
 export const store = configureStore({
   reducer: combineReducers({
     auth: persistedAuthReducer,
-    theme: persistedThemeReducer,
+    theme: themeSlice,
   }),
   devTools: false,
   middleware: (getDefaultMiddleware) =>
