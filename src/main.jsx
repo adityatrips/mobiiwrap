@@ -11,7 +11,7 @@ import LoginModalProvider from "./context/LoginModalContext";
 import NavigationMenu from "./components/NavigationMenu";
 import AboutScreen from "./pages/AboutScreen";
 import CartScreen from "./pages/CartScreen";
-import CheckOutPage from "./pages/CheckOutPage";
+import CheckOutPage from "./pages/CheckoutPage";
 import ContactUs from "./pages/ContactUsPage";
 import FaqPage from "./pages/FaqPage";
 import FeelingLucky from "./pages/FeelingLucky";
