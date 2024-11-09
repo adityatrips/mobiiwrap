@@ -77,14 +77,11 @@ const SignUp = () => {
     return true;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsSigningUp(true);
-    if (!validateForm()) {
-      setIsSigningUp(false);
-      return;
-    }
+  const handleSubmit = () => {
+    const valid = validateForm();
+    if (!valid) return;
 
+    setIsSigningUp(true);
     signUp.mutate(
       {
         name: `${formState.firstName} ${formState.lastName}`,
@@ -131,7 +128,7 @@ const SignUp = () => {
                   title: "Welcome back!",
                   description: "You are now logged in",
                 });
-                navigate("/dashboard"); // Redirect to dashboard
+                navigate("/");
                 dispatch(updateUser(data.data));
               },
             }
@@ -143,10 +140,7 @@ const SignUp = () => {
 
   return (
     <section className="px-2 flex flex-col md:flex-row justify-center items-center gap-4">
-      <form
-        className="flex flex-col items-center justify-center w-full gap-4"
-        onSubmit={handleSubmit}
-      >
+      <div className="flex flex-col items-center justify-center w-full gap-4">
         <h2 className="text-center">Welcome to the shop! 🛒</h2>
         <p className="text-center">
           Signup with an account to unlock a special shopping experience
@@ -196,7 +190,7 @@ const SignUp = () => {
             disabled={isSigningUp}
             className="w-2/5"
             color="primary"
-            type="submit"
+            onClick={handleSubmit}
           >
             {isSigningUp ? "Signing up..." : "Sign up"}
           </Button>
@@ -207,7 +201,7 @@ const SignUp = () => {
             Already have an account? Login
           </p>
         </div>
-      </form>
+      </div>
       <img
         alt="Signup page image"
         src="https://images.unsplash.com/photo-1728388939226-3fc095526a91?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"

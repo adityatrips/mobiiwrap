@@ -21,6 +21,7 @@ import AllProductsPage from "./pages/AllProductsPage";
 import OneProductsPage from "./pages/OneProductsPage";
 import OrderDetails from "./pages/OrderDetails";
 import OneOrderDetail from "./pages/OneOrderDetail";
+import { Toaster } from "./components/ui/toaster";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ createRoot(document.getElementById("root")).render(
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <QueryClientProvider client={queryClient}>
+              <Toaster />
               <NavigationMenu />
               <Routes>
                 <Route path="/" element={<App />} />
