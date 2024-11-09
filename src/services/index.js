@@ -182,9 +182,7 @@ export const usePlaceOrder = () => {
         address: variables.address,
         phone: variables.phone,
         pincode: variables.pincode,
-        payment: variables.payment,
         total: variables.total,
-        paymentProof: variables.paymentProof.toString(),
       });
     },
   });

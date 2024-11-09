@@ -17,6 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const OneProductPage = () => {
   const { toast } = useToast();
@@ -42,12 +43,21 @@ const OneProductPage = () => {
       });
       return;
     }
+
+    console.log({
+      productId: product._id,
+      quantity,
+      phoneBrand: brand,
+      phoneModel: model,
+      cost: product.price,
+      userId: user._id,
+    });
     addToCart.mutate({
       productId: product._id,
       quantity,
       phoneBrand: brand,
       phoneModel: model,
-      cost: product.price * quantity,
+      cost: product.price,
       userId: user._id,
     });
     toast({
@@ -56,7 +66,7 @@ const OneProductPage = () => {
     });
   };
 
-  const handleBuyNow = () => {
+  const handleBuyNow = async () => {
     if (!isLoggedIn) {
       toast({
         title: "Error",
@@ -71,11 +81,15 @@ const OneProductPage = () => {
         quantity,
         phoneBrand: brand,
         phoneModel: model,
-        cost: product.price * quantity,
+        cost: product.price,
         userId: user._id,
       },
       {
-        onSuccess: () => {
+        onSettled: (data, error) => {
+          console.log({
+            data,
+            error,
+          });
           navigate("/checkout");
         },
       }

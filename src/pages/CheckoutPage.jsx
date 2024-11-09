@@ -12,6 +12,9 @@ import { Check, IndianRupee } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { X } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
 
 const CheckOutPage = () => {
   const { user } = useSelector((state) => state.auth);
@@ -23,7 +26,7 @@ const CheckOutPage = () => {
   const [orderId, setOrderId] = useState("");
 
   const [file, setFile] = useState(null);
-  const [upiError, setUpiError] = useState("");
+  const [payError, setPayError] = useState(false);
 
   const [userData, setUserData] = useState({
     name: "",
@@ -36,6 +39,7 @@ const CheckOutPage = () => {
   });
 
   const [isFormComplete, setIsFormComplete] = useState(false); // New state for form completion
+  const [isPaymentComplete, setIsPaymentComplete] = useState(false); // New state for payment completion
 
   useEffect(() => {
     getCart.mutate(user._id, {
@@ -59,6 +63,73 @@ const CheckOutPage = () => {
       pincode.trim() !== "";
     setIsFormComplete(allFieldsFilled);
   }, [userData]);
+
+  const handlePayemnt = async () => {
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_API_URL}/payment`,
+      {
+        amount: userData.totalPrice * 100,
+      }
+    );
+
+    console.log(data);
+
+    const options = {
+      key: import.meta.env.VITE_TRZP_KEY_ID,
+      currency: data.currency,
+      amount: data.amount,
+      name: "MobiiWrap",
+      description: "MobiiWrap Payment",
+      image: "https://www.mobiiwrap.in/favicon.ico",
+      order_id: data.id,
+      handler: function (response) {
+        console.log(response);
+        setIsPaymentComplete(true);
+        setSelectedTab("acknowledgement");
+        placeOrder.mutate(
+          {
+            products: getCart.data?.data.cart.products.map((product) => {
+              for (let i = 0; i < product.quantity; i++) {
+                return {
+                  phoneBrand: product.phoneBrand,
+                  phoneModel: product.phoneModel,
+                  product: product.item._id,
+                  quantity: product.quantity,
+                };
+              }
+            }),
+            userId: user._id,
+            address: userData.address,
+            phone: userData.phone,
+            pincode: userData.pincode,
+            total: userData.totalPrice,
+          },
+          {
+            onSuccess: (data) => {
+              console.log(data);
+              setOrderId(data.data.id);
+              clearCart.mutate(user._id);
+            },
+          }
+        );
+        console.log({
+          products: getCart.data?.data.cart.products,
+          userId: user._id,
+          address: userData.address,
+          phone: userData.phone,
+          pincode: userData.pincode,
+          total: userData.totalPrice,
+        });
+      },
+      prefill: {
+        name: userData.name,
+        email: userData.email,
+        contact: userData.phone,
+      },
+    };
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  };
 
   if (getCart.isError) {
     return (
@@ -87,12 +158,7 @@ const CheckOutPage = () => {
           <TabsTrigger className="flex-1" value="overview">
             Overview
           </TabsTrigger>
-          {userData.pincode !== "" && (
-            <TabsTrigger className="flex-1" value="payment">
-              Payment
-            </TabsTrigger>
-          )}
-          {file != null && (
+          {isFormComplete && (
             <TabsTrigger className="flex-1" value="acknowledgement">
               Acknowledgement
             </TabsTrigger>
@@ -155,9 +221,13 @@ const CheckOutPage = () => {
               />
               <Button
                 onClick={() => {
-                  setSelectedTab("payment");
+                  handlePayemnt({
+                    currency: "INR",
+                    amount: userData.totalPrice * 100,
+                    id: uuidv4(),
+                  });
                 }}
-                disabled={!isFormComplete} // Disable button if form is incomplete
+                disabled={!isFormComplete}
               >
                 Continue
               </Button>
@@ -171,7 +241,7 @@ const CheckOutPage = () => {
                       className="border rounded-md flex w-full gap-2 p-2"
                     >
                       <img
-                        className="h-full aspect-square rounded-md"
+                        className="h-auto w-1/2 aspect-square rounded-md"
                         src={product.item.image}
                         alt={product.item.name}
                       />
@@ -201,100 +271,42 @@ const CheckOutPage = () => {
             </div>
           </div>
         </TabsContent>
-        <TabsContent value={"payment"}>
-          <h1>Payment</h1>
-          <p>
-            Scan the QR and send the <b>Rs. {userData.totalPrice}</b> to the
-            following QR code via UPI or to this API handle{" "}
-            <b>7838880955@ptsbi</b>
-          </p>
-          <b>
-            <small>We will make a RazorPay gateway soon!</small>
-          </b>
-          <img
-            alt="QR Code"
-            src={"/paytm_qr.jpeg"}
-            className="max-w-lg w-full h-auto mx-auto"
-          />
-          <div className="flex flex-col gap-4">
-            <Label className="mt-10">
-              Upload the transaction detail (pdf/image)
-              <Input
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  if (!file) return;
-                  setFile(file);
-                }}
-                className="mt-2"
-                type="file"
-              />
-            </Label>
-            <Label>
-              <Input
-                value={upiError}
-                onChange={(e) => setUpiError(e.target.value)}
-                placeholder="For any UPI related issues, write below."
-              />
-            </Label>
-            <Button
-              onClick={async () => {
-                if (file != null) {
-                  placeOrder.mutate(
-                    {
-                      address: userData.address,
-                      userId: user._id,
-                      payment: "cod",
-                      phone: userData.phone,
-                      pincode: userData.pincode,
-                      products: data?.data.cart.products.map((product) => {
-                        for (let i = 0; i < product.quantity; i++) {
-                          return {
-                            phoneBrand: product.phoneBrand,
-                            phoneModel: product.phoneModel,
-                            product: product.item._id,
-                            quantity: product.quantity,
-                          };
-                        }
-                      }),
-                      total: userData.totalPrice.toString(),
-                      paymentProof: await getBase64(file),
-                    },
-                    {
-                      onSuccess: (data) => {
-                        setSelectedTab("acknowledgement");
-                        clearCart.mutate(user._id);
-                        setOrderId(data?.data.id);
-                      },
-                    }
-                  );
-                } else
-                  toast({
-                    title: "Error",
-                    description: "Please upload the transaction detail.",
-                    variant: "destructive",
-                  });
-              }}
-            >
-              Proceed!
-            </Button>
-          </div>
-        </TabsContent>
+
         {isFormComplete && (
           <TabsContent value="acknowledgement">
-            <Check size={64} className="text-primary mx-auto" />
-            <h3 className="text-center">Thank you for placing your order!</h3>
-            <p className="text-center">
-              Your order has been successfully placed. You will receive an email
-              confirmation shortly.
-            </p>
-            <p className="text-center mt-5">
-              Your order ID is{" "}
-              <Link className="text-blue-500" to={`/order-details/${orderId}`}>
-                <strong>{orderId}</strong>
-              </Link>
-              <br />
-              Keep this ID for future reference.
-            </p>
+            {/* {error ? (
+              <>
+                <X size={64} className="text-primary mx-auto" />
+                <h3 className="text-center">
+                  There was an error processing your payment
+                </h3>
+                <p className="text-center">
+                  Your payment was unsuccessful. Please try again. If the amount
+                  has been deducted from your account, it will be refunded
+                  within 7-10 business days.
+                </p>
+              </>
+            ) : ( */}
+            <>
+              <Check size={64} className="text-primary mx-auto" />
+              <h3 className="text-center">Thank you for placing your order!</h3>
+              <p className="text-center">
+                Your order has been successfully placed. You will receive an
+                email confirmation shortly.
+              </p>
+              <p className="text-center mt-5">
+                Your order ID is{" "}
+                <Link
+                  className="text-blue-500"
+                  to={`/order-details/${orderId}`}
+                >
+                  <strong>{orderId}</strong>
+                </Link>
+                <br />
+                Keep this ID for future reference.
+              </p>
+            </>
+            {/* )} */}
           </TabsContent>
         )}
       </Tabs>
