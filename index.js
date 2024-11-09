@@ -12,8 +12,6 @@ const productRoutes = require("./routes/products");
 const feelingLuckyRoutes = require("./routes/feeling-lucky");
 const paymentRoutes = require("./routes/payment");
 
-const logger = require("./utils/logger");
-
 require("dotenv").config();
 cors({
   origin: "*",
@@ -39,6 +37,4 @@ app.use("/feeling-lucky", feelingLuckyRoutes);
 app.use("/payment", paymentRoutes);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  logger.success(`Server is running on port ${PORT}`);
-});
+app.listen(PORT, () => {});

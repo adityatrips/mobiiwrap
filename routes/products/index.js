@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const router = Router();
-const logger = require("../../utils/logger");
 
 const getProduct = require("./getProduct");
 const getProducts = require("./getProducts");
