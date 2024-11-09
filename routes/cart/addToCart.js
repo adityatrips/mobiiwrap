@@ -10,6 +10,8 @@ const addToCard = async (req, res) => {
 
   try {
     const { item, quantity, userId, cost, phoneBrand, phoneModel } = req.body;
+    console.log(cost);
+
     const cart = await Cart.findOne({ user: userId });
 
     if (!cart) {
@@ -22,7 +24,6 @@ const addToCard = async (req, res) => {
 
     if (productIndex > -1) {
       cart.products[productIndex].quantity += quantity;
-      cart.products[productIndex].cost = cost;
     } else {
       cart.products.push({ item, quantity, cost, phoneBrand, phoneModel });
     }

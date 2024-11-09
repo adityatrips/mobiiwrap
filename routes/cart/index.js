@@ -5,8 +5,10 @@ const addToCart = require("./addToCart");
 const removeFromCart = require("./removeFromCart");
 const getCart = require("./getCartProducts");
 const clearCart = require("./clearCart");
+const quantiyUpdate = require("./cartQuantity");
 const { query, body } = require("express-validator");
 
+router.post("/quantity", quantiyUpdate);
 router.get("/", query("user").notEmpty().isString(), getCart);
 router.post(
   "/",

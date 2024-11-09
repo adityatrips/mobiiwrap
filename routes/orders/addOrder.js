@@ -1,4 +1,3 @@
-const { validationResult } = require("express-validator");
 const Orders = require("../../models/Orders");
 
 const addOrder = async (req, res) => {
@@ -21,6 +20,7 @@ const addOrder = async (req, res) => {
       id: order._id,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       message: "Server error",
     });
