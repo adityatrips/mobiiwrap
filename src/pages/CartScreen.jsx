@@ -1,3 +1,6 @@
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
@@ -5,11 +8,7 @@ import { useGetCart, useRemoveFromCartMut } from "@/services";
 import CustomLoading from "@/components/Loader";
 import withAuth from "@/components/withAuth";
 import { toTitleCase } from "@/utils/strFunctions";
-import { X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { IndianRupee } from "lucide-react";
+import { X, IndianRupee } from "lucide-react";
 import axios from "axios";
 
 const CartPage = () => {
@@ -21,9 +20,11 @@ const CartPage = () => {
 
   const cart = getCart.data?.data.cart || [];
 
+  console.log(cart);
+
   useEffect(() => {
-    getCart.mutate(userId);
-  }, []);
+    if (userId) getCart.mutate(userId);
+  }, [userId]);
 
   const handleRemoveFromCart = async (productId) => {
     await removeFromCart.mutateAsync(
@@ -39,9 +40,8 @@ const CartPage = () => {
       }
     );
   };
-  const isCartEmpty = () => {
-    return cart.products.length === 0;
-  };
+
+  const isCartEmpty = () => cart.products?.length === 0;
 
   const handleCheckout = () => {
     if (isCartEmpty()) {
@@ -61,25 +61,25 @@ const CartPage = () => {
         <div className="text-center">
           <h1 className="text-3xl font-bold">Error Fetching Products</h1>
           <p className="text-lg mt-4">
-            An error occurred while fetching products. Please try again later
+            An error occurred while fetching products. Please try again later.
           </p>
         </div>
       </div>
     );
   }
 
-  if (getCart.data?.data.cart.products.length === 0) {
+  if (cart.products?.length === 0) {
     return (
       <div className="px-2 flex min-h-nav-full justify-center items-center">
         <div className="text-center">
           <h1 className="text-3xl font-bold">Cart is Empty</h1>
-          <p className="text-lg mt-4">You have no products in your cart</p>
+          <p className="text-lg mt-4">You have no products in your cart.</p>
         </div>
       </div>
     );
   }
 
-  return getCart.isPending || getCart.data == undefined ? (
+  return getCart.isPending || !getCart.data ? (
     <CustomLoading />
   ) : (
     <div className="flex gap-10 min-h-nav-full">
@@ -93,9 +93,7 @@ const CartPage = () => {
             <div className="relative w-1/2 rounded overflow-hidden">
               <img src={product.item.image} alt={product.item.name} />
               <X
-                onClick={() => {
-                  handleRemoveFromCart(product._id);
-                }}
+                onClick={() => handleRemoveFromCart(product._id)}
                 className="bg-red-700 rounded absolute top-0 right-0 cursor-pointer"
               />
             </div>
@@ -159,7 +157,6 @@ const CartPage = () => {
           <h2>Total</h2>
           <h2>{cart.total}</h2>
         </div>
-        {/* <Button onClick={() => navigate('/checkout')}>Checkout</Button> */}
         <Button onClick={handleCheckout} className="w-full mt-4">
           Checkout
         </Button>

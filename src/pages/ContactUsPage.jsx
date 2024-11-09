@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useSubmitContactForm } from "@/services";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const ContactUs = () => {
   const { toast } = useToast();
@@ -15,15 +15,40 @@ const ContactUs = () => {
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
 
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  // Validate email and phone number
+  const validateForm = () => {
+    const emailRegex = /\S+@\S+\.\S+/;
+    const phoneRegex = /^[0-9]{10}$/; // Simple validation for 10-digit phone number
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid email",
+        variant: "destructive",
+      });
+      return false;
+    }
+    if (!phoneRegex.test(phone)) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid phone number",
+        variant: "destructive",
+      });
+      return false;
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    const isValid = name && email && phone && message && validateForm();
+    setIsFormValid(isValid);
+  }, [name, email, phone, message]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     submitContactForm.mutate(
-      {
-        name,
-        email,
-        phone,
-        message,
-      },
+      { name, email, phone, message },
       {
         onSuccess: () => {
           toast({
@@ -31,6 +56,7 @@ const ContactUs = () => {
             description: "Message sent successfully",
           });
 
+          // Reset form fields
           setName("");
           setEmail("");
           setPhone("");
@@ -43,6 +69,7 @@ const ContactUs = () => {
             variant: "destructive",
           });
 
+          // Reset form fields
           setName("");
           setEmail("");
           setPhone("");
@@ -67,6 +94,7 @@ const ContactUs = () => {
           }}
           type="text"
           placeholder="Enter your name"
+          aria-label="Name"
         />
         <Input
           required
@@ -76,6 +104,7 @@ const ContactUs = () => {
           }}
           type="text"
           placeholder="Enter your email"
+          aria-label="Email"
         />
         <Input
           required
@@ -85,6 +114,7 @@ const ContactUs = () => {
           }}
           type="text"
           placeholder="Enter your phone"
+          aria-label="Phone"
         />
         <Textarea
           required
@@ -94,9 +124,15 @@ const ContactUs = () => {
           }}
           rows={10}
           placeholder="Enter your message"
+          aria-label="Message"
         />
 
-        <Button type="submit">Submit</Button>
+        <Button
+          type="submit"
+          disabled={!isFormValid || submitContactForm.isLoading}
+        >
+          {submitContactForm.isLoading ? "Submitting..." : "Submit"}
+        </Button>
 
         <a
           href="https://www.google.com/maps/place/Mobiiwrap/@28.649645,77.1884415,17z/data=!3m1!4b1!4m6!3m5!1s0x390d039b553f8ac1:0x1a410a3d3ff4d368!8m2!3d28.649645!4d77.1910164!16s%2Fg%2F11kcr31tpt?entry=ttu&g_ep=EgoyMDI0MTAyNy4wIKXMDSoASAFQAw%3D%3D"
@@ -111,7 +147,7 @@ const ContactUs = () => {
         </a>
       </form>
       <img
-        alt="Login page image"
+        alt="Contact Us page image"
         src="https://images.unsplash.com/photo-1728388939226-3fc095526a91?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         className="h-nav-full w-full object-cover object-left-center  max-w-full md:max-w-[50%] rounded-lg"
       />

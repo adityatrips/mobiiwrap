@@ -1,19 +1,34 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const OrderDetails = () => {
   const navigate = useNavigate();
+  const { toast } = useToast(); // Assuming you're using a toast hook for notifications
   const [id, setId] = useState("");
 
   const handleTrack = () => {
     if (!id) {
-      alert("Please enter a valid Order ID.");
+      toast({
+        title: "Error",
+        description: "Please enter a valid Order ID.",
+        variant: "destructive",
+      });
       return;
     }
+
+    // Here, you can add more validations for the id if necessary
+    if (id.length < 6) {
+      toast({
+        title: "Invalid Order ID",
+        description: "Order ID must be at least 6 characters.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     navigate(`/order-details/${id}`);
   };
 
@@ -25,7 +40,7 @@ const OrderDetails = () => {
         order ID in the confirmation email.
       </p>
       <div className="w-full max-w-md mx-auto flex flex-col gap-2 mt-10">
-        <label htmlFor="order-id" className="sr-only">
+        <label htmlFor="order-id" className="block text-sm font-semibold mb-2">
           Order ID
         </label>
         <Input

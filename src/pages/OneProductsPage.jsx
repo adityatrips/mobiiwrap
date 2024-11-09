@@ -17,7 +17,6 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 
 const OneProductPage = () => {
   const { toast } = useToast();
@@ -44,14 +43,6 @@ const OneProductPage = () => {
       return;
     }
 
-    console.log({
-      productId: product._id,
-      quantity,
-      phoneBrand: brand,
-      phoneModel: model,
-      cost: product.price,
-      userId: user._id,
-    });
     addToCart.mutate({
       productId: product._id,
       quantity,
@@ -86,10 +77,6 @@ const OneProductPage = () => {
       },
       {
         onSettled: (data, error) => {
-          console.log({
-            data,
-            error,
-          });
           navigate("/checkout");
         },
       }
@@ -102,41 +89,45 @@ const OneProductPage = () => {
 
   if (getOneProduct.isError) {
     return (
-      <div className="flex min-h-nav-full justify-center items-center">
+      <div className="flex min-h-screen justify-center items-center">
         <div className="text-center">
-          <h1 className="text-3xl font-bold">Error Fetching Products</h1>
-          <p className="text-lg mt-4">
-            An error occurred while fetching products. Please try again later
+          <h1 className="text-3xl font-bold text-primary">
+            Error Fetching Product
+          </h1>
+          <p className="text-lg mt-4 text-gray-500">
+            Something went wrong. Please try again later.
           </p>
         </div>
       </div>
     );
   }
 
-  return getOneProduct.isPending ? (
+  return getOneProduct.isPending &&
+    getOneProduct.data != undefined &&
+    getOneProduct.data != null ? (
     <CustomLoading />
   ) : (
     <>
-      <div className="px-2 flex flex-col md:flex-row gap-4 justify-start items-center">
-        <img
-          alt={"Apple iPhone"}
-          className="h-auto w-full md:w-2/6 rounded-lg object-cover"
-          src={getOneProduct.data?.data?.image}
-        />
-        <div className="flex flex-col w-full md:w-4/6 md:max-w-[30%] justify-start gap-2">
-          <p className="text-sm text-primary my-0 py-0 font-[900] tracking-widest">
-            {getOneProduct.data?.data.category.name.toLowerCase()}
+      <div className="px-6 md:px-12 flex flex-col md:flex-row gap-8 justify-center items-center">
+        <div className="w-full md:w-1/2 flex justify-center">
+          <img
+            alt={product?.name}
+            className="w-full max-w-xs rounded-lg shadow-lg hover:scale-110 transition-all duration-300"
+            src={product?.image}
+          />
+        </div>
+        <div className="w-full md:w-1/2 flex flex-col justify-start gap-6">
+          <p className="text-sm text-primary font-bold tracking-wide uppercase">
+            {product?.category.name}
           </p>
-          <h2 className="mt-0 pt-0">{toTitleCase(id.replaceAll("-", " "))}</h2>
-          <div className="flex items-start">
-            <span className="mr-1">₹</span>
-            <span className="flex items-end">
-              <span className="text-4xl">{getOneProduct.data?.data.price}</span>
-              <span className="ml-1 line-through">
-                {getOneProduct.data?.data.slug === "dirty-money"
-                  ? "2000"
-                  : "899"}
-              </span>
+          <h2 className="text-3xl font-semibold">
+            {toTitleCase(id.replaceAll("-", " "))}
+          </h2>
+          <div className="flex items-baseline gap-2 text-lg">
+            <span className="text-xl font-bold">₹</span>
+            <span className="text-4xl font-extrabold">{product?.price}</span>
+            <span className="text-sm line-through text-gray-500">
+              {product?.slug === "dirty-money" ? "2000" : "899"}
             </span>
           </div>
 
@@ -147,7 +138,9 @@ const OneProductPage = () => {
               setModel(mobiles[e][0]);
             }}
           >
-            <SelectTrigger>{toTitleCase(brand)}</SelectTrigger>
+            <SelectTrigger className="h-10 border rounded-md shadow-sm">
+              {toTitleCase(brand)}
+            </SelectTrigger>
             <SelectContent>
               {Object.keys(mobiles).map((product) => (
                 <SelectItem key={product} value={product}>
@@ -163,48 +156,43 @@ const OneProductPage = () => {
               setModel(e);
             }}
           >
-            <SelectTrigger>
+            <SelectTrigger className="h-10 border rounded-md shadow-sm">
               {toTitleCase(model.replaceAll("_", " "))}
             </SelectTrigger>
             <SelectContent>
               {mobiles[brand].map((product) => (
                 <SelectItem key={product} value={product}>
-                  {toTitleCase(product.replaceAll("_", " "))}
+                  {toTitleCase(product?.replaceAll("_", " "))}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <div className="border border-white rounded-lg w-full  gap-5 flex items-center justify-between">
+
+          <div className="flex items-center justify-between gap-4 border border-gray-300 rounded-lg">
             <Button
-              className="rounded-r-none"
-              onClick={() => {
-                if (quantity > 1) setQuantity(quantity - 1);
-              }}
+              className="aspect-square size-10"
+              onClick={() => quantity > 1 && setQuantity(quantity - 1)}
             >
-              <Minus size={28} />
+              <Minus size={24} />
             </Button>
-            <span className="text-center">{quantity}</span>
+            <span className="text-2xl font-semibold">{quantity}</span>
             <Button
-              className="rounded-l-none"
-              onClick={() => {
-                setQuantity(quantity + 1);
-              }}
+              className="aspect-square size-10"
+              onClick={() => setQuantity(quantity + 1)}
             >
-              <Plus size={28} />
+              <Plus size={24} />
             </Button>
           </div>
-          <div className="flex gap-2 flex-row w-full">
-            <Button
-              className="flex w-full justify-between"
-              onClick={handleAddToCart}
-            >
-              Add to cart
+
+          <div className="flex flex-col md:flex-row gap-4">
+            <Button onClick={handleAddToCart} className="md:w-full">
+              Add to Cart
               <ShoppingCart />
             </Button>
             <Button
               variant={"secondary"}
-              className="flex w-full justify-between"
               onClick={handleBuyNow}
+              className="md:w-full"
             >
               Buy Now
               <IndianRupee />
@@ -212,75 +200,55 @@ const OneProductPage = () => {
           </div>
         </div>
       </div>
-      <Separator className="my-5" />
-      <div className="mx-auto container p-6 rounded-lg shadow-lg">
-        <h4 className="mt-5 text-lg font-semibold text-center ">
-          Why Mobiiwrap?
-        </h4>
-        <p className="text-sm leading-relaxed mt-3 text-center">
-          Discover our premium phone skins, designed to provide both style and
-          protection. Each Mobiiwrap skin offers a precision fit, enhancing your
-          device with a sleek look, without the bulk of a traditional case.
+
+      <div className="mt-10 container mx-auto p-8 border rounded-lg shadow-lg space-y-8">
+        <h3 className="text-2xl font-semibold text-center">Why Mobiiwrap?</h3>
+        <p className="text-lg text-center">
+          Discover premium phone skins designed to enhance style and protect
+          your device.
         </p>
 
-        <div className="mt-6 space-y-4">
-          <div className="flex items-start gap-3">
-            <span className="text-green-600 dark:text-green-400 text-lg">
-              ✔
-            </span>
-            <div>
-              <strong className="text-md font-semibold ">
-                High-Quality Materials
-              </strong>
-              <p className="text-sm">
-                Durable and resilient, offering long-lasting style for any
-                lifestyle.
-              </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {[
+            {
+              title: "High-Quality Materials",
+              description:
+                "Durable and resilient, providing long-lasting style.",
+            },
+            {
+              title: "Precision Fit",
+              description:
+                "Designed to fit your device perfectly, adding a sleek premium look.",
+            },
+            {
+              title: "Residue-Free Removal",
+              description:
+                "Easily removable without leaving any residue behind.",
+            },
+          ].map((item, idx) => (
+            <div key={idx} className="flex items-start gap-4">
+              <span className="text-green-500 text-2xl">✔</span>
+              <div>
+                <h4 className="text-xl font-semibold">{item.title}</h4>
+                <p className="text-lg">{item.description}</p>
+              </div>
             </div>
-          </div>
-
-          <div className="flex items-start gap-3">
-            <span className="text-green-600 dark:text-green-400 text-lg">
-              ✔
-            </span>
-            <div>
-              <strong className="text-md font-semibold ">Precision Fit</strong>
-              <p className="text-sm">
-                Designed to fit perfectly, giving your device a sleek, premium
-                look.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3">
-            <span className="text-green-600 dark:text-green-400 text-lg">
-              ✔
-            </span>
-            <div>
-              <strong className="text-md font-semibold ">
-                Residue-Free Removal
-              </strong>
-              <p className="text-sm">
-                Easily removable without leaving any residue behind.
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
 
-        <div className="mt-6">
-          <h5 className="text-md font-semibold ">Application Tips</h5>
-          <p className="text-sm mt-2">
-            Ensure a smooth, bubble-free application by starting from the center
-            and pressing outward. Align carefully and press firmly for a
-            flawless finish.
+        <div>
+          <h5 className="text-xl font-semibold">Application Tips</h5>
+          <p className="text-lg mt-2">
+            Start from the center and press outward for a smooth, bubble-free
+            application. Align carefully for a flawless finish.
           </p>
         </div>
 
-        <div className="mt-6">
-          <h5 className="text-md font-semibold ">Our Guarantee</h5>
-          <p className="text-sm mt-2">
-            Each Mobiiwrap skin is crafted with quality, ensuring you get the
-            best combination of style and protection.
+        <div>
+          <h5 className="text-xl font-semibold">Our Guarantee</h5>
+          <p className="text-lg mt-2">
+            Crafted with quality in mind, Mobiiwrap skins provide the best
+            combination of style, protection, and durability.
           </p>
         </div>
       </div>

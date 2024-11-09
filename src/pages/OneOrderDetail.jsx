@@ -1,33 +1,31 @@
-"use client";
-
-// app/OrderDetails.tsx
-import React, { useEffect, useState } from "react";
+import React from "react";
 import CustomLoading from "@/components/Loader";
 import { useParams } from "react-router-dom";
 import { useGetOrder } from "@/services";
 
 const OneOrderDetail = () => {
-  const [order, setOrder] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   const { id } = useParams();
+  const { data, isLoading, isError, error, refetch } = useGetOrder(id);
 
-  const getUserCart = useGetOrder(id);
+  if (isLoading) return <CustomLoading />;
 
-  if (getUserCart.isPending) return <CustomLoading />;
-  if (getUserCart.isError)
+  if (isError) {
     return (
       <div className="min-h-screen flex flex-col mx-auto container text-center justify-center items-center">
-        <p>Error: {error}</p>
+        <p>Error: {error?.message || "An error occurred"}</p>
         <button
-          onClick={handleRetry}
+          onClick={() => refetch()} // Retry the request
           className="mt-4 bg-blue-500 text-white p-2 rounded"
         >
           Retry
         </button>
       </div>
     );
+  }
+
+  if (!data) return <div>No order data found.</div>;
+
+  const order = data.data;
 
   return (
     <div className="flex flex-col min-h-nav-full mt-20">
@@ -36,32 +34,32 @@ const OneOrderDetail = () => {
         <div className="w-full">
           <div className="shadow-md rounded-lg p-6">
             <h2 className="text-2xl font-semibold mb-2 text-center">
-              Order ID: {getUserCart.data.data._id}
+              Order ID: {order._id}
             </h2>
             <p>
-              <strong>Status:</strong> {getUserCart.data.data.status}
+              <strong>Status:</strong> {order.status}
             </p>
             <p>
-              <strong>Total:</strong> ₹{getUserCart.data.data.total}
+              <strong>Total:</strong> ₹{order.total}
             </p>
             <p>
-              <strong>Payment Method:</strong> {getUserCart.data.data.payment}
+              <strong>Payment Method:</strong> {order.payment}
             </p>
             <h3 className="text-xl font-semibold mt-4">Shipping Information</h3>
             <p>
-              <strong>Address:</strong> {getUserCart.data.data.address}
+              <strong>Address:</strong> {order.address}
             </p>
             <p>
-              <strong>Phone:</strong> {getUserCart.data.data.phone}
+              <strong>Phone:</strong> {order.phone}
             </p>
             <p>
-              <strong>Pincode:</strong> {getUserCart.data.data.pincode}
+              <strong>Pincode:</strong> {order.pincode}
             </p>
           </div>
         </div>
         <div className="w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {getUserCart.data.data.products.map((item) => (
+            {order.products.map((item) => (
               <div key={item._id} className="border w-full rounded-lg p-4">
                 <h3 className="font-semibold mb-4">{item.product.name}</h3>
                 <img

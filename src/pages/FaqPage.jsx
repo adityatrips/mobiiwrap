@@ -11,8 +11,8 @@ const FaqPage = () => {
     <Accordion collapsible defaultValue="1" type="single" className="px-2">
       {faqs.map((faq) => (
         <AccordionItem value={String(faq.id)} key={faq.id}>
-          <AccordionTrigger>
-            <h3 className="text-left">{faq.title}</h3>
+          <AccordionTrigger aria-expanded={faq.id === 1 ? "true" : "false"}>
+            <h4 className="heading text-left leading-6">{faq.title}</h4>
           </AccordionTrigger>
           <AccordionContent>
             <p>{faq.content}</p>

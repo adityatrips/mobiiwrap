@@ -17,7 +17,7 @@ const Policies = () => {
     >
       <AccordionItem value="privacy">
         <AccordionTrigger>
-          <h3>Privacy Policy</h3>
+          <h4 className="heading leading-6">Privacy Policy</h4>
         </AccordionTrigger>
         <AccordionContent>
           <b className="text-blue-400">
@@ -146,7 +146,7 @@ const Policies = () => {
       </AccordionItem>
       <AccordionItem value="return">
         <AccordionTrigger>
-          <h3>Return and Refund Policy</h3>
+          <h4 className="heading leading-6">Return and Refund Policy</h4>
         </AccordionTrigger>
         <AccordionContent className="flex flex-col">
           <b className="mb-5">
@@ -216,7 +216,7 @@ const Policies = () => {
       </AccordionItem>
       <AccordionItem value="tnc">
         <AccordionTrigger>
-          <h3>Terms and Conditions</h3>
+          <h4 className="heading leading-6">Terms and Conditions</h4>
         </AccordionTrigger>
         <AccordionContent>
           <b className="text-blue-400">
@@ -357,7 +357,7 @@ const Policies = () => {
       </AccordionItem>
       <AccordionItem value="shipping">
         <AccordionTrigger>
-          <h3>Shipping Policy</h3>
+          <h4 className="heading leading-6">Shipping Policy</h4>
         </AccordionTrigger>
         <AccordionContent>
           <b className="mb-5">
@@ -459,7 +459,7 @@ const Policies = () => {
       </AccordionItem>
       <AccordionItem value="contact">
         <AccordionTrigger>
-          <h3>Contact Us</h3>
+          <h4 className="heading leading-6">Contact Us</h4>
         </AccordionTrigger>
         <AccordionContent>
           <p>

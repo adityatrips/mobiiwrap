@@ -1,7 +1,5 @@
-import React from "react";
-import { useState } from "react";
-
-import { useLoginMut, useSignupMut } from "@/services";
+import React, { useState } from "react";
+import { useSignupMut, useLoginMut } from "@/services";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -10,36 +8,100 @@ import { useDispatch } from "react-redux";
 import { useToast } from "@/hooks/use-toast";
 import { useLoginModal } from "@/context/LoginModalContext";
 
+const useFormState = (initialState) => {
+  const [formState, setFormState] = useState(initialState);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  return [formState, handleChange];
+};
+
 const SignUp = () => {
   const { toast } = useToast();
-
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const signUp = useSignupMut();
   const logIn = useLoginMut();
-
   const { setIsLoginOpen } = useLoginModal();
+
   const [isSigningUp, setIsSigningUp] = useState(false);
+  const [formState, handleFormChange] = useFormState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+
+  const validateForm = () => {
+    if (
+      !formState.firstName ||
+      !formState.lastName ||
+      !formState.email ||
+      !formState.password
+    ) {
+      toast({
+        title: "Missing fields",
+        description: "Please fill in all fields.",
+        variant: "destructive",
+      });
+      return false;
+    }
+    // Basic email format check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formState.email)) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return false;
+    }
+    // Password strength check (min 6 chars, mix of letters and numbers)
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+    if (!passwordRegex.test(formState.password)) {
+      toast({
+        title: "Weak password",
+        description:
+          "Password must be at least 6 characters long and contain both letters and numbers.",
+        variant: "destructive",
+      });
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     setIsSigningUp(true);
+    if (!validateForm()) {
+      setIsSigningUp(false);
+      return;
+    }
+
     signUp.mutate(
-      { name: `${firstName} ${lastName}`, email, password },
+      {
+        name: `${formState.firstName} ${formState.lastName}`,
+        email: formState.email,
+        password: formState.password,
+      },
       {
         onSettled: () => {
           setIsSigningUp(false);
         },
-        onError: () => {
+        onError: (error) => {
+          const errorMessage =
+            error.response?.data?.message ||
+            "An error occurred. Please try again.";
           toast({
-            title: "An error occurred",
-            description: "Please try again",
+            title: "Error",
+            description: errorMessage,
             variant: "destructive",
           });
         },
@@ -50,23 +112,26 @@ const SignUp = () => {
           });
           logIn.mutate(
             {
-              email,
-              password,
+              email: formState.email,
+              password: formState.password,
             },
             {
-              onError: () => {
+              onError: (error) => {
+                const errorMessage =
+                  error.response?.data?.message ||
+                  "Login failed. Please try again.";
                 toast({
-                  title: "An error occurred",
-                  description: "Please try again",
+                  title: "Login Error",
+                  description: errorMessage,
                   variant: "destructive",
                 });
               },
-              onSuccess(data) {
+              onSuccess: (data) => {
                 toast({
                   title: "Welcome back!",
                   description: "You are now logged in",
                 });
-                navigate("/");
+                navigate("/dashboard"); // Redirect to dashboard
                 dispatch(updateUser(data.data));
               },
             }
@@ -88,41 +153,43 @@ const SignUp = () => {
         </p>
         <div className="flex w-full gap-4">
           <Input
+            name="firstName"
+            value={formState.firstName}
+            onChange={handleFormChange}
             aria-label="First name"
             placeholder="First name"
             required
             color="default"
-            defaultValue={firstName}
-            type="text"
-            onChange={(e) => setFirstName(e.target.value)}
           />
           <Input
+            name="lastName"
+            value={formState.lastName}
+            onChange={handleFormChange}
             aria-label="Last name"
             placeholder="Last name"
             required
             color="default"
-            defaultValue={lastName}
-            type="text"
-            onChange={(e) => setLastName(e.target.value)}
           />
         </div>
         <Input
+          name="email"
+          value={formState.email}
+          onChange={handleFormChange}
           aria-label="Email"
           placeholder="Email address"
           required
           color="default"
-          defaultValue={email}
           type="email"
-          onChange={(e) => setEmail(e.target.value)}
         />
         <Input
+          name="password"
+          value={formState.password}
+          onChange={handleFormChange}
           aria-label="Password"
           placeholder="Password"
           required
           color="default"
-          defaultValue={password}
           type="password"
-          onChange={(e) => setPassword(e.target.value)}
         />
         <div className="flex items-center justify-between gap-4 w-full">
           <Button
@@ -135,18 +202,16 @@ const SignUp = () => {
           </Button>
           <p
             className="flex flex-col cursor-pointer text-blue-500"
-            onClick={() => {
-              setIsLoginOpen(true);
-            }}
+            onClick={() => setIsLoginOpen(true)}
           >
             Already have an account? Login
           </p>
         </div>
       </form>
       <img
-        alt="Login page image"
+        alt="Signup page image"
         src="https://images.unsplash.com/photo-1728388939226-3fc095526a91?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        className="h-nav-full w-full object-cover object-left-center  max-w-full md:max-w-[50%] rounded-lg"
+        className="h-nav-full w-full object-cover object-left-center max-w-full md:max-w-[50%] rounded-lg"
       />
     </section>
   );

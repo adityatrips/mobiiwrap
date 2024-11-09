@@ -53,8 +53,20 @@ export default function NavigationMenu() {
   const [cartOpen, setCartOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  useEffect(() => {
+    getCart.mutate(window.localStorage.getItem("uid"));
+  }, [cartOpen]);
+
+  useEffect(() => {
+    document.querySelector("body").classList.toggle("dark", isDark);
+  }, [isDark]);
+
+  const handleToggleTheme = (e) => {
+    console.log(e);
+    dispatch(toggleTheme());
+  };
 
   const handleSubmit = () => {
     setIsLoggingIn(true);
@@ -82,22 +94,6 @@ export default function NavigationMenu() {
     );
   };
 
-  useEffect(() => {
-    getCart.mutate(window.localStorage.getItem("uid"));
-  }, [cartOpen]);
-
-  const handleToggleTheme = () => {
-    dispatch(toggleTheme());
-  };
-
-  useEffect(() => {
-    if (isDark) {
-      document.querySelector("body").classList.add("dark");
-    } else {
-      document.querySelector("body").classList.remove("dark");
-    }
-  }, [isDark]);
-
   const handleLogout = () => {
     dispatch(removeUser());
     window.localStorage.removeItem("token");
@@ -109,10 +105,9 @@ export default function NavigationMenu() {
 
   return (
     <nav
-      className={`fixed top-0 z-20 w-full h-16 flex justify-between px-2 items-center ${
-        isDark ? "bg-[rgba(10,10,10,0.5)]" : "bg-[rgba(255,255,255,0.5)]"
-      } backdrop-blur-md`}
+      className={`fixed top-0 z-20 w-full h-20 flex justify-between px-2 items-center bg-background`}
     >
+      {/* Mobile Menu Button */}
       <div className="flex items-center gap-2">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger>
@@ -155,20 +150,24 @@ export default function NavigationMenu() {
             </div>
           </SheetContent>
         </Sheet>
+
         <Link to="/" className="hidden md:flex">
           <h4 className="heading">{brandAbbr}</h4>
         </Link>
       </div>
 
+      {/* Desktop Menu Links */}
       <div className="hidden md:flex gap-5">
         {links.map((link, i) => (
-          <Link to={link.url} key={i} className={link.className}>
+          <Link key={i} to={link.url} className={link.className}>
             {link.name}
           </Link>
         ))}
       </div>
 
+      {/* Theme Toggle and Cart/Account */}
       <div className="flex items-center gap-2">
+        {/* Cart Sheet */}
         <Sheet open={cartOpen} onOpenChange={setCartOpen}>
           <SheetTrigger className={`${isLoggedIn ? "block" : "hidden"}`}>
             <Button>
@@ -255,6 +254,7 @@ export default function NavigationMenu() {
           </SheetContent>
         </Sheet>
 
+        {/* Theme Toggle */}
         <div className="hidden md:flex items-center gap-2">
           <Label htmlFor="theme-toggle">
             <Moon />
@@ -269,6 +269,7 @@ export default function NavigationMenu() {
           </Label>
         </div>
 
+        {/* Login / User Dropdown */}
         {isLoggedIn ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -320,7 +321,7 @@ export default function NavigationMenu() {
                     navigate("/sign-up");
                   }}
                 >
-                  No account?&nbsp; Sign up
+                  No account? Sign up
                 </Button>
                 <Button
                   className="w-2/5"
