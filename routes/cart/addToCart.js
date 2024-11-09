@@ -10,7 +10,6 @@ const addToCard = async (req, res) => {
 
   try {
     const { item, quantity, userId, cost, phoneBrand, phoneModel } = req.body;
-    console.log(cost);
 
     const cart = await Cart.findOne({ user: userId });
 

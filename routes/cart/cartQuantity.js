@@ -2,11 +2,6 @@ const Cart = require("../../models/Cart");
 
 const quantiyUpdate = async (req, res) => {
   const { product, type, user } = req.body;
-  console.log({
-    product,
-    type,
-    user,
-  });
 
   try {
     // Find the cart for the specific user
@@ -54,7 +49,6 @@ const quantiyUpdate = async (req, res) => {
     await cart.save();
     return res.status(200).json({ message: "Cart updated successfully" });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({ message: error.message });
   }
 };

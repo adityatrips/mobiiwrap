@@ -16,7 +16,6 @@ const verifyOrder = async (req, res) => {
         .json({ success: true, message: "Payment verified successfully" });
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json({ success: false, message: "Internal Server Error!" });
   }
 };

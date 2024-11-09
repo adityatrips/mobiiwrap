@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "consola": "^3.2.3",
-    "pino": "^9.5.0"
+    "pino": "^9.5.0",
+    "wrangler": "^3.86.0"
   }
 }

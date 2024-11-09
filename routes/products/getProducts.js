@@ -3,17 +3,9 @@ const Category = require("../../models/Product");
 const Product = require("../../models/Product");
 
 const getProduct = async (req, res) => {
-  const result = validationResult(req);
-
-  if (!result.isEmpty()) {
-    return res.status(400).json({ errors: result.array() });
-  }
-
   try {
     let { page, limit, search, minPrice, maxPrice, category, rating, sort } =
       req.query;
-
-    await Category.find();
 
     page = parseInt(page || "1");
     limit = parseInt(limit || "10");

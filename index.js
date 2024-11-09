@@ -20,6 +20,7 @@ cors({
 });
 
 const app = express();
+app.disable("etag");
 
 connectToDb(process.env.MONGO_URI);
 

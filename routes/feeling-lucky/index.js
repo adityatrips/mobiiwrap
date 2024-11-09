@@ -17,8 +17,6 @@ const feelingLucky = async (req, res) => {
 
     qty = parseInt(qty || "1");
 
-    logger.info(`Feeling lucky request for ${qty} products`);
-
     const products = await Product.aggregate().sample(qty);
 
     return res.status(200).json({
