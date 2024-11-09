@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useSignupMut, useLoginMut } from "@/services";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useSignupMut, useLoginMut } from "../services";
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { updateUser } from "@/stores/authSlice";
+import { updateUser } from "../stores/authSlice";
 import { useDispatch } from "react-redux";
-import { useToast } from "@/hooks/use-toast";
-import { useLoginModal } from "@/context/LoginModalContext";
+import { useToast } from "../hooks/use-toast";
+import { useLoginModal } from "../context/LoginModalContext";
 
 const useFormState = (initialState) => {
   const [formState, setFormState] = useState(initialState);

@@ -1,7 +1,7 @@
 import React from "react";
 import { Phone, Headphones, Star } from "lucide-react";
 
-import { brandName } from "@/lib/constants";
+import { brandName } from "../lib/constants";
 
 const AboutScreen = () => {
   return (

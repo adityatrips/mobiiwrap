@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import { IndianRupee, Minus, Plus, ShoppingCart } from "lucide-react";
 
-import { toTitleCase } from "@/utils/strFunctions";
-import { mobiles } from "@/models";
-import CustomLoading from "@/components/Loader";
-import { useAddToCartMut, useGetOneProduct } from "@/services";
+import { toTitleCase } from "../utils/strFunctions";
+import { mobiles } from "../models";
+import CustomLoading from "../components/Loader";
+import { useAddToCartMut, useGetOneProduct } from "../services";
 import { useSelector } from "react-redux";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/hooks/use-toast";
+} from "../components/ui/select";
+import { Button } from "../components/ui/button";
+import { useToast } from "../hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 

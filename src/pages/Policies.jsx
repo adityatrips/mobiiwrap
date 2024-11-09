@@ -3,8 +3,8 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { brandName, email, phone } from "@/lib/constants";
+} from "../components/ui/accordion";
+import { brandName, email, phone } from "../lib/constants";
 import { Link } from "react-router-dom";
 
 const Policies = () => {

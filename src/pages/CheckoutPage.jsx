@@ -1,19 +1,22 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "@/hooks/use-toast";
-import { getBase64 } from "@/lib/utils";
-import { useClearCart, useGetCart, usePlaceOrder } from "@/services";
-import CustomLoading from "@/components/Loader";
-import withAuth from "@/components/withAuth";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../components/ui/tabs";
+import { Textarea } from "../components/ui/textarea";
+import { toast } from "../hooks/use-toast";
+import { getBase64 } from "../lib/utils";
+import { useClearCart, useGetCart, usePlaceOrder } from "../services";
+import CustomLoading from "../components/Loader";
+import withAuth from "../components/withAuth";
 import { Check, IndianRupee } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { X } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 
 const CheckOutPage = () => {

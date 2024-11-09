@@ -4,7 +4,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "../components/ui/card";
 import { IndianRupee } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 

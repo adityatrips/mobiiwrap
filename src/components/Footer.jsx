@@ -1,5 +1,5 @@
 import React from "react";
-import { brandName, links } from "@/lib/constants";
+import { brandName, links } from "../lib/constants";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear(); // Extracted for readability

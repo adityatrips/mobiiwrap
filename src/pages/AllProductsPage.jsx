@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Filter, IndianRupee } from "lucide-react";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import ProductCard from "@/components/ProductCard";
-import CustomLoading from "@/components/Loader";
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
+import ProductCard from "../components/ProductCard";
+import CustomLoading from "../components/Loader";
 
 import {
   Pagination,
@@ -12,14 +12,14 @@ import {
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
+} from "../components/ui/pagination";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "../components/ui/select";
 import {
   Sheet,
   SheetContent,
@@ -27,10 +27,10 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { Slider } from "@/components/ui/slider";
+} from "../components/ui/sheet";
+import { Slider } from "../components/ui/slider";
 
-import { useGetAllCategories, useGetProducts } from "@/services";
+import { useGetAllCategories, useGetProducts } from "../services";
 
 const categoryNameMap = {
   "6713e23a97fba66950fec8a9": "Brands and Logos",

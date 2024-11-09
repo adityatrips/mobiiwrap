@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "../hooks/use-toast";
 
 const withAuth = (WrappedComponent) => {
   const AuthenticatedComponent = (props) => {

@@ -6,10 +6,6 @@
   ],
   "compilerOptions": {
     "jsx": "react-jsx",
-    "allowJs": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "allowJs": true
   }
 }

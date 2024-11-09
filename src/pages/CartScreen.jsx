@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/hooks/use-toast";
-import { useGetCart, useRemoveFromCartMut } from "@/services";
-import CustomLoading from "@/components/Loader";
-import withAuth from "@/components/withAuth";
-import { toTitleCase } from "@/utils/strFunctions";
+import { Button } from "../components/ui/button";
+import { Separator } from "../components/ui/separator";
+import { useToast } from "../hooks/use-toast";
+import { useGetCart, useRemoveFromCartMut } from "../services";
+import CustomLoading from "../components/Loader";
+import withAuth from "../components/withAuth";
+import { toTitleCase } from "../utils/strFunctions";
 import { X, IndianRupee } from "lucide-react";
 import axios from "axios";
 

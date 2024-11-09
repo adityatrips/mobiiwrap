@@ -5,12 +5,12 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import { useGetFeaturedProducts } from "@/services";
+import { useGetFeaturedProducts } from "./services";
 
 import { ShoppingCart, Phone, ShieldCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import CustomLoading from "@/components/Loader";
-import TinderCards from "@/components/TinderCards";
+import { Button } from "./components/ui/button";
+import CustomLoading from "./components/Loader";
+import TinderCards from "./components/TinderCards";
 
 const IndexPage = () => {
   const { isDark } = useSelector((state) => state.theme);

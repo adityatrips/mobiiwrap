@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
-import { useSubmitContactForm } from "@/services";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Textarea } from "../components/ui/textarea";
+import { useToast } from "../hooks/use-toast";
+import { useSubmitContactForm } from "../services";
 import React, { useState, useEffect } from "react";
 
 const ContactUs = () => {

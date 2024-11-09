@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeUser, updateUser } from "@/stores/authSlice";
+import { removeUser, updateUser } from "../stores/authSlice";
 import { useNavigate } from "react-router-dom";
-import { toggleTheme } from "@/stores/themeSlice";
+import { toggleTheme } from "../stores/themeSlice";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "../components/ui/dropdown-menu";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "../components/ui/sheet";
 import { Menu, Moon, ShoppingCart, Sun, User } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { brandName, links, brandAbbr } from "@/lib/constants";
-import { useGetCart, useLoginMut, useRemoveFromCartMut } from "@/services";
+import { Switch } from "../components/ui/switch";
+import { Label } from "../components/ui/label";
+import { brandName, links, brandAbbr } from "../lib/constants";
+import { useGetCart, useLoginMut, useRemoveFromCartMut } from "../services";
 import { useQueryClient } from "@tanstack/react-query";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "../hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -31,9 +31,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { useLoginModal } from "@/context/LoginModalContext";
+} from "../components/ui/dialog";
+import { Input } from "../components/ui/input";
+import { useLoginModal } from "../context/LoginModalContext";
 
 export default function NavigationMenu() {
   const navigate = useNavigate();

@@ -1,7 +1,7 @@
 import React from "react";
-import CustomLoading from "@/components/Loader";
+import CustomLoading from "../components/Loader";
 import { useParams } from "react-router-dom";
-import { useGetOrder } from "@/services";
+import { useGetOrder } from "../services";
 
 const OneOrderDetail = () => {
   const { id } = useParams();

@@ -1,4 +1,4 @@
-import TinderCards from "@/components/TinderCards";
+import TinderCards from "../components/TinderCards";
 import React from "react";
 
 const FeelingLucky = () => {

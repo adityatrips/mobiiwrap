@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 
-import { updateUser } from "@/stores/authSlice";
+import { updateUser } from "../stores/authSlice";
 
 export const useLoginMut = () => {
   const dispatch = useDispatch();

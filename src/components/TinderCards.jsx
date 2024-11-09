@@ -2,8 +2,8 @@
 
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useEffect, useState, useCallback } from "react";
-import CustomLoading from "@/components/Loader";
-import { useGetNProducts } from "@/services";
+import CustomLoading from "../components/Loader";
+import { useGetNProducts } from "../services";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 

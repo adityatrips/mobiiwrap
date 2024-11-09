@@ -3,8 +3,8 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { faqs } from "@/lib/constants";
+} from "../components/ui/accordion";
+import { faqs } from "../lib/constants";
 
 const FaqPage = () => {
   return (
