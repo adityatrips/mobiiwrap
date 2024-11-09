@@ -52,16 +52,6 @@ const OrderSchema = new Schema(
       ],
       default: "pending",
     },
-    payment: {
-      type: String,
-      enum: ["cod", "prepaid"],
-      default: "cod",
-      required: true,
-    },
-    paymentProof: {
-      type: String,
-      required: true,
-    },
     total: {
       type: String,
       required: true,

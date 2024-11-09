@@ -2,23 +2,8 @@ const { validationResult } = require("express-validator");
 const Orders = require("../../models/Orders");
 
 const addOrder = async (req, res) => {
-  const result = validationResult(req);
-
-  if (!result.isEmpty()) {
-    return res.status(400).json({ errors: result.array() });
-  }
-
   try {
-    const {
-      products,
-      userId,
-      address,
-      phone,
-      pincode,
-      payment,
-      total,
-      paymentProof,
-    } = req.body;
+    const { products, userId, address, phone, pincode, total } = req.body;
 
     const order = new Orders({
       user: userId,
@@ -26,8 +11,6 @@ const addOrder = async (req, res) => {
       address,
       phone,
       pincode,
-      payment,
-      paymentProof,
       total,
     });
 

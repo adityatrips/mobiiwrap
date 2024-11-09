@@ -10,6 +10,7 @@ const contactRoutes = require("./routes/contact");
 const orderRoutes = require("./routes/orders");
 const productRoutes = require("./routes/products");
 const feelingLuckyRoutes = require("./routes/feeling-lucky");
+const paymentRoutes = require("./routes/payment");
 
 const logger = require("./utils/logger");
 
@@ -34,6 +35,7 @@ app.use("/contact-us", contactRoutes);
 app.use("/orders", orderRoutes);
 app.use("/products", productRoutes);
 app.use("/feeling-lucky", feelingLuckyRoutes);
+app.use("/payment", paymentRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
