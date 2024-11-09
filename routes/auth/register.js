@@ -1,17 +1,9 @@
 const User = require("../../models/User");
 const Cart = require("../../models/Cart");
-const { validationResult } = require("express-validator");
 
 const register = async (req, res) => {
   try {
-    const result = validationResult(req);
-
-    if (!result.isEmpty()) {
-      return res.status(400).json({
-        errors: result.array(),
-      });
-    }
-
+    console.log("SignUp initiated");
     const { email, password, name } = req.body;
 
     const newUser = new User({

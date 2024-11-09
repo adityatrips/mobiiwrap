@@ -11,6 +11,12 @@ WORKDIR /app
 
 # Set production environment
 ENV NODE_ENV="production"
+ENV MONGO_URI="mongodb+srv://root:toor@aditya.qvnrr.mongodb.net/mobiiwrap?retryWrites=true&w=majority&appName=aditya"
+ENV JWT_SECRET="c4168259-739f-4fc5-ba88-0d3d805ae51a"
+ENV RZP_KEY_ID="rzp_live_2JgBheIjOqSw6k"
+ENV RZP_KEY_SECRET="DMP6n7S5pi9dXnSVl9JdAwzL"
+ENV RZP_TEST_KEY_ID="rzp_test_9X3Qpir7NtIqds"
+ENV RZP_TEST_KEY_SECRET="zzKCVtYdRzsryXnVGFiAxFRe"
 
 # Install pnpm
 ARG PNPM_VERSION=9.12.3
